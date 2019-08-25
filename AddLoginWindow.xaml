@@ -5,36 +5,36 @@
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:local="clr-namespace:WhisperDragonWPF"
 		mc:Ignorable="d"
-		Title="Add login" Height="350" Width="400" SizeToContent="WidthAndHeight">
+		Title="Add login" MinWidth="350" SizeToContent="WidthAndHeight">
 
 		<StackPanel>
-			<Label Content="Title:" />
-			<TextBox Name="title" Text="{Binding Title}" />
+			<Label Content="Title:" Margin="2,5,2,2" />
+			<TextBox Name="title" Text="{Binding Title}" Margin="2,0,2,2" />
 
-			<Label Content="URL:" />
-			<TextBox Name="url" Text="{Binding URL}" />
+			<Label Content="URL:" Margin="2,5,2,2" />
+			<TextBox Name="url" Text="{Binding URL}" Margin="2,0,2,2" />
 
-			<Label Content="Username:" />
-			<TextBox Name="username" Text="{Binding Username}" />
+			<Label Content="Username:" Margin="2,5,2,2" />
+			<TextBox Name="username" Text="{Binding Username}" Margin="2,0,2,2" />
 
-			<Label Content="Password:" />
-			<TextBox Name="password" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />
-			<CheckBox IsChecked="{Binding VisiblePassword}">Visible</CheckBox>
+			<Label Content="Password:" Margin="2,5,2,2" />
+			<TextBox Name="password" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,2" />
+			<CheckBox IsChecked="{Binding VisiblePassword}" Margin="2,0,2,2">Visible</CheckBox>
 
-			<Label Content="Notes:" />
-			<TextBox Name="notes" Text="{Binding Notes}" TextWrapping="Wrap" AcceptsReturn="True" />
+			<Label Content="Notes:" Margin="2,5,2,2" />
+			<TextBox Name="notes" Text="{Binding Notes}" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" MinLines="3" MaxLines="5" Margin="2,0,2,2" />
 
-			<Label Content="Category:" />
-			<TextBox Name="category" Text="{Binding Category}" />
+			<Label Content="Category:" Margin="2,5,2,2" />
+			<TextBox Name="category" Text="{Binding Category}" Margin="2,0,2,2" />
 
-			<Label Content="Tags:" />
-			<TextBox Name="tags" Text="{Binding Tags}" />
+			<Label Content="Tags:" Margin="2,5,2,2" />
+			<TextBox Name="tags" Text="{Binding Tags}" Margin="2,0,2,2" />
 
-			<CheckBox IsChecked="{Binding IsSecret}">Secret</CheckBox>
+			<CheckBox IsChecked="{Binding IsSecret}" Margin="2,15,2,2">Secret</CheckBox>
 
-			<StackPanel Orientation="Horizontal">
-				<Button Margin="10" Command="{Binding AddLoginCommand}">Add login</Button>
-				<Button Margin="10" Command="{Binding CancelCommand}">Cancel</Button>
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+				<Button Margin="10" Command="{Binding AddLoginCommand}" Padding="3,3,3,3">Add login</Button>
+				<Button Margin="10" Command="{Binding CancelCommand}" Padding="3,3,3,3">Cancel</Button>
 			</StackPanel>
 
 		</StackPanel>
