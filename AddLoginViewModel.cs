@@ -63,6 +63,16 @@ public class AddLoginViewModel : INotifyPropertyChanged
 
 	public event PropertyChangedEventHandler PropertyChanged;
 
+	private Action onPositiveClose;
+
+	private Action onNegativeClose;
+
+	public AddLoginViewModel(Action positiveAction, Action negativeAction)
+	{
+		this.onPositiveClose = positiveAction;
+		this.onNegativeClose = negativeAction;
+	}
+
 	
 	#region Buttons
 
@@ -75,7 +85,7 @@ public class AddLoginViewModel : INotifyPropertyChanged
 			return addLoginCommand 
 				?? (addLoginCommand = new ActionCommand(() =>
 				{
-					
+					this.onPositiveClose();
 				}));
 		}
 	}
@@ -88,7 +98,7 @@ public class AddLoginViewModel : INotifyPropertyChanged
 			return cancelCommand 
 				?? (cancelCommand = new ActionCommand(() =>
 				{
-					
+					this.onNegativeClose();
 				}));
 		}
 	}
