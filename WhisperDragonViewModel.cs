@@ -1,4 +1,5 @@
 using System;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
@@ -6,10 +7,17 @@ using WhisperDragonWPF;
 
 public class WhisperDragonViewModel
 {
+	private ObservableCollection<LoginSimplified> logins = new ObservableCollection<LoginSimplified>();
+	public ObservableCollection<LoginSimplified> Logins
+	{
+		get { return this.logins; }
+	}
+
 	private TabControl tabSections;
 
 	public WhisperDragonViewModel(TabControl sections)
 	{
+		logins.Add(new LoginSimplified() { Title = "ababa", Username = "abaaba" });
 		this.tabSections = sections;
 	}
 
