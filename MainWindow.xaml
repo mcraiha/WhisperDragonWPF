@@ -65,6 +65,13 @@
                                 <ContextMenu>
                                     <MenuItem Header="Open URL (F5)" Command="{Binding OpenURLViaMenu}" />
                                     <MenuItem Header="Copy URL (F6)" Command="{Binding CopyURLViaMenu}" />
+                                    <MenuItem Header="Copy Username (F7)" Command="{Binding CopyUsernameViaMenu}" />
+                                    <MenuItem Header="Copy Password (F8)" Command="{Binding CopyPasswordViaMenu}" />
+                                    <Separator />
+                                    <MenuItem Header="Add Login..." Command="{Binding AddLoginViaMenu}" />
+                                    <MenuItem Header="Edit/View Login..." Command="{Binding EditViewLoginViaMenu}" />
+                                    <MenuItem Header="Duplicate Login" Command="{Binding DuplicateLoginViaMenu}" />
+                                    <MenuItem Header="Delete Login" Command="{Binding DeleteLoginViaMenu}" />
                                 </ContextMenu>
                             </DataGrid.ContextMenu>
                         </DataGrid>

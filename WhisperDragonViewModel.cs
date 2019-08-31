@@ -75,7 +75,7 @@ public class WhisperDragonViewModel
 	#endregion // Select tabs
 
 
-	#region Edit menu items
+	#region Context menu items
 
 	private ICommand openURLViaMenu;
 	public ICommand OpenURLViaMenu
@@ -106,7 +106,96 @@ public class WhisperDragonViewModel
 		}
 	}
 
-	#endregion // Edit menu items
+	private ICommand copyUsernameViaMenu;
+	public ICommand CopyUsernameViaMenu
+	{
+		get
+		{
+			return copyUsernameViaMenu
+				?? (copyUsernameViaMenu = new ActionCommand(() =>
+				{
+					if (this.SelectedLogin != null)
+					{
+						Clipboard.SetText(this.SelectedLogin.Username);
+					}
+				}));
+		}
+	}
+
+	private ICommand copyPasswordViaMenu;
+	public ICommand CopyPasswordViaMenu
+	{
+		get
+		{
+			return copyPasswordViaMenu
+				?? (copyPasswordViaMenu = new ActionCommand(() =>
+				{
+					if (this.SelectedLogin != null)
+					{
+						Clipboard.SetText(this.SelectedLogin.Password);
+					}
+				}));
+		}
+	}
+
+	private ICommand addLoginViaMenu;
+	public ICommand AddLoginViaMenu
+	{
+		get
+		{
+			return addLoginViaMenu
+				?? (addLoginViaMenu = new ActionCommand(() =>
+				{
+					
+				}));
+		}
+	}
+
+	private ICommand editViewLoginViaMenu;
+	public ICommand EditViewLoginViaMenu
+	{
+		get
+		{
+			return editViewLoginViaMenu
+				?? (editViewLoginViaMenu = new ActionCommand(() =>
+				{
+					
+				}));
+		}
+	}
+
+	private ICommand duplicateLoginViaMenu;
+	public ICommand DuplicateLoginViaMenu
+	{
+		get
+		{
+			return duplicateLoginViaMenu
+				?? (duplicateLoginViaMenu = new ActionCommand(() =>
+				{
+					
+				}));
+		}
+	}
+
+	private ICommand deleteLoginViaMenu;
+	public ICommand DeleteLoginViaMenu
+	{
+		get
+		{
+			return deleteLoginViaMenu
+				?? (deleteLoginViaMenu = new ActionCommand(() =>
+				{
+					if (this.SelectedLogin != null)
+					{
+						logins.Remove(this.SelectedLogin);
+					}
+				}));
+		}
+	}
+
+	
+
+	#endregion // Context menu items
 
 
 	#region Tools
