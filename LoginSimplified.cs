@@ -1,8 +1,12 @@
 
 namespace WhisperDragonWPF
 {
-	public class LoginSimplified
+	public sealed class LoginSimplified
 	{
+		// Non visible
+		public int indexNumber { get; set; }
+
+		// Visible elements
 		public string Title { get; set; }
 		public string URL { get; set; }
 		public string Username { get; set; }
