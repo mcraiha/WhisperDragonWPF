@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
@@ -13,11 +14,16 @@ public class WhisperDragonViewModel
 		get { return this.logins; }
 	}
 
+	public LoginSimplified SelectedLogin { get; set; }
+
 	private TabControl tabSections;
 
 	public WhisperDragonViewModel(TabControl sections)
 	{
-		logins.Add(new LoginSimplified() { Title = "ababa", Username = "abaaba" });
+		for (int i = 0; i < 5; i++ )
+		{
+			logins.Add(new LoginSimplified() { indexNumber = i, Title = Path.GetRandomFileName(), Username = Path.GetRandomFileName(), URL = $"https://{Path.GetRandomFileName()}" });
+		}
 		this.tabSections = sections;
 	}
 
@@ -67,6 +73,40 @@ public class WhisperDragonViewModel
 	}
 
 	#endregion // Select tabs
+
+
+	#region Edit menu items
+
+	private ICommand openURLViaMenu;
+	public ICommand OpenURLViaMenu
+	{
+		get
+		{
+			return openURLViaMenu
+				?? (openURLViaMenu = new ActionCommand(() =>
+				{
+					
+				}));
+		}
+	}
+
+	private ICommand copyURLViaMenu;
+	public ICommand CopyURLViaMenu
+	{
+		get
+		{
+			return copyURLViaMenu
+				?? (copyURLViaMenu = new ActionCommand(() =>
+				{
+					if (this.SelectedLogin != null)
+					{
+						Clipboard.SetText(this.SelectedLogin.URL);
+					}
+				}));
+		}
+	}
+
+	#endregion // Edit menu items
 
 
 	#region Tools

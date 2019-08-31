@@ -47,7 +47,10 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <DataGrid Grid.Row="0" Grid.Column="0" Name="LoginInformations" ItemsSource="{Binding Logins}" AutoGenerateColumns="False" IsReadOnly="True" >
+                        <DataGrid Grid.Row="0" Grid.Column="0" 
+                                Name="LoginInformations" ItemsSource="{Binding Logins}" SelectedItem="{Binding SelectedLogin, Mode=TwoWay}"
+                                SelectionMode="Single" AutoGenerateColumns="False" 
+                                IsReadOnly="True" >
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Title" Binding="{Binding Title}" />
                                 <DataGridTextColumn Header="Address / URL" Binding="{Binding URL}" />
@@ -58,6 +61,12 @@
                                 <DataGridTextColumn Header="Creation time" Binding="{Binding CreationTime}" />
                                 <DataGridTextColumn Header="Modification time" Binding="{Binding ModificationTime}" />
                             </DataGrid.Columns>
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Open URL (F5)" Command="{Binding OpenURLViaMenu}" />
+                                    <MenuItem Header="Copy URL (F6)" Command="{Binding CopyURLViaMenu}" />
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
                         </DataGrid>
 
                         <Button Grid.Row="1" Grid.Column="0" Command="{Binding AddLoginViaButton}">+ Add</Button>
