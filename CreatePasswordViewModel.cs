@@ -82,6 +82,9 @@ public class CreatePasswordViewModel : INotifyPropertyChanged
 		'!', '"', '#', '$', '%', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~'
 	};
 
+	// Generated during runtime in ConstructEmojiList(), See https://en.wikipedia.org/wiki/Emoticons_(Unicode_block)
+	private static readonly List<string> emoticonsUnicodeBlock = new List<string>();
+
 	#region Buttons
 
 	private ICommand generatePasswordCommand;
@@ -94,38 +97,50 @@ public class CreatePasswordViewModel : INotifyPropertyChanged
 				{
 					int howManyChars = int.Parse(PasswordLength);
 
-					List<char> generated = new List<char>(howManyChars);
+					List<string> generated = new List<string>(howManyChars);
 
-					List<char> possibleChars = new List<char>();
+					List<string> possibleChars = new List<string>();
 
 					using (var generator = RandomNumberGenerator.Create())
 					{
 						if (IncludeUpperCaseLatinLetters)
 						{
 							int index = GetPositiveRandomInt(generator) % upperCaseLatinLetters.Count;
-							generated.Add(upperCaseLatinLetters[index]);
-							possibleChars.AddRange(upperCaseLatinLetters);
+							generated.Add(upperCaseLatinLetters[index].ToString());
+							possibleChars.AddRange(Array.ConvertAll<char, string>(upperCaseLatinLetters.ToArray(), element => element.ToString()));
 						}
 
 						if (IncludeLowerCaseLatinLetters)
 						{
 							int index = GetPositiveRandomInt(generator) % lowerCaseLatinLetters.Count;
-							generated.Add(lowerCaseLatinLetters[index]);
-							possibleChars.AddRange(lowerCaseLatinLetters);
+							generated.Add(lowerCaseLatinLetters[index].ToString());
+							possibleChars.AddRange(Array.ConvertAll<char, string>(lowerCaseLatinLetters.ToArray(), element => element.ToString()));
 						}
 
 						if (IncludeDigits)
 						{
 							int index = GetPositiveRandomInt(generator) % digits.Count;
-							generated.Add(digits[index]);
-							possibleChars.AddRange(digits);
+							generated.Add(digits[index].ToString());
+							possibleChars.AddRange(Array.ConvertAll<char, string>(digits.ToArray(), element => element.ToString()));
 						}
 
 						if (IncludeSpecialCharactersASCII)
 						{
 							int index = GetPositiveRandomInt(generator) % specialCharactersASCII.Count;
-							generated.Add(specialCharactersASCII[index]);
-							possibleChars.AddRange(specialCharactersASCII);
+							generated.Add(specialCharactersASCII[index].ToString());
+							possibleChars.AddRange(Array.ConvertAll<char, string>(specialCharactersASCII.ToArray(), element => element.ToString()));
+						}
+
+						if (IncludeEmojis)
+						{
+							if (emoticonsUnicodeBlock.Count < 1)
+							{
+								ConstructEmojiList();
+							}
+
+							int index = GetPositiveRandomInt(generator) % emoticonsUnicodeBlock.Count;
+							generated.Add(emoticonsUnicodeBlock[index]);
+							possibleChars.AddRange(emoticonsUnicodeBlock);
 						}
 
 						// Reorder all possible chars
@@ -141,7 +156,7 @@ public class CreatePasswordViewModel : INotifyPropertyChanged
 						generated = generated.OrderBy(x => GetPositiveRandomInt(generator)).ToList();
 					}
 
-					GeneratedPassword = new String(generated.ToArray());
+					GeneratedPassword = string.Join("", generated); //  new String( generated.ToArray());
 					copyToClipboardCommand.RaiseCanExecuteChanged();
 				}));
 		}
@@ -217,5 +232,16 @@ public class CreatePasswordViewModel : INotifyPropertyChanged
 		}
 
 		return returnValue;
+	}
+
+	private static void ConstructEmojiList()
+	{
+		int startValue = 0x1F600;
+		emoticonsUnicodeBlock.Add(Char.ConvertFromUtf32(startValue));
+		for (int i = 0; i < 80; i++)
+		{
+			startValue++;
+			emoticonsUnicodeBlock.Add(Char.ConvertFromUtf32(startValue));
+		}
 	}
 }
