@@ -23,9 +23,13 @@ namespace WhisperDragonWPF
 		public CreatePasswordWindow()
 		{
 			InitializeComponent();
-			DataContext = new CreatePasswordViewModel();
+			DataContext = new CreatePasswordViewModel(this.OkClose);
 		}
 
+		private void OkClose()
+		{
+			this.Close();
+		}
 
 		#region Validators
 

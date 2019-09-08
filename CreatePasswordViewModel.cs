@@ -85,6 +85,14 @@ public class CreatePasswordViewModel : INotifyPropertyChanged
 	// Generated during runtime in ConstructEmojiList(), See https://en.wikipedia.org/wiki/Emoticons_(Unicode_block)
 	private static readonly List<string> emoticonsUnicodeBlock = new List<string>();
 
+	private readonly Action callOnClose;
+
+	public CreatePasswordViewModel(Action closeAction)
+	{
+		this.callOnClose = closeAction;
+	}
+
+
 	#region Buttons
 
 	private ICommand generatePasswordCommand;
@@ -185,7 +193,7 @@ public class CreatePasswordViewModel : INotifyPropertyChanged
 			return closeCommand 
 				?? (closeCommand = new ActionCommand(() =>
 				{
-					
+					this.callOnClose?.Invoke();
 				}));
 		}
 	}
