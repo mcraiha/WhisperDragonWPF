@@ -222,10 +222,15 @@ public class WhisperDragonViewModel
 			return addLoginViaButton 
 				?? (addLoginViaButton = new ActionCommand(() =>
 				{
-					AddLoginWindow addLoginWindow = new AddLoginWindow();
+					AddLoginWindow addLoginWindow = new AddLoginWindow(this.AddLoginToCollection);
 					addLoginWindow.ShowDialog();
 				}));
 		}
+	}
+
+	private void AddLoginToCollection(LoginSimplified newLogin)
+	{
+		this.logins.Add(newLogin);
 	}
 
 	#endregion // Tools

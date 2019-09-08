@@ -63,14 +63,17 @@ public class AddLoginViewModel : INotifyPropertyChanged
 
 	public event PropertyChangedEventHandler PropertyChanged;
 
-	private Action onPositiveClose;
+	private readonly Action onPositiveClose;
 
-	private Action onNegativeClose;
+	private readonly Action onNegativeClose;
 
-	public AddLoginViewModel(Action positiveAction, Action negativeAction)
+	private readonly Action<LoginSimplified> addLogin;
+
+	public AddLoginViewModel(Action positiveAction, Action negativeAction, Action<LoginSimplified> add)
 	{
 		this.onPositiveClose = positiveAction;
 		this.onNegativeClose = negativeAction;
+		this.addLogin = add;
 	}
 
 	
@@ -85,6 +88,16 @@ public class AddLoginViewModel : INotifyPropertyChanged
 			return addLoginCommand 
 				?? (addLoginCommand = new ActionCommand(() =>
 				{
+					this.addLogin(new LoginSimplified() {
+						Title = this.Title,
+						URL = this.URL,
+						Username = this.Username,
+						Password = this.password,
+						Category = this.Category,
+						Tags = this.Tags,
+						//CreationTime = DateTime.UtcNow,
+
+					 });
 					this.onPositiveClose();
 				}));
 		}
