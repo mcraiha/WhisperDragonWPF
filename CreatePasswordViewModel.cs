@@ -206,19 +206,6 @@ public class CreatePasswordViewModel : INotifyPropertyChanged
 
 	#endregion // Property changed
 
-/* 	public static void Randomize<T>(List<T> target, RandomNumberGenerator rng)
-	{
-		int n = target.Count;
-        for (int i = 0; i < n; i++)
-        {
-            int r = i + _random.Next(n - i);
-
-            T t = target[r];
-            target[r] = target[i];
-            target[i] = t;
-        }
-	}*/
-
 	private static int GetPositiveRandomInt(RandomNumberGenerator rng)
 	{
 		int returnValue = -1;
