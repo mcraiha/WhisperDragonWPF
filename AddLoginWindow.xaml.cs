@@ -22,7 +22,7 @@ namespace WhisperDragonWPF
 		public AddLoginWindow(Action<LoginSimplified> addLogin)
 		{
 			InitializeComponent();
-			DataContext = new AddLoginViewModel(AddClose, CancelClose, addLogin);
+			DataContext = new AddLoginViewModel(AddClose, CancelClose, addLogin, passwordBox);
 		}
 
 		private void AddClose()

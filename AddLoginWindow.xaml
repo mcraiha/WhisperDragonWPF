@@ -18,7 +18,8 @@
 			<TextBox Name="username" Text="{Binding Username}" Margin="2,0,2,2" />
 
 			<Label Content="Password:" Margin="2,5,2,2" />
-			<TextBox Name="password" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,2" />
+			<TextBox Name="password" Visibility="{Binding PasswordTextVisibility}" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,2" />
+			<PasswordBox x:Name="passwordBox" Visibility="{Binding PasswordBoxVisibility}" Margin="2,0,2,2" />
 			<CheckBox IsChecked="{Binding VisiblePassword}" Margin="2,0,2,2">Visible</CheckBox>
 
 			<Label Content="Notes:" Margin="2,5,2,2" />

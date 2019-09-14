@@ -28,32 +28,23 @@ public class AddLoginViewModel : INotifyPropertyChanged
 		set
 		{
 			this.visiblePassword = value;
-			// Update to cause onpropertychange
-			Password = password;
+			
+			if (this.visiblePassword)
+			{
+				this.Password = passwordBox.Password;
+			}
+			else
+			{
+				passwordBox.Password = this.Password;
+			}
+
+			OnPropertyChanged(nameof(PasswordTextVisibility));
+			OnPropertyChanged(nameof(PasswordBoxVisibility));
+			OnPropertyChanged(nameof(Password));
 		} 
 	}
 
-	private string password = "";
-	public string Password 
-	{ 
-		get
-		{
-			if (VisiblePassword)
-			{
-				return this.password;
-			}
-			
-			return string.Create(this.password.Length, '*', (chars, buf) => {
-																		for (int i = 0; i < chars.Length; i++) chars[i] = buf;
-					});
-		}
-		set         
-		{
-			this.password = value;
-			OnPropertyChanged(nameof(Password));
-		}
-	
-	}
+	public string Password { get; set; } = "";
 
 	public string Notes { get; set; } = "";
 
@@ -69,12 +60,44 @@ public class AddLoginViewModel : INotifyPropertyChanged
 
 	private readonly Action<LoginSimplified> addLogin;
 
-	public AddLoginViewModel(Action positiveAction, Action negativeAction, Action<LoginSimplified> add)
+	private readonly PasswordBox passwordBox;
+
+	public AddLoginViewModel(Action positiveAction, Action negativeAction, Action<LoginSimplified> add, PasswordBox pwBox)
 	{
 		this.onPositiveClose = positiveAction;
 		this.onNegativeClose = negativeAction;
 		this.addLogin = add;
+		this.passwordBox = pwBox;
 	}
+
+
+	#region Visibilities
+
+	public Visibility PasswordTextVisibility
+	{ 
+		get
+		{
+			return this.visiblePassword ? Visibility.Visible : Visibility.Collapsed;
+		} 
+		set
+		{
+
+		}
+	}
+
+	public Visibility PasswordBoxVisibility
+	{ 
+		get
+		{
+			return !this.visiblePassword ? Visibility.Visible : Visibility.Collapsed;
+		} 
+		set
+		{
+
+		}
+	}
+
+	#endregion
 
 	
 	#region Buttons
@@ -92,7 +115,7 @@ public class AddLoginViewModel : INotifyPropertyChanged
 						Title = this.Title,
 						URL = this.URL,
 						Username = this.Username,
-						Password = this.password,
+						Password = this.Password,
 						Category = this.Category,
 						Tags = this.Tags,
 						//CreationTime = DateTime.UtcNow,
