@@ -214,6 +214,27 @@ public class WhisperDragonViewModel
 		}
 	}
 
+	#endregion // Tools
+
+	#region Help
+
+	private ICommand showAboutViaMenu;
+
+	public ICommand ShowAboutViaMenu
+	{
+		get
+		{
+			return showAboutViaMenu
+				?? (showAboutViaMenu = new ActionCommand(() =>
+				{
+					AboutWindow aboutWindow = new AboutWindow();
+					aboutWindow.ShowDialog();
+				}));
+		}
+	}
+
+	#endregion // Help
+
 	private ICommand addLoginViaButton;
 	public ICommand AddLoginViaButton
 	{
@@ -233,5 +254,5 @@ public class WhisperDragonViewModel
 		this.logins.Add(newLogin);
 	}
 
-	#endregion // Tools
+	
 }

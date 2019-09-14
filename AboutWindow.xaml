@@ -1,0 +1,18 @@
+<Window x:Class="WhisperDragonWPF.AboutWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="clr-namespace:WhisperDragonWPF"
+		mc:Ignorable="d"
+		Title="About" MinWidth="350" SizeToContent="WidthAndHeight">
+
+		<StackPanel>
+			<Label Content="{Binding Description}" Margin="2,5,2,2" />
+			<Label Content="URL:" Margin="2,5,2,2" />
+			<TextBlock><Hyperlink NavigateUri="http://tba.com">WhisperDragonWPF</Hyperlink></TextBlock>
+			<TextBlock><Hyperlink NavigateUri="https://github.com/mcraiha/WhisperDragonWPF">GitHub</Hyperlink></TextBlock>
+
+			<Button Command="{Binding OkCommand}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Padding="3,3,3,3" Width="75" Margin="10">OK</Button>
+		</StackPanel>
+</Window>

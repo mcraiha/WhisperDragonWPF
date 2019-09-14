@@ -34,7 +34,7 @@
                 <MenuItem Header="Help">
                     <MenuItem Header="View Help" />
                     <Separator />
-                    <MenuItem Header="About" />
+                    <MenuItem Header="About" Command="{Binding ShowAboutViaMenu}" />
                 </MenuItem>
             </Menu>
 
