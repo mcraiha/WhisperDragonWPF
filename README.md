@@ -35,4 +35,6 @@ Follow build steps above, once it builds, open the project in Visual Studio Code
 
 ## License
 
-Licensed under **The Unlicense**, see [LICENSE](https://github.com/mcraiha/WhisperDragonWPF/blob/master/LICENSE)
+Code licensed under **The Unlicense**, see [LICENSE](https://github.com/mcraiha/WhisperDragonWPF/blob/master/LICENSE)
+
+Icon file ([whisperdragon.ico](whisperdragon.ico)) is released under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) license. It uses 🐉 and 🔒 emojis from [Twitter Emoji (Twemoji)](https://github.com/twitter/twemoji) project.
