@@ -7,6 +7,8 @@ namespace WhisperDragonWPF
 		public int indexNumber { get; set; }
 
 		// Visible elements
+
+		public bool IsSecure { get; set; }
 		public string Title { get; set; }
 		public string URL { get; set; }
 		public string Username { get; set; }

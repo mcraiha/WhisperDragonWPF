@@ -22,7 +22,13 @@ public class WhisperDragonViewModel
 	{
 		for (int i = 0; i < 5; i++ )
 		{
-			logins.Add(new LoginSimplified() { indexNumber = i, Title = Path.GetRandomFileName(), Username = Path.GetRandomFileName(), URL = $"https://{Path.GetRandomFileName()}" });
+			logins.Add(new LoginSimplified() {
+				IsSecure =  i % 2 == 0,
+				indexNumber = i, 
+				Title = Path.GetRandomFileName(), 
+				Username = Path.GetRandomFileName(), 
+				URL = $"https://{Path.GetRandomFileName()}" 
+				});
 		}
 		this.tabSections = sections;
 	}

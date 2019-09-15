@@ -13,6 +13,10 @@
         <KeyBinding Command="{Binding SelectThirdTab}" Key="F4"/>
     </Window.InputBindings>
 
+    <Window.Resources>
+        <local:BoolToSecureIconStringConverter x:Key="booltosecureiconstringconverter" />
+    </Window.Resources>
+
     <Grid>
         <DockPanel>
             <Menu DockPanel.Dock="Top">
@@ -52,6 +56,7 @@
                                 SelectionMode="Single" AutoGenerateColumns="False" 
                                 IsReadOnly="True" >
                             <DataGrid.Columns>
+                                <DataGridTextColumn Header="Secure" Binding="{Binding IsSecure, Converter={StaticResource booltosecureiconstringconverter}}" />
                                 <DataGridTextColumn Header="Title" Binding="{Binding Title}" />
                                 <DataGridTextColumn Header="Address / URL" Binding="{Binding URL}" />
                                 <DataGridTextColumn Header="Username" Binding="{Binding Username}" />
