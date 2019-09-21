@@ -206,6 +206,21 @@ public class WhisperDragonViewModel
 
 	#region Tools
 
+	private ICommand createNewCommonSecretsContainerViaMenu;
+
+	public ICommand CreateNewCommonSecretsContainerViaMenu
+	{
+		get
+		{
+			return createNewCommonSecretsContainerViaMenu 
+				?? (createNewCommonSecretsContainerViaMenu = new ActionCommand(() =>
+				{
+					CreateKeyDerivationFunctionWindow keyDerivationFunctionWindow = new CreateKeyDerivationFunctionWindow();
+					keyDerivationFunctionWindow.ShowDialog();
+				}));
+		}
+	}
+
 	private ICommand generatePasswordViaMenu;
 	public ICommand GeneratePasswordViaMenu
 	{

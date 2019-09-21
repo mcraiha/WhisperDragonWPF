@@ -21,7 +21,7 @@
         <DockPanel>
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File">
-                    <MenuItem Command="New" />
+                    <MenuItem Header="_New" Command="{Binding CreateNewCommonSecretsContainerViaMenu}" />
                     <Separator />
                     <MenuItem Header="_Exit" />
                 </MenuItem>
