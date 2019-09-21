@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace WhisperDragonWPF
 {
 	/// <summary>
-	/// Interaction logic for MainWindow.xaml
+	/// Interaction logic for CreatePasswordWindow.xaml
 	/// </summary>
 	public partial class CreatePasswordWindow : Window
 	{
