@@ -215,8 +215,10 @@ public class WhisperDragonViewModel
 			return createNewCommonSecretsContainerViaMenu 
 				?? (createNewCommonSecretsContainerViaMenu = new ActionCommand(() =>
 				{
-					CreateKeyDerivationFunctionWindow keyDerivationFunctionWindow = new CreateKeyDerivationFunctionWindow();
-					keyDerivationFunctionWindow.ShowDialog();
+					CreateCommonSecretsWindow createCommonSecretsWindow = new CreateCommonSecretsWindow();
+					createCommonSecretsWindow.ShowDialog();
+					//CreateKeyDerivationFunctionWindow keyDerivationFunctionWindow = new CreateKeyDerivationFunctionWindow();
+					//keyDerivationFunctionWindow.ShowDialog();
 				}));
 		}
 	}
