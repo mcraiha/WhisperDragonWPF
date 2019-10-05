@@ -1,3 +1,5 @@
+using System;
+using System.Text;
 using System.Numerics;
 using System.Collections.Generic;
 
@@ -115,6 +117,44 @@ namespace WhisperDragonWPF
 			}
 
 			return PasswordSecurityLevel.Unknown;
+		}
+
+		public static double ShannonEntropy(string input)
+		{
+			if (string.IsNullOrEmpty(input))
+			{
+				return 0;
+			}
+
+			return ShannonEntropy(Encoding.UTF8.GetBytes(input));
+		}
+
+		public static double ShannonEntropy(byte[] byteArray)
+		{
+			var dictionary = new Dictionary<byte, int>();
+
+			foreach (byte b in byteArray)
+			{
+				if (!dictionary.ContainsKey(b))
+				{
+					dictionary.Add(b, 1);
+				}
+				else
+				{
+					dictionary[b] += 1;
+				}
+			}
+
+			double result = 0.0;
+			int length = byteArray.Length;
+			
+			foreach (var item in dictionary)
+			{
+				var frequency = (double)item.Value / length;
+				result -= frequency * (Math.Log(frequency) / Math.Log(2));
+			}
+
+			return result;
 		}
 	}
 }
