@@ -133,7 +133,9 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 
 	private void UpdatePasswordEntropy(string pw)
 	{
-		this.PasswordEntropy = EntropyCalcs.CalcutePasswordEntropy(pw).ToString();
+		int entropyInBits = EntropyCalcs.CalcutePasswordEntropy(pw);
+		PasswordSecurityLevel level = EntropyCalcs.GetPasswordSecurityLevel(entropyInBits);
+		this.PasswordEntropy = $"{LocMan.Get("Password entropy:")} {entropyInBits} {LocMan.Get("bits")} ({level})";
 		OnPropertyChanged(nameof(PasswordEntropy));
 	}
 
