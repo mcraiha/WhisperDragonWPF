@@ -1,86 +1,120 @@
 using System.Numerics;
+using System.Collections.Generic;
 
 namespace WhisperDragonWPF
 {
-    public static class EntropyCalcs
-    {
-        /// <summary>
-        /// Calculate password entropy
-        /// </summary>
-        /// <remarks>
-        /// Logic is from https://www.pleacher.com/mp/mlessons/algebra/entropy.html
-        /// </remarks>
-        /// <param name="password">Password for calculations</param>
-        /// <returns>Returns password entropy in bits</returns>
-        public static int CalcutePasswordEntropy(string password)
-        {
-            if (string.IsNullOrEmpty(password))
-            {
-                return 0;
-            }
+	public enum PasswordSecurityLevel
+	{
+		// These aren't exact science so do NOT assume anything
+		Very_Weak = 0,
+		Weak,
+		Reasonable,
+		Strong,
+		Very_Strong,
+		Unknown,
+	}
 
-            int charsInPassword = password.Length;
-            int totalPool = SumUpTotalPool(password);
+	public static class EntropyCalcs
+	{
+		private static readonly List<(PasswordSecurityLevel level, int min, int max)> limitsInBits = new List<(PasswordSecurityLevel level, int min, int max)>()
+		{
+			(PasswordSecurityLevel.Very_Weak, -1, 27),
+			(PasswordSecurityLevel.Weak, 28, 35),
+			(PasswordSecurityLevel.Reasonable, 36, 59),
+			(PasswordSecurityLevel.Strong, 60, 127),
+			(PasswordSecurityLevel.Very_Strong, 128, int.MaxValue),
+		};
 
-            BigInteger beforeLog = BigInteger.Pow(totalPool, charsInPassword);
-            return (int) BigInteger.Log(beforeLog);
-        }
+		/// <summary>
+		/// Calculate password entropy
+		/// </summary>
+		/// <remarks>
+		/// Logic is from https://www.pleacher.com/mp/mlessons/algebra/entropy.html
+		/// </remarks>
+		/// <param name="password">Password for calculations</param>
+		/// <returns>Returns password entropy in bits</returns>
+		public static int CalcutePasswordEntropy(string password)
+		{
+			if (string.IsNullOrEmpty(password))
+			{
+				return 0;
+			}
 
-        private static int SumUpTotalPool(string password)
-        {
-            if (string.IsNullOrEmpty(password))
-            {
-                return 0;
-            }
+			int charsInPassword = password.Length;
+			int totalPool = SumUpTotalPool(password);
 
-            bool includesLowercase = false;
-            bool includesUppercase = false;
-            bool includesDigits = false;
-            bool includesSymbols = false;
+			BigInteger beforeLog = BigInteger.Pow(totalPool, charsInPassword);
+			return (int) BigInteger.Log(beforeLog);
+		}
 
-            foreach (char c in password)
-            {
-                if (char.IsLower(c))
-                {
-                    includesLowercase = true;
-                }
-                else if (char.IsUpper(c))
-                {
-                    includesUppercase = true;
-                }
-                else if (char.IsDigit(c))
-                {
-                    includesDigits = true;
-                }
-                else if (char.IsSymbol(c))
-                {
-                    includesSymbols = true;
-                }
-            }
+		private static int SumUpTotalPool(string password)
+		{
+			if (string.IsNullOrEmpty(password))
+			{
+				return 0;
+			}
 
-            int returnValue = 0;
+			bool includesLowercase = false;
+			bool includesUppercase = false;
+			bool includesDigits = false;
+			bool includesSymbols = false;
 
-            if (includesLowercase)
-            {
-                returnValue += 26;
-            }
+			foreach (char c in password)
+			{
+				if (char.IsLower(c))
+				{
+					includesLowercase = true;
+				}
+				else if (char.IsUpper(c))
+				{
+					includesUppercase = true;
+				}
+				else if (char.IsDigit(c))
+				{
+					includesDigits = true;
+				}
+				else if (char.IsSymbol(c))
+				{
+					includesSymbols = true;
+				}
+			}
 
-            if (includesUppercase)
-            {
-                returnValue += 26;
-            }
+			int returnValue = 0;
 
-            if (includesDigits)
-            {
-                returnValue += 10;
-            }
+			if (includesLowercase)
+			{
+				returnValue += 26;
+			}
 
-            if (includesSymbols)
-            {
-                returnValue += 30;
-            }
+			if (includesUppercase)
+			{
+				returnValue += 26;
+			}
 
-            return returnValue;
-        }
-    }
+			if (includesDigits)
+			{
+				returnValue += 10;
+			}
+
+			if (includesSymbols)
+			{
+				returnValue += 30;
+			}
+
+			return returnValue;
+		}
+
+		public static PasswordSecurityLevel GetPasswordSecurityLevel(int passwordEntropyInBits)
+		{
+			foreach ((PasswordSecurityLevel level, int min, int max) in limitsInBits)
+			{
+				if (passwordEntropyInBits >= min && passwordEntropyInBits <= max)
+				{
+					return level;
+				}
+			}
+
+			return PasswordSecurityLevel.Unknown;
+		}
+	}
 }
