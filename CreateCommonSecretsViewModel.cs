@@ -42,6 +42,8 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 
 	public string PasswordEntropy { get; set; } = "";
 
+	public string ShannonEntropy { get; set; } = "";
+
 	public event PropertyChangedEventHandler PropertyChanged;
 
 	private readonly Action callOnPositive;
@@ -124,6 +126,7 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 	private void Password1Changed(Object sender, RoutedEventArgs args)
 	{
 		this.UpdatePasswordEntropy(passwordBox1.Password);
+		this.UpdateShannonEntropy(passwordBox1.Password);
 	}
 
 	private void Password2Changed(Object sender, RoutedEventArgs args)
@@ -137,6 +140,13 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 		PasswordSecurityLevel level = EntropyCalcs.GetPasswordSecurityLevel(entropyInBits);
 		this.PasswordEntropy = $"{LocMan.Get("Password entropy:")} {entropyInBits} {LocMan.Get("bits")} ({level})";
 		OnPropertyChanged(nameof(PasswordEntropy));
+	}
+
+	private void UpdateShannonEntropy(string pw)
+	{
+		double entropyInBits = EntropyCalcs.ShannonEntropy(pw);
+		this.ShannonEntropy = $"{LocMan.Get("Shannon entropy:")} {entropyInBits.ToString("F2")} {LocMan.Get("bits")}";
+		OnPropertyChanged(nameof(ShannonEntropy));
 	}
 
 	#endregion // Values changed
