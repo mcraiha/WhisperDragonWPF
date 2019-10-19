@@ -44,6 +44,59 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 
 	public string ShannonEntropy { get; set; } = "";
 
+	public ObservableCollection<string> Algorithms { get; }
+	public string selectedAlgorithm;
+
+	public string SelectedAlgorithm
+    {
+        get
+        {
+            return this.selectedAlgorithm;
+        }
+        set
+        {
+            if (this.selectedAlgorithm != value)
+            {
+                this.selectedAlgorithm = value;
+                OnPropertyChanged(nameof(SelectedAlgorithm));
+            }
+        }
+    }
+
+	public ObservableCollection<string> PseudorandomFunctions { get; }
+
+	public string selectedPseudorandomFunction;
+
+	public string SelectedPseudorandomFunction
+	{
+        get
+        {
+            return this.selectedPseudorandomFunction;
+        }
+        set
+        {
+            if (this.selectedPseudorandomFunction != value)
+            {
+                this.selectedPseudorandomFunction = value;
+                OnPropertyChanged(nameof(SelectedPseudorandomFunction));
+            }
+        }
+    }
+
+	private byte[] salt = new byte[16];
+
+	public string Salt
+	{
+        get
+        {
+            return BitConverter.ToString(this.salt).Replace("-", string.Empty);
+        }
+    }
+
+	public int Iterations { get; set; }
+
+	public string Identifier { get; set; }
+
 	public event PropertyChangedEventHandler PropertyChanged;
 
 	private readonly Action callOnPositive;
@@ -61,6 +114,42 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 
 		this.passwordBox1.PasswordChanged += Password1Changed;
 		this.passwordBox2.PasswordChanged += Password2Changed;
+
+		Algorithms = this.GenerateAlgorithms();
+		this.selectedAlgorithm = Algorithms[0];
+
+		PseudorandomFunctions = this.GeneratePseudorandomFunctions();
+		this.selectedPseudorandomFunction = PseudorandomFunctions[0];
+
+		this.GenerateSalt();
+	}
+
+	private ObservableCollection<string> GenerateAlgorithms()
+	{
+		var returnValue = new ObservableCollection<string>();
+
+		//foreach ()
+		returnValue.Add("PBKDF2");
+
+		return returnValue;
+	}
+
+	private ObservableCollection<string> GeneratePseudorandomFunctions()
+	{
+		var returnValue = new ObservableCollection<string>();
+
+		returnValue.Add("HMAC-SHA256");
+		returnValue.Add("HMAC-SHA512");
+
+		return returnValue;
+	}
+
+	private void GenerateSalt()
+	{
+		using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
+		{
+			rng.GetBytes(this.salt);
+		}
 	}
 
 	#region Visibilities
@@ -89,7 +178,7 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 		}
 	}
 
-	#endregion
+	#endregion // Visibilities
 	
 	#region Buttons
 
