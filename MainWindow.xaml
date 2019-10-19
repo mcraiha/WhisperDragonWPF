@@ -15,6 +15,11 @@
 
     <Window.Resources>
         <local:BoolToSecureIconStringConverter x:Key="booltosecureiconstringconverter" />
+        <Style x:Key="CenterCellText" TargetType="DataGridCell">
+            <Style.Setters>
+                <Setter Property="TextBlock.TextAlignment" Value="Center" />
+            </Style.Setters>
+        </Style>
     </Window.Resources>
 
     <Grid>
@@ -56,7 +61,7 @@
                                 SelectionMode="Single" AutoGenerateColumns="False" 
                                 IsReadOnly="True" >
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Secure" Binding="{Binding IsSecure, Converter={StaticResource booltosecureiconstringconverter}}" />
+                                <DataGridTextColumn Header="Secure" Binding="{Binding IsSecure, Converter={StaticResource booltosecureiconstringconverter}}" CellStyle="{StaticResource CenterCellText}" />
                                 <DataGridTextColumn Header="Title" Binding="{Binding Title}" />
                                 <DataGridTextColumn Header="Address / URL" Binding="{Binding URL}" />
                                 <DataGridTextColumn Header="Username" Binding="{Binding Username}" />
