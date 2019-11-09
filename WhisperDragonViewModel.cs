@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
 using WhisperDragonWPF;
+using Microsoft.Win32;
 
 public class WhisperDragonViewModel
 {
@@ -221,6 +222,24 @@ public class WhisperDragonViewModel
 					createCommonSecretsWindow.ShowDialog();
 					//CreateKeyDerivationFunctionWindow keyDerivationFunctionWindow = new CreateKeyDerivationFunctionWindow();
 					//keyDerivationFunctionWindow.ShowDialog();
+				}));
+		}
+	}
+
+	private ICommand openCommonSecretsContainerViaMenu;
+
+	public ICommand OpenCommonSecretsContainerViaMenu
+	{
+		get
+		{
+			return openCommonSecretsContainerViaMenu 
+				?? (openCommonSecretsContainerViaMenu = new ActionCommand(() =>
+				{
+					OpenFileDialog openFileDialog = new OpenFileDialog();
+					if (openFileDialog.ShowDialog() == true)
+					{
+
+					}
 				}));
 		}
 	}
