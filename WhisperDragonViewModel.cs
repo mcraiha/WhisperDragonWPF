@@ -244,6 +244,38 @@ public class WhisperDragonViewModel
 		}
 	}
 
+	private ICommand saveCommonSecretsContainerViaMenu;
+
+	public ICommand SaveCommonSecretsContainerViaMenu
+	{
+		get
+		{
+			return saveCommonSecretsContainerViaMenu 
+				?? (saveCommonSecretsContainerViaMenu = new ActionCommand(() =>
+				{
+					// Check that writing to file is still possible
+				}));
+		}
+	}
+
+	private ICommand saveAsCommonSecretsContainerViaMenu;
+
+	public ICommand SaveAsCommonSecretsContainerViaMenu
+	{
+		get
+		{
+			return saveAsCommonSecretsContainerViaMenu 
+				?? (saveAsCommonSecretsContainerViaMenu = new ActionCommand(() =>
+				{
+					SaveFileDialog saveFileDialog = new SaveFileDialog();
+					if(saveFileDialog.ShowDialog() == true)
+					{
+
+					}
+				}));
+		}
+	}
+
 	private ICommand generatePasswordViaMenu;
 	public ICommand GeneratePasswordViaMenu
 	{

@@ -28,6 +28,8 @@
                 <MenuItem Header="_File">
                     <MenuItem Header="_New..." Command="{Binding CreateNewCommonSecretsContainerViaMenu}" />
                     <MenuItem Header="_Open..." Command="{Binding OpenCommonSecretsContainerViaMenu}" />
+                    <MenuItem Header="_Save" Command="{Binding SaveCommonSecretsContainerViaMenu}" />
+                    <MenuItem Header="_Save As..." Command="{Binding SaveAsCommonSecretsContainerViaMenu}" />
                     <Separator />
                     <MenuItem Header="_Exit" />
                 </MenuItem>
