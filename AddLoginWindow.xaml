@@ -14,6 +14,9 @@
 			<Label Content="URL:" Margin="2,5,2,2" />
 			<TextBox Name="url" Text="{Binding URL}" Margin="2,0,2,2" />
 
+			<Label Content="Email:" Margin="2,5,2,2" />
+			<TextBox Name="email" Text="{Binding Email}" Margin="2,0,2,2" />
+
 			<Label Content="Username:" Margin="2,5,2,2" />
 			<TextBox Name="username" Text="{Binding Username}" Margin="2,0,2,2" />
 

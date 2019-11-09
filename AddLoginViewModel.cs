@@ -15,6 +15,8 @@ public class AddLoginViewModel : INotifyPropertyChanged
 
 	public string URL { get; set; } = "";
 
+	public string Email { get; set; } = "";
+
 	public string Username { get; set; } = "";
 
 	private bool visiblePassword = false;
@@ -114,6 +116,7 @@ public class AddLoginViewModel : INotifyPropertyChanged
 					this.addLogin(new LoginSimplified() {
 						Title = this.Title,
 						URL = this.URL,
+						Email = this.Email,
 						Username = this.Username,
 						Password = this.Password,
 						Category = this.Category,
