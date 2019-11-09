@@ -64,6 +64,7 @@
                                 <DataGridTextColumn Header="Secure" Binding="{Binding IsSecure, Converter={StaticResource booltosecureiconstringconverter}}" CellStyle="{StaticResource CenterCellText}" />
                                 <DataGridTextColumn Header="Title" Binding="{Binding Title}" />
                                 <DataGridTextColumn Header="Address / URL" Binding="{Binding URL}" />
+                                <DataGridTextColumn Header="Email" Binding="{Binding Email}" />
                                 <DataGridTextColumn Header="Username" Binding="{Binding Username}" />
                                 <DataGridTextColumn Header="Password" Binding="{Binding Password}" />
                                 <DataGridTextColumn Header="Category" Binding="{Binding Category}" />

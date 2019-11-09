@@ -27,7 +27,8 @@ public class WhisperDragonViewModel
 				indexNumber = i, 
 				Title = Path.GetRandomFileName(), 
 				Username = Path.GetRandomFileName(), 
-				URL = $"https://{Path.GetRandomFileName()}" 
+				URL = $"https://{Path.GetRandomFileName()}",
+				Email =  $"{Path.GetRandomFileName()}@{Path.GetRandomFileName()}",
 				});
 		}
 		this.tabSections = sections;
