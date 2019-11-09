@@ -153,7 +153,8 @@ public class WhisperDragonViewModel
 			return addLoginViaMenu
 				?? (addLoginViaMenu = new ActionCommand(() =>
 				{
-					
+					AddLoginWindow addLoginWindow = new AddLoginWindow(this.AddLoginToCollection);
+					addLoginWindow.ShowDialog();
 				}));
 		}
 	}
