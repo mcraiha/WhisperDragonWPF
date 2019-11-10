@@ -27,11 +27,11 @@ See unreleased documentation in ...
 
 1. Clone repository to local machine
 2. Install .NET Core 3.0 (or later) to Windows machine (if not already installed) 
-3. Run `dotnet run` in command prompt or PowerShell
+3. Run `dotnet run` in command prompt or PowerShell or run `dotnet publish -c Release` to build single exe to **bin\Release\netcoreapp3.0\win-x64\publish** folder
 
-### Debug wit Visual Studio Code
+### Debug with Visual Studio Code
 
-Follow build steps above, once it builds, open the project in Visual Studio Code with `code .` command, and use **Debug -> Start Debugging (F5)**
+Follow build steps above, once it runs, open the project in Visual Studio Code with `code .` command, and use **Debug -> Start Debugging (F5)**
 
 ## License
 
