@@ -11,4 +11,8 @@
 	  <ApplicationIcon>whisperdragon.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="LibCommonSecrets" Version="0.9.0" />
+  </ItemGroup>
+
 </Project>
