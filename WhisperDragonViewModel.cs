@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Controls;
 using WhisperDragonWPF;
 using Microsoft.Win32;
+using CSCommonSecrets;
 
 public class WhisperDragonViewModel
 {
@@ -18,6 +19,9 @@ public class WhisperDragonViewModel
 	public LoginSimplified SelectedLogin { get; set; }
 
 	private TabControl tabSections;
+
+	private CommonSecretsContainer csc = null;
+	private string filePath = null;
 
 	public WhisperDragonViewModel(TabControl sections)
 	{
@@ -218,7 +222,7 @@ public class WhisperDragonViewModel
 			return createNewCommonSecretsContainerViaMenu 
 				?? (createNewCommonSecretsContainerViaMenu = new ActionCommand(() =>
 				{
-					CreateCommonSecretsWindow createCommonSecretsWindow = new CreateCommonSecretsWindow();
+					CreateCommonSecretsWindow createCommonSecretsWindow = new CreateCommonSecretsWindow(this.CreateNewCommonSecrets);
 					createCommonSecretsWindow.ShowDialog();
 					//CreateKeyDerivationFunctionWindow keyDerivationFunctionWindow = new CreateKeyDerivationFunctionWindow();
 					//keyDerivationFunctionWindow.ShowDialog();
@@ -330,5 +334,12 @@ public class WhisperDragonViewModel
 		this.logins.Add(newLogin);
 	}
 
-	
+	#region New, Open, Save, Close
+
+	private void CreateNewCommonSecrets(KeyDerivationFunctionEntry kdfe)
+	{
+		this.csc = new CommonSecretsContainer(kdfe);
+	}
+
+	#endregion // New, Open, Save, Close
 }

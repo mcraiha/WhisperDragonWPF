@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.ComponentModel;
 using WhisperDragonWPF;
 using CSCommonSecrets;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 {
@@ -100,13 +101,13 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 
 	public event PropertyChangedEventHandler PropertyChanged;
 
-	private readonly Action callOnPositive;
+	private readonly Action<KeyDerivationFunctionEntry> callOnPositive;
 	private readonly Action callOnNegative;
 
 	private readonly PasswordBox passwordBox1;
 	private readonly PasswordBox passwordBox2;
 
-	public CreateCommonSecretsViewModel(Action positiveAction, Action negativeAction, PasswordBox pwBox1, PasswordBox pwBox2)
+	public CreateCommonSecretsViewModel(Action<KeyDerivationFunctionEntry> positiveAction, Action negativeAction, PasswordBox pwBox1, PasswordBox pwBox2)
 	{
 		this.callOnPositive = positiveAction;
 		this.callOnNegative = negativeAction;
@@ -146,8 +147,8 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 	{
 		var returnValue = new ObservableCollection<string>();
 
-		returnValue.Add(Microsoft.AspNetCore.Cryptography.KeyDerivation.KeyDerivationPrf.HMACSHA256.ToString());
-		returnValue.Add(Microsoft.AspNetCore.Cryptography.KeyDerivation.KeyDerivationPrf.HMACSHA512.ToString());
+		returnValue.Add(KeyDerivationPrf.HMACSHA256.ToString());
+		returnValue.Add(KeyDerivationPrf.HMACSHA512.ToString());
 
 		return returnValue;
 	}
@@ -198,7 +199,9 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 			return createCommand 
 				?? (createCommand = new ActionCommand(() =>
 				{
-					this.callOnPositive();
+					Enum.TryParse(this.selectedPseudorandomFunction, out KeyDerivationPrf keyDerivationPrf);
+					int neededBytes = (keyDerivationPrf == KeyDerivationPrf.HMACSHA256) ? 32 : 64;
+					this.callOnPositive(new KeyDerivationFunctionEntry(keyDerivationPrf, this.salt, this.Iterations, neededBytes, this.Identifier));
 				}));
 		}
 	}

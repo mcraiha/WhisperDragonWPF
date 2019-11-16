@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CSCommonSecrets;
 
 namespace WhisperDragonWPF
 {
@@ -20,9 +21,12 @@ namespace WhisperDragonWPF
 	/// </summary>
 	public partial class CreateCommonSecretsWindow : Window
 	{
-		public CreateCommonSecretsWindow()
+		private Action<KeyDerivationFunctionEntry> positive;
+
+		public CreateCommonSecretsWindow(Action<KeyDerivationFunctionEntry> onPositive)
 		{
 			InitializeComponent();
+			this.positive = onPositive;
 			DataContext = new CreateCommonSecretsViewModel(OkClose, CancelClose, passwordBox1, passwordBox2);
 		}
 
@@ -31,9 +35,10 @@ namespace WhisperDragonWPF
 			this.Close();
 		}
 
-		private void OkClose()
+		private void OkClose(KeyDerivationFunctionEntry kdfe)
 		{
 			this.Close();
+			this.positive(kdfe);
 		}
 
 		#region Validators
