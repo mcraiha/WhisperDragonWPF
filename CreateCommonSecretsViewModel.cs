@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Controls;
 using System.ComponentModel;
 using WhisperDragonWPF;
+using CSCommonSecrets;
 
 public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 {
@@ -122,14 +123,21 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 		this.selectedPseudorandomFunction = PseudorandomFunctions[0];
 
 		this.GenerateSalt();
+
+		int seed = BitConverter.ToInt32(this.salt, 0);
+		Iterations = KeyDerivationFunctionEntry.suggestedMinIterationsCount + new Random(Seed: seed).Next(100, 4242);
+
+		Identifier = "master";
 	}
 
 	private ObservableCollection<string> GenerateAlgorithms()
 	{
 		var returnValue = new ObservableCollection<string>();
 
-		//foreach ()
-		returnValue.Add("PBKDF2");
+		foreach (KDFAlgorithm algorithm in Enum.GetValues(typeof(KDFAlgorithm)))
+		{
+			returnValue.Add(algorithm.ToString());
+		}
 
 		return returnValue;
 	}
@@ -138,8 +146,8 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 	{
 		var returnValue = new ObservableCollection<string>();
 
-		returnValue.Add("HMAC-SHA256");
-		returnValue.Add("HMAC-SHA512");
+		returnValue.Add(Microsoft.AspNetCore.Cryptography.KeyDerivation.KeyDerivationPrf.HMACSHA256.ToString());
+		returnValue.Add(Microsoft.AspNetCore.Cryptography.KeyDerivation.KeyDerivationPrf.HMACSHA512.ToString());
 
 		return returnValue;
 	}
