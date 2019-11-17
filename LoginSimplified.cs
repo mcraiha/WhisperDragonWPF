@@ -56,7 +56,7 @@ namespace WhisperDragonWPF
 					byte[] derivedPassword = derivedPasswords[loginInformationSecret.GetKeyIdentifier()];
 					returnList.Add(new LoginSimplified() {
 						indexNumber = runningIndexNumber,
-						IsSecure = false,
+						IsSecure = true,
 						Title = loginInformationSecret.GetTitle(derivedPassword),
 						URL = loginInformationSecret.GetUrl(derivedPassword),
 						Email = loginInformationSecret.GetEmail(derivedPassword),
