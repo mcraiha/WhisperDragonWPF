@@ -11,6 +11,8 @@ using CSCommonSecrets;
 
 public class WhisperDragonViewModel
 {
+	public string MainTitle { get; set; } = "WhisperDragon WPF";
+
 	private ObservableCollection<LoginSimplified> logins = new ObservableCollection<LoginSimplified>();
 	public ObservableCollection<LoginSimplified> Logins
 	{
