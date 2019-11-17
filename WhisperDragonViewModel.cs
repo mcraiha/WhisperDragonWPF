@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -22,6 +23,7 @@ public class WhisperDragonViewModel
 
 	private CommonSecretsContainer csc = null;
 	private string filePath = null;
+	private readonly Dictionary<string, byte[]> derivedPasswords = new Dictionary<string, byte[]>();
 
 	public WhisperDragonViewModel(TabControl sections)
 	{
@@ -336,9 +338,24 @@ public class WhisperDragonViewModel
 
 	#region New, Open, Save, Close
 
-	private void CreateNewCommonSecrets(KeyDerivationFunctionEntry kdfe)
+	private void CreateNewCommonSecrets(KeyDerivationFunctionEntry kdfe, string password)
 	{
+		this.derivedPasswords.Clear();
+		this.derivedPasswords[kdfe.GetKeyIdentifier()] = kdfe.GeneratePasswordBytes(password);
+
 		this.csc = new CommonSecretsContainer(kdfe);
+
+		LoginInformation demoLogin = new LoginInformation("Demo login", "https://localhost", "sample@email.com", "Dragon", "gwWTY#¤&%36");
+
+		this.csc.AddLoginInformationSecret(password, demoLogin, kdfe.GetKeyIdentifier());
+		
+		this.logins.Clear();
+		List<LoginSimplified> newLogins =LoginSimplified.TurnIntoUICompatible(csc.loginInformations, csc.loginInformationSecrets, this.derivedPasswords);
+
+		foreach (LoginSimplified login in newLogins)
+		{
+			this.logins.Add(login);
+		}
 	}
 
 	#endregion // New, Open, Save, Close

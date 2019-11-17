@@ -21,9 +21,9 @@ namespace WhisperDragonWPF
 	/// </summary>
 	public partial class CreateCommonSecretsWindow : Window
 	{
-		private Action<KeyDerivationFunctionEntry> positive;
+		private Action<KeyDerivationFunctionEntry, string> positive;
 
-		public CreateCommonSecretsWindow(Action<KeyDerivationFunctionEntry> onPositive)
+		public CreateCommonSecretsWindow(Action<KeyDerivationFunctionEntry, string> onPositive)
 		{
 			InitializeComponent();
 			this.positive = onPositive;
@@ -35,10 +35,10 @@ namespace WhisperDragonWPF
 			this.Close();
 		}
 
-		private void OkClose(KeyDerivationFunctionEntry kdfe)
+		private void OkClose(KeyDerivationFunctionEntry kdfe, string password)
 		{
 			this.Close();
-			this.positive(kdfe);
+			this.positive(kdfe, password);
 		}
 
 		#region Validators

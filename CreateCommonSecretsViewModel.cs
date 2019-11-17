@@ -101,13 +101,13 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 
 	public event PropertyChangedEventHandler PropertyChanged;
 
-	private readonly Action<KeyDerivationFunctionEntry> callOnPositive;
+	private readonly Action<KeyDerivationFunctionEntry, string> callOnPositive;
 	private readonly Action callOnNegative;
 
 	private readonly PasswordBox passwordBox1;
 	private readonly PasswordBox passwordBox2;
 
-	public CreateCommonSecretsViewModel(Action<KeyDerivationFunctionEntry> positiveAction, Action negativeAction, PasswordBox pwBox1, PasswordBox pwBox2)
+	public CreateCommonSecretsViewModel(Action<KeyDerivationFunctionEntry, string> positiveAction, Action negativeAction, PasswordBox pwBox1, PasswordBox pwBox2)
 	{
 		this.callOnPositive = positiveAction;
 		this.callOnNegative = negativeAction;
@@ -201,7 +201,7 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 				{
 					Enum.TryParse(this.selectedPseudorandomFunction, out KeyDerivationPrf keyDerivationPrf);
 					int neededBytes = (keyDerivationPrf == KeyDerivationPrf.HMACSHA256) ? 32 : 64;
-					this.callOnPositive(new KeyDerivationFunctionEntry(keyDerivationPrf, this.salt, this.Iterations, neededBytes, this.Identifier));
+					this.callOnPositive(new KeyDerivationFunctionEntry(keyDerivationPrf, this.salt, this.Iterations, neededBytes, this.Identifier), Password);
 				}));
 		}
 	}
