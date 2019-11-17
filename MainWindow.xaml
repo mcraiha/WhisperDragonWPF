@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WhisperDragonWPF"
         mc:Ignorable="d"
-        Title="{Binding MainTitle}" Height="450" Width="800">
+        Title="{Binding MainTitle, Mode=OneWay}" Height="450" Width="800">
 
     <Window.InputBindings>
         <KeyBinding Command="{Binding SelectFirstTab}" Key="F2"/>

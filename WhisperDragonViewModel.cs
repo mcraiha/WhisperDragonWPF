@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
@@ -9,9 +10,10 @@ using WhisperDragonWPF;
 using Microsoft.Win32;
 using CSCommonSecrets;
 
-public class WhisperDragonViewModel
+public class WhisperDragonViewModel : INotifyPropertyChanged
 {
-	public string MainTitle { get; set; } = "WhisperDragon WPF";
+	public const string appName = "WhisperDragon WPF";
+	public string MainTitle { get; set; } = appName;
 
 	private ObservableCollection<LoginSimplified> logins = new ObservableCollection<LoginSimplified>();
 	public ObservableCollection<LoginSimplified> Logins
@@ -23,8 +25,11 @@ public class WhisperDragonViewModel
 
 	private TabControl tabSections;
 
+	public event PropertyChangedEventHandler PropertyChanged;
+
 	private CommonSecretsContainer csc = null;
 	private string filePath = null;
+	private bool isModified = false;
 	private readonly Dictionary<string, byte[]> derivedPasswords = new Dictionary<string, byte[]>();
 
 	public WhisperDragonViewModel(TabControl sections)
@@ -358,7 +363,36 @@ public class WhisperDragonViewModel
 		{
 			this.logins.Add(login);
 		}
+
+		
+		this.isModified = true;
+		this.UpdateMainTitle("Untitled");
 	}
 
 	#endregion // New, Open, Save, Close
+
+	#region Title generation
+
+	private void UpdateMainTitle(string fileName)
+	{
+		string possibleAsterisk = this.isModified ? "*" : "";
+		this.MainTitle = $"{possibleAsterisk}{fileName} - {appName}";
+		OnPropertyChanged(nameof(this.MainTitle));
+	}
+
+	#endregion // Title generation
+
+	#region Property changed
+
+	// Create the OnPropertyChanged method to raise the event
+	protected void OnPropertyChanged(string name)
+	{
+		PropertyChangedEventHandler handler = PropertyChanged;
+		if (handler != null)
+		{
+			handler(this, new PropertyChangedEventArgs(name));
+		}
+	}
+
+	#endregion // Property changed
 }
