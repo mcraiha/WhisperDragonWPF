@@ -30,6 +30,12 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 	private CommonSecretsContainer csc = null;
 	private string filePath = null;
 	private bool isModified = false;
+
+	/// <summary>
+	/// Because we do not want to store actual passwords in memory, keep collection of derived ones (TODO: encrypt at some point)
+	/// </summary>
+	/// <typeparam name="string">Key Identifier</typeparam>
+	/// <typeparam name="byte[]">Derived password as bytes</typeparam>
 	private readonly Dictionary<string, byte[]> derivedPasswords = new Dictionary<string, byte[]>();
 
 	public WhisperDragonViewModel(TabControl sections)
