@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Windows;
 
 namespace WhisperDragonWPF
@@ -8,10 +9,10 @@ namespace WhisperDragonWPF
 	/// </summary>
 	public partial class AddLoginWindow : Window
 	{
-		public AddLoginWindow(Action<LoginSimplified> addLogin)
+		public AddLoginWindow(List<string> keyIdentifiers, Action<LoginSimplified, string /* Key identifier */> addLogin)
 		{
 			InitializeComponent();
-			DataContext = new AddLoginViewModel(AddClose, CancelClose, addLogin, passwordBox);
+			DataContext = new AddLoginViewModel(keyIdentifiers, AddClose, CancelClose, addLogin, passwordBox);
 		}
 
 		private void AddClose()

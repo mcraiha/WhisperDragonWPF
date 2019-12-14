@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -178,7 +179,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 			return addLoginViaMenu
 				?? (addLoginViaMenu = new ActionCommand(() =>
 				{
-					AddLoginWindow addLoginWindow = new AddLoginWindow(this.AddLoginToCollection);
+					AddLoginWindow addLoginWindow = new AddLoginWindow(this.derivedPasswords.Keys.ToList(), this.AddLoginToCollection);
 					addLoginWindow.ShowDialog();
 				}));
 		}
@@ -357,15 +358,25 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 			return addLoginViaButton 
 				?? (addLoginViaButton = new ActionCommand(() =>
 				{
-					AddLoginWindow addLoginWindow = new AddLoginWindow(this.AddLoginToCollection);
+					AddLoginWindow addLoginWindow = new AddLoginWindow(this.derivedPasswords.Keys.ToList(), this.AddLoginToCollection);
 					addLoginWindow.ShowDialog();
 				}));
 		}
 	}
 
-	private void AddLoginToCollection(LoginSimplified newLogin)
+	private void AddLoginToCollection(LoginSimplified newLogin, string keyIdentifier)
 	{
-		this.logins.Add(newLogin);
+		LoginInformation loginToAdd = new LoginInformation(newLogin.Title, newLogin.URL, newLogin.Email, newLogin.Username, newLogin.Password);
+		if (newLogin.IsSecure)
+		{
+			this.csc.AddLoginInformationSecret(this.derivedPasswords[keyIdentifier], loginToAdd, keyIdentifier);
+		}
+		else
+		{
+			this.csc.loginInformations.Add(loginToAdd);
+		}
+
+		this.GenerateLoginSimplifiedsFromCommonSecrets();
 	}
 
 	#region New, Open, Save, Close

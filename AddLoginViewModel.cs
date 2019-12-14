@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
@@ -52,18 +54,48 @@ public class AddLoginViewModel : INotifyPropertyChanged
 
 	public string Tags { get; set; } = "";
 
+	public ObservableCollection<string> KeyIdentifiers { get; }
+	public string selectedKeyIdentifier;
+
+	public string SelectedKeyIdentifier
+    {
+        get
+        {
+            return this.selectedKeyIdentifier;
+        }
+        set
+        {
+            if (this.selectedKeyIdentifier != value)
+            {
+                this.selectedKeyIdentifier = value;
+                OnPropertyChanged(nameof(SelectedKeyIdentifier));
+            }
+        }
+    }
+
 	public event PropertyChangedEventHandler PropertyChanged;
 
 	private readonly Action onPositiveClose;
 
 	private readonly Action onNegativeClose;
 
-	private readonly Action<LoginSimplified> addLogin;
+	private readonly Action<LoginSimplified, string /* Key identifier */> addLogin;
 
 	private readonly PasswordBox passwordBox;
 
-	public AddLoginViewModel(Action positiveAction, Action negativeAction, Action<LoginSimplified> add, PasswordBox pwBox)
+	public AddLoginViewModel(List<string> keyIds, Action positiveAction, Action negativeAction, Action<LoginSimplified, string /* Key identifier */> add, PasswordBox pwBox)
 	{
+		this.KeyIdentifiers = new ObservableCollection<string>();
+		foreach (string keyIdentifier in keyIds)
+		{
+			this.KeyIdentifiers.Add(keyIdentifier);
+		}
+
+		if (keyIds.Count > 0)
+		{
+			this.SelectedKeyIdentifier = keyIds[0];
+		}
+		
 		this.onPositiveClose = positiveAction;
 		this.onNegativeClose = negativeAction;
 		this.addLogin = add;
@@ -119,9 +151,10 @@ public class AddLoginViewModel : INotifyPropertyChanged
 						Password = this.Password,
 						Category = this.Category,
 						Tags = this.Tags,
+						IsSecure = this.IsSecret,
 						//CreationTime = DateTime.UtcNow,
 
-					 });
+					 }, this.selectedKeyIdentifier);
 					this.onPositiveClose();
 				}));
 		}
