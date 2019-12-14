@@ -15,6 +15,11 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 	public const string appName = "WhisperDragon WPF";
 	public string MainTitle { get; set; } = appName;
 
+	public bool IsSaveEnabled 
+	{ 
+		get { return csc != null; }
+	}
+
 	private ObservableCollection<LoginSimplified> logins = new ObservableCollection<LoginSimplified>();
 	public ObservableCollection<LoginSimplified> Logins
 	{
@@ -380,6 +385,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		
 		this.isModified = true;
 		this.UpdateMainTitle("Untitled");
+		OnPropertyChanged(nameof(this.IsSaveEnabled));
 	}
 
 	#endregion // New, Open, Save, Close
