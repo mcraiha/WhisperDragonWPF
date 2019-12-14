@@ -38,7 +38,7 @@
                     <MenuItem Command="Copy" />
                     <MenuItem Command="Paste" />
                     <Separator />
-                    <MenuItem Header="Preferences..." />
+                    <MenuItem Header="Preferences..." Command="{Binding PreferencesViaMenu}" />
                 </MenuItem>
                 <MenuItem Header="_Tools">
                     <MenuItem Header="Generate Password..." Command="{Binding GeneratePasswordViaMenu}" />

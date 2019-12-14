@@ -303,6 +303,20 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		}
 	}
 
+	private ICommand preferencesViaMenu;
+	public ICommand PreferencesViaMenu
+	{
+		get
+		{
+			return preferencesViaMenu 
+				?? (preferencesViaMenu = new ActionCommand(() =>
+				{
+					PreferencesWindow preferencesWindow = new PreferencesWindow("c:\\temp\\something.json");
+					preferencesWindow.ShowDialog();
+				}));
+		}
+	}
+
 	#endregion // Tools
 
 	#region Help
