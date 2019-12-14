@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Security.Cryptography;
 using System;
 using System.Windows;
 using System.Windows.Input;
