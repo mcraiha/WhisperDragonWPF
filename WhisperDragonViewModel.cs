@@ -247,6 +247,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 				?? (openCommonSecretsContainerViaMenu = new ActionCommand(() =>
 				{
 					OpenFileDialog openFileDialog = new OpenFileDialog();
+					openFileDialog.Filter = "CommonSecrets JSON (*.commonsecrets.json)|*.commonsecrets.json|CommonSecrets XML (*.commonsecrets.xml)|*.commonsecrets.xml|All files (*.*)|*.*";
 					if (openFileDialog.ShowDialog() == true)
 					{
 
