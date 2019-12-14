@@ -371,7 +371,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		this.csc.AddLoginInformationSecret(password, demoLogin, kdfe.GetKeyIdentifier());
 		
 		this.logins.Clear();
-		List<LoginSimplified> newLogins =LoginSimplified.TurnIntoUICompatible(csc.loginInformations, csc.loginInformationSecrets, this.derivedPasswords);
+		List<LoginSimplified> newLogins = LoginSimplified.TurnIntoUICompatible(csc.loginInformations, csc.loginInformationSecrets, this.derivedPasswords);
 
 		foreach (LoginSimplified login in newLogins)
 		{
