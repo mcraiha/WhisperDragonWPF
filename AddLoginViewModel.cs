@@ -9,7 +9,19 @@ using WhisperDragonWPF;
 
 public class AddLoginViewModel : INotifyPropertyChanged
 {
-	public bool IsSecret { get; set; } = true;
+	private bool isSecret = true;
+	public bool IsSecret 
+	{ 
+		get
+		{
+			return this.isSecret;
+		} 
+		set
+		{
+			this.isSecret = value;
+			OnPropertyChanged(nameof(KeyIdentifierVisibility));
+		}
+	}
 
 	public string Title { get; set; } = "";
 
@@ -122,6 +134,18 @@ public class AddLoginViewModel : INotifyPropertyChanged
 		get
 		{
 			return !this.visiblePassword ? Visibility.Visible : Visibility.Collapsed;
+		} 
+		set
+		{
+
+		}
+	}
+
+	public Visibility KeyIdentifierVisibility
+	{ 
+		get
+		{
+			return this.IsSecret ? Visibility.Visible : Visibility.Collapsed;
 		} 
 		set
 		{
