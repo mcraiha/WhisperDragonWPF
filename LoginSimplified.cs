@@ -58,7 +58,7 @@ namespace WhisperDragonWPF
 						indexNumber = runningIndexNumber,
 						IsSecure = true,
 						Title = loginInformationSecret.GetTitle(derivedPassword),
-						URL = loginInformationSecret.GetUrl(derivedPassword),
+						URL = loginInformationSecret.GetURL(derivedPassword),
 						Email = loginInformationSecret.GetEmail(derivedPassword),
 						Username = loginInformationSecret.GetUsername(derivedPassword),
 						Password = loginInformationSecret.GetPassword(derivedPassword),
