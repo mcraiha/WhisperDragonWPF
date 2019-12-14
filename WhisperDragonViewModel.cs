@@ -233,8 +233,6 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 				{
 					CreateCommonSecretsWindow createCommonSecretsWindow = new CreateCommonSecretsWindow(this.CreateNewCommonSecrets);
 					createCommonSecretsWindow.ShowDialog();
-					//CreateKeyDerivationFunctionWindow keyDerivationFunctionWindow = new CreateKeyDerivationFunctionWindow();
-					//keyDerivationFunctionWindow.ShowDialog();
 				}));
 		}
 	}
