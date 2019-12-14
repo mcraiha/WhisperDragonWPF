@@ -280,6 +280,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 				?? (saveAsCommonSecretsContainerViaMenu = new ActionCommand(() =>
 				{
 					SaveFileDialog saveFileDialog = new SaveFileDialog();
+					saveFileDialog.Filter = "CommonSecrets JSON (*.commonsecrets.json)|*.commonsecrets.json|CommonSecrets XML (*.commonsecrets.xml)|*.commonsecrets.xml";
 					if(saveFileDialog.ShowDialog() == true)
 					{
 
