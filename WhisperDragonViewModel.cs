@@ -370,14 +370,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 
 		this.csc.AddLoginInformationSecret(password, demoLogin, kdfe.GetKeyIdentifier());
 		
-		this.logins.Clear();
-		List<LoginSimplified> newLogins = LoginSimplified.TurnIntoUICompatible(csc.loginInformations, csc.loginInformationSecrets, this.derivedPasswords);
-
-		foreach (LoginSimplified login in newLogins)
-		{
-			this.logins.Add(login);
-		}
-
+		this.GenerateLoginSimplifiedsFromCommonSecrets();
 		
 		this.isModified = true;
 		this.UpdateMainTitle("Untitled");
@@ -395,6 +388,21 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 	}
 
 	#endregion // Title generation
+
+	#region Common
+
+	private void GenerateLoginSimplifiedsFromCommonSecrets()
+	{
+		this.logins.Clear();
+		List<LoginSimplified> newLogins = LoginSimplified.TurnIntoUICompatible(this.csc.loginInformations, this.csc.loginInformationSecrets, this.derivedPasswords);
+
+		foreach (LoginSimplified login in newLogins)
+		{
+			this.logins.Add(login);
+		}
+	}
+
+	#endregion // Common
 
 	#region Property changed
 
