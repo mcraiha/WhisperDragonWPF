@@ -6,7 +6,7 @@ namespace WhisperDragonWPF
 	public sealed class LoginSimplified
 	{
 		// Non visible
-		public int indexNumber { get; set; }
+		public int zeroBasedIndexNumber { get; set; }
 
 		// Visible elements
 
@@ -31,7 +31,7 @@ namespace WhisperDragonWPF
 				foreach (LoginInformation loginInformation in loginInformations)
 				{
 					returnList.Add(new LoginSimplified() {
-						indexNumber = runningIndexNumber,
+						zeroBasedIndexNumber = runningIndexNumber,
 						IsSecure = false,
 						Title = loginInformation.GetTitle(),
 						URL = loginInformation.GetURL(),
@@ -55,7 +55,7 @@ namespace WhisperDragonWPF
 				{
 					byte[] derivedPassword = derivedPasswords[loginInformationSecret.GetKeyIdentifier()];
 					returnList.Add(new LoginSimplified() {
-						indexNumber = runningIndexNumber,
+						zeroBasedIndexNumber = runningIndexNumber,
 						IsSecure = true,
 						Title = loginInformationSecret.GetTitle(derivedPassword),
 						URL = loginInformationSecret.GetURL(derivedPassword),

@@ -50,7 +50,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		{
 			logins.Add(new LoginSimplified() {
 				IsSecure =  i % 2 == 0,
-				indexNumber = i, 
+				zeroBasedIndexNumber = i, 
 				Title = Path.GetRandomFileName(), 
 				Username = Path.GetRandomFileName(), 
 				URL = $"https://{Path.GetRandomFileName()}",
