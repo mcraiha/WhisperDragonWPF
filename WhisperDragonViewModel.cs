@@ -262,7 +262,8 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 					openFileDialog.Filter = "CommonSecrets JSON (*.commonsecrets.json)|*.commonsecrets.json|CommonSecrets XML (*.commonsecrets.xml)|*.commonsecrets.xml|All files (*.*)|*.*";
 					if (openFileDialog.ShowDialog() == true)
 					{
-
+						SecondaryOpenStepWindow secondaryOpenStepWindow = new SecondaryOpenStepWindow(null, null);
+						secondaryOpenStepWindow.ShowDialog();
 					}
 				}));
 		}
