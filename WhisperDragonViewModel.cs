@@ -262,6 +262,11 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 					openFileDialog.Filter = "CommonSecrets JSON (*.commonsecrets.json)|*.commonsecrets.json|CommonSecrets XML (*.commonsecrets.xml)|*.commonsecrets.xml|All files (*.*)|*.*";
 					if (openFileDialog.ShowDialog() == true)
 					{
+						// First check what is the file format
+
+						// Try to deserialize
+
+						// If contains secrets, then show secondary open step (which basically asks for passwords)
 						SecondaryOpenStepWindow secondaryOpenStepWindow = new SecondaryOpenStepWindow(null, null);
 						secondaryOpenStepWindow.ShowDialog();
 					}
