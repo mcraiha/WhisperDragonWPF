@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -43,6 +45,11 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 	/// <typeparam name="string">Key Identifier</typeparam>
 	/// <typeparam name="byte[]">Derived password as bytes</typeparam>
 	private readonly Dictionary<string, byte[]> derivedPasswords = new Dictionary<string, byte[]>();
+
+	private static readonly JsonSerializerOptions serializerOptions = new JsonSerializerOptions
+	{
+		WriteIndented = true
+	};
 
 	public WhisperDragonViewModel(TabControl sections)
 	{
@@ -299,9 +306,21 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 				{
 					SaveFileDialog saveFileDialog = new SaveFileDialog();
 					saveFileDialog.Filter = "CommonSecrets JSON (*.commonsecrets.json)|*.commonsecrets.json|CommonSecrets XML (*.commonsecrets.xml)|*.commonsecrets.xml";
-					if(saveFileDialog.ShowDialog() == true)
+					saveFileDialog.Title = "Save a CommonSecrets file";
+					if (saveFileDialog.ShowDialog() == true && !string.IsNullOrEmpty(saveFileDialog.FileName))
 					{
-
+						try
+						{
+							// Assume JSON for now
+							string json = JsonSerializer.Serialize(this.csc, serializerOptions);
+							File.WriteAllText(saveFileDialog.FileName, json);
+							this.filePath = saveFileDialog.FileName;
+							this.UpdateMainTitle(this.filePath);
+						}
+						catch (Exception e)
+						{
+							MessageBox.Show($"Error happened while saving: {e}", "Error");
+						}
 					}
 				}));
 		}
