@@ -35,8 +35,21 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 
 	public event PropertyChangedEventHandler PropertyChanged;
 
+	/// <summary>
+	/// Our current common secrets container reference
+	/// </summary>
 	private CommonSecretsContainer csc = null;
+
+	// TODO: Add save format structure
+
+	/// <summary>
+	/// Path to current file (might be null)
+	/// </summary>
 	private string filePath = null;
+
+	/// <summary>
+	/// Is CommonSecretsContainer modified
+	/// </summary>
 	private bool isModified = false;
 
 	/// <summary>
@@ -54,6 +67,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 
 	public WhisperDragonViewModel(TabControl sections)
 	{
+		// TODO: remove this dummy init
 		for (int i = 0; i < 5; i++ )
 		{
 			logins.Add(new LoginSimplified() {
