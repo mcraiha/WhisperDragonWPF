@@ -27,11 +27,11 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 			
 			if (this.visiblePassword)
 			{
-				this.Password = passwordBox1.Password;
+				this.Password = this.passwordBox1.Password;
 			}
 			else
 			{
-				passwordBox1.Password = this.Password;
+				this.passwordBox1.Password = this.Password;
 			}
 
 			OnPropertyChanged(nameof(PasswordTextVisibility));
@@ -201,7 +201,8 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 				{
 					Enum.TryParse(this.selectedPseudorandomFunction, out KeyDerivationPrf keyDerivationPrf);
 					int neededBytes = (keyDerivationPrf == KeyDerivationPrf.HMACSHA256) ? 32 : 64;
-					this.callOnPositive(new KeyDerivationFunctionEntry(keyDerivationPrf, this.salt, this.Iterations, neededBytes, this.Identifier), Password);
+					this.callOnPositive(new KeyDerivationFunctionEntry(keyDerivationPrf, this.salt, this.Iterations, neededBytes, this.Identifier), 
+											this.visiblePassword ? this.Password : this.passwordBox1.Password);
 				}));
 		}
 	}
