@@ -46,6 +46,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 	/// <typeparam name="byte[]">Derived password as bytes</typeparam>
 	private readonly Dictionary<string, byte[]> derivedPasswords = new Dictionary<string, byte[]>();
 
+	// Settings for JSON serialization
 	private static readonly JsonSerializerOptions serializerOptions = new JsonSerializerOptions
 	{
 		WriteIndented = true
@@ -304,6 +305,8 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 			return saveAsCommonSecretsContainerViaMenu 
 				?? (saveAsCommonSecretsContainerViaMenu = new ActionCommand(() =>
 				{
+					// TODO: Check that there is a least one secret when saving (otherwise there is no way to verify passwords when opening)
+
 					SaveFileDialog saveFileDialog = new SaveFileDialog();
 					saveFileDialog.Filter = "CommonSecrets JSON (*.commonsecrets.json)|*.commonsecrets.json|CommonSecrets XML (*.commonsecrets.xml)|*.commonsecrets.xml";
 					saveFileDialog.Title = "Save a CommonSecrets file";
