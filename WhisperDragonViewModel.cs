@@ -415,7 +415,13 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 
 		LoginInformation demoLogin = new LoginInformation("Demo login", "https://localhost", "sample@email.com", "Dragon", "gwWTY#¤&%36");
 
-		this.csc.AddLoginInformationSecret(password, demoLogin, kdfe.GetKeyIdentifier());
+		(bool success, string possibleError) = this.csc.AddLoginInformationSecret(password, demoLogin, kdfe.GetKeyIdentifier());
+
+		if (!success)
+		{
+			MessageBox.Show($"Error when adding demo secret: {possibleError}", "Error");
+			return;
+		}
 		
 		this.GenerateLoginSimplifiedsFromCommonSecrets();
 		
