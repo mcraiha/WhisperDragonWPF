@@ -173,6 +173,7 @@ public class AddLoginViewModel : INotifyPropertyChanged
 						Email = this.Email,
 						Username = this.Username,
 						Password = this.visiblePassword ? this.Password : passwordBox.Password,
+						Notes = this.Notes,
 						Category = this.Category,
 						Tags = this.Tags,
 						IsSecure = this.IsSecret,
