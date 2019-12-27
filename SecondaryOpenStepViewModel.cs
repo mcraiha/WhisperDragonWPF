@@ -8,6 +8,9 @@ using System.Windows.Controls;
 using System.ComponentModel;
 using WhisperDragonWPF;
 
+/// <summary>
+/// This window is shown when CommonSecrets container has password protected content
+/// </summary>
 public class SecondaryOpenStepViewModel : INotifyPropertyChanged
 {
 	private bool visiblePassword = false;
@@ -38,6 +41,8 @@ public class SecondaryOpenStepViewModel : INotifyPropertyChanged
 	}
 
 	public string Password { get; set; } = "";
+
+	// TODO: Add get secret from file method
 
 	public event PropertyChangedEventHandler PropertyChanged;
 
