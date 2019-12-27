@@ -62,6 +62,8 @@ public class AddLoginViewModel : INotifyPropertyChanged
 
 	public string Notes { get; set; } = "";
 
+	// TODO: Add icon here when supported
+
 	public string Category { get; set; } = "";
 
 	public string Tags { get; set; } = "";
