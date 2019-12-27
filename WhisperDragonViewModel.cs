@@ -431,7 +431,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 
 		this.csc = new CommonSecretsContainer(kdfe);
 
-		LoginInformation demoLogin = new LoginInformation("Demo login", "https://localhost", "sample@email.com", "Dragon", "gwWTY#¤&%36");
+		LoginInformation demoLogin = new LoginInformation("Demo login", "https://localhost", "sample@email.com", "Dragon", "gwWTY#¤&%36", "This login will expire in 2030", new byte[] {}, "Samples", "Samples\tDemo");
 
 		(bool success, string possibleError) = this.csc.AddLoginInformationSecret(password, demoLogin, kdfe.GetKeyIdentifier());
 
