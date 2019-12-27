@@ -32,7 +32,7 @@ namespace WhisperDragonWPF
 			}
 
 			string text = Encoding.UTF8.GetString(input);
-			string startWithWhiteSpaceTrimmed = Regex.Replace(text.Substring(0, 20), @"s", "");
+			string startWithWhiteSpaceTrimmed = Regex.Replace(text.Substring(0, 20), @"\s+", "");
 			return startWithWhiteSpaceTrimmed.StartsWith(jsonMagicStart);
 		}
 
