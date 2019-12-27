@@ -286,11 +286,28 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 					if (openFileDialog.ShowDialog() == true)
 					{
 						// First check what is the file format
+						byte[] allBytes = File.ReadAllBytes(openFileDialog.FileName);
+						DeserializationFormat fileFormat = DeserializationFormat.None;
+						foreach (var kvp in DeserializationDefinitions.deserializers)
+						{
+							if (kvp.Value.isThisFormat(allBytes))
+							{
+								fileFormat = kvp.Key;
+								break;
+							}
+						}
+
+						if (fileFormat == DeserializationFormat.None || fileFormat == DeserializationFormat.Unknown)
+						{
+							MessageBox.Show($"Cannot identify format of file: {openFileDialog.FileName}", "Error");
+							return;
+						}
 
 						// Try to deserialize
+						CommonSecretsContainer tempContainer = DeserializationDefinitions.deserializers[fileFormat].deserialize(allBytes);
 
 						// If contains secrets, then show secondary open step (which basically asks for passwords)
-						SecondaryOpenStepWindow secondaryOpenStepWindow = new SecondaryOpenStepWindow(null, null);
+						SecondaryOpenStepWindow secondaryOpenStepWindow = new SecondaryOpenStepWindow(tempContainer.keyDerivationFunctionEntries.Select(kdfe => kdfe.GetKeyIdentifier()).ToList(), null);
 						secondaryOpenStepWindow.ShowDialog();
 					}
 				}));
