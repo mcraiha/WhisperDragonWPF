@@ -16,6 +16,7 @@ namespace WhisperDragonWPF
 		public string Email { get; set; }
 		public string Username { get; set; }
 		public string Password { get; set; }
+		public string Notes { get; set; }
 		public string Category { get; set; }
 		public string Tags { get; set; }
 		public string CreationTime { get; set; }
@@ -38,6 +39,7 @@ namespace WhisperDragonWPF
 						Email = loginInformation.GetEmail(),
 						Username = loginInformation.GetUsername(),
 						Password = loginInformation.GetPassword(),
+						Notes = loginInformation.GetNotes(),
 						Category = loginInformation.GetCategory(),
 						Tags = loginInformation.GetTags(),
 						CreationTime = loginInformation.GetCreationTime().ToString("s", System.Globalization.CultureInfo.InvariantCulture),
@@ -62,6 +64,7 @@ namespace WhisperDragonWPF
 						Email = loginInformationSecret.GetEmail(derivedPassword),
 						Username = loginInformationSecret.GetUsername(derivedPassword),
 						Password = loginInformationSecret.GetPassword(derivedPassword),
+						Notes = loginInformationSecret.GetNotes(derivedPassword),
 						Category = loginInformationSecret.GetCategory(derivedPassword),
 						Tags = loginInformationSecret.GetTags(derivedPassword),
 						CreationTime = loginInformationSecret.GetCreationTime(derivedPassword).ToString("s", System.Globalization.CultureInfo.InvariantCulture),
