@@ -215,7 +215,8 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 			return editViewLoginViaMenu
 				?? (editViewLoginViaMenu = new ActionCommand(() =>
 				{
-					
+					EditViewLoginWindow editViewLoginWindow = new EditViewLoginWindow(this.SelectedLogin, this.derivedPasswords.Keys.ToList(), this.EditLoginInCollection);
+					editViewLoginWindow.ShowDialog();
 				}));
 		}
 	}
@@ -420,6 +421,11 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		}
 
 		this.GenerateLoginSimplifiedsFromCommonSecrets();
+	}
+
+	private void EditLoginInCollection(LoginSimplified editedLogin, string keyIdentifier)
+	{
+
 	}
 
 	#region New, Open, Save, Close
