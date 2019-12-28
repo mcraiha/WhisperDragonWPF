@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
+using CSCommonSecrets;
 
 namespace WhisperDragonWPF
 {
@@ -9,10 +10,10 @@ namespace WhisperDragonWPF
 	/// </summary>
 	public partial class SecondaryOpenStepWindow : Window
 	{
-		public SecondaryOpenStepWindow(List<string> keyIdentifiers, Action<Dictionary<string, byte[]>> secondaryOpen)
+		public SecondaryOpenStepWindow(List<KeyDerivationFunctionEntry> keyDerivationFunctionEntries, Action<Dictionary<string, byte[]>> finalizeOpenWithDerivedPasswords)
 		{
 			InitializeComponent();
-			DataContext = new SecondaryOpenStepViewModel(keyIdentifiers, secondaryOpen, CancelClose, OpenClose, passwordBox);
+			DataContext = new SecondaryOpenStepViewModel(keyDerivationFunctionEntries, finalizeOpenWithDerivedPasswords, CancelClose, OpenClose, passwordBox);
 		}
 
 		private void OpenClose()

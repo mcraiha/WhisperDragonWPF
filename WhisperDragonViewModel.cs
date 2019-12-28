@@ -307,11 +307,94 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 						CommonSecretsContainer tempContainer = DeserializationDefinitions.deserializers[fileFormat].deserialize(allBytes);
 
 						// If contains secrets, then show secondary open step (which basically asks for passwords)
-						SecondaryOpenStepWindow secondaryOpenStepWindow = new SecondaryOpenStepWindow(tempContainer.keyDerivationFunctionEntries.Select(kdfe => kdfe.GetKeyIdentifier()).ToList(), null);
+						SecondaryOpenStepWindow secondaryOpenStepWindow = new SecondaryOpenStepWindow(tempContainer.keyDerivationFunctionEntries, 
+																				(Dictionary<string,byte[]> derivedPasswords) => this.FinalOpenStepWithSecrets(openFileDialog.FileName, tempContainer, derivedPasswords));
 						secondaryOpenStepWindow.ShowDialog();
 					}
 				}));
 		}
+	}
+
+	/// <summary>
+	/// Final open step when file contains secrets
+	/// </summary>
+	/// <param name="filename">Filename</param>
+	/// <param name="tempContainer">Temp container</param>
+	/// <param name="newDerivedPasswords">New derived passwords</param>
+	private void FinalOpenStepWithSecrets(string filename, CommonSecretsContainer tempContainer, Dictionary<string, byte[]> newDerivedPasswords)
+	{
+		// Check that every entry can be decoded with given passwords
+		bool success = true;
+		foreach (LoginInformationSecret loginInformationSecret in tempContainer.loginInformationSecrets)
+		{
+			try
+			{
+				loginInformationSecret.GetTitle(newDerivedPasswords[loginInformationSecret.GetKeyIdentifier()]);
+			}
+			catch
+			{
+				MessageBox.Show($"Cannot decrypt login information secret which uses key identifier: {loginInformationSecret.GetKeyIdentifier()}", "Decryption error");
+				success = false;
+				break;
+			}
+		}
+
+		if (!success)
+		{
+			return;
+		}
+
+		foreach (NoteSecret noteSecret in tempContainer.noteSecrets)
+		{
+			try
+			{
+				noteSecret.GetNoteTitle(newDerivedPasswords[noteSecret.GetKeyIdentifier()]);
+			}
+			catch
+			{
+				MessageBox.Show($"Cannot decrypt note secret which uses key identifier: {noteSecret.GetKeyIdentifier()}", "Decryption error");
+				success = false;
+				break;
+			}
+		}
+
+		if (!success)
+		{
+			return;
+		}
+
+		/*foreach (FileEntrySecret fileEntrySecret in tempContainer.fileSecrets)
+		{
+			try
+			{
+				fileEntrySecret.GetFilename(newDerivedPasswords[fileEntrySecret.GetKeyIdentifier()]);
+			}
+			catch
+			{
+				MessageBox.Show($"Cannot decrypt file which uses key identifier: {fileEntrySecret.GetKeyIdentifier()}", "Decryption error");
+				success = false;
+				break;
+			}
+		}*/
+
+		if (!success)
+		{
+			return;
+		}
+
+		// SUCCESS POINT
+		this.derivedPasswords.Clear();
+		foreach (var kvp in newDerivedPasswords)
+		{
+			this.derivedPasswords.Add(kvp.Key, kvp.Value);
+		}
+
+		this.csc = tempContainer;
+		this.isModified = false;
+		this.filePath = filename;
+		this.UpdateMainTitle(filename);
+
+		this.GenerateLoginSimplifiedsFromCommonSecrets();
 	}
 
 	private ICommand saveCommonSecretsContainerViaMenu;
