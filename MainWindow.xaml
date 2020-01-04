@@ -31,7 +31,7 @@
                     <MenuItem Header="_Save" Command="{Binding SaveCommonSecretsContainerViaMenu}" IsEnabled="{Binding IsSaveEnabled, Mode=OneWay}" />
                     <MenuItem Header="_Save As..." Command="{Binding SaveAsCommonSecretsContainerViaMenu}" IsEnabled="{Binding IsSaveEnabled, Mode=OneWay}" />
                     <Separator />
-                    <MenuItem Header="_Exit" />
+                    <MenuItem Header="_Exit" Command="{Binding TryToExitViaMenu}" />
                 </MenuItem>
                 <MenuItem Header="_Edit">
                     <MenuItem Command="Cut" />

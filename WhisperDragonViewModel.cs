@@ -33,6 +33,8 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 
 	private TabControl tabSections;
 
+	private Window mainWindow;
+
 	public event PropertyChangedEventHandler PropertyChanged;
 
 	/// <summary>
@@ -65,7 +67,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		WriteIndented = true
 	};
 
-	public WhisperDragonViewModel(TabControl sections)
+	public WhisperDragonViewModel(TabControl sections, Window window)
 	{
 		// TODO: remove this dummy init
 		for (int i = 0; i < 5; i++ )
@@ -79,7 +81,9 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 				Email =  $"{Path.GetRandomFileName()}@{Path.GetRandomFileName()}",
 				});
 		}
+
 		this.tabSections = sections;
+		this.mainWindow = window;
 	}
 
 
@@ -543,6 +547,23 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 	}
 
 	#endregion // New, Open, Save, Close
+
+	#region Exit
+
+	private ICommand tryToExitViaMenu;
+	public ICommand TryToExitViaMenu
+	{
+		get
+		{
+			return tryToExitViaMenu 
+				?? (tryToExitViaMenu = new ActionCommand(() =>
+				{
+					this.mainWindow.Close();
+				}));
+		}
+	}
+
+	#endregion // Exit
 
 	#region Title generation
 

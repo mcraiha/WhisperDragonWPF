@@ -23,7 +23,7 @@ namespace WhisperDragonWPF
 		public MainWindow()
 		{
 			InitializeComponent();
-			DataContext = new WhisperDragonViewModel(tabSections);
+			DataContext = new WhisperDragonViewModel(tabSections, this);
 		}
 	}
 }
