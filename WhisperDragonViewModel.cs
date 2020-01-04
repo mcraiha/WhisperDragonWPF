@@ -327,11 +327,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		bool success = true;
 		foreach (LoginInformationSecret loginInformationSecret in tempContainer.loginInformationSecrets)
 		{
-			try
-			{
-				loginInformationSecret.GetTitle(newDerivedPasswords[loginInformationSecret.GetKeyIdentifier()]);
-			}
-			catch
+			if (!loginInformationSecret.CanBeDecryptedWithDerivedPassword(newDerivedPasswords[loginInformationSecret.GetKeyIdentifier()]))
 			{
 				MessageBox.Show($"Cannot decrypt login information secret which uses key identifier: {loginInformationSecret.GetKeyIdentifier()}", "Decryption error");
 				success = false;
@@ -346,11 +342,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 
 		foreach (NoteSecret noteSecret in tempContainer.noteSecrets)
 		{
-			try
-			{
-				noteSecret.GetNoteTitle(newDerivedPasswords[noteSecret.GetKeyIdentifier()]);
-			}
-			catch
+			if (!noteSecret.CanBeDecryptedWithDerivedPassword(newDerivedPasswords[noteSecret.GetKeyIdentifier()]))
 			{
 				MessageBox.Show($"Cannot decrypt note secret which uses key identifier: {noteSecret.GetKeyIdentifier()}", "Decryption error");
 				success = false;
@@ -363,19 +355,15 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 			return;
 		}
 
-		/*foreach (FileEntrySecret fileEntrySecret in tempContainer.fileSecrets)
+		foreach (FileEntrySecret fileEntrySecret in tempContainer.fileSecrets)
 		{
-			try
+			if (!fileEntrySecret.CanBeDecryptedWithDerivedPassword(newDerivedPasswords[fileEntrySecret.GetKeyIdentifier()]))
 			{
-				fileEntrySecret.GetFilename(newDerivedPasswords[fileEntrySecret.GetKeyIdentifier()]);
-			}
-			catch
-			{
-				MessageBox.Show($"Cannot decrypt file which uses key identifier: {fileEntrySecret.GetKeyIdentifier()}", "Decryption error");
+				MessageBox.Show($"Cannot decrypt file secret which uses key identifier: {fileEntrySecret.GetKeyIdentifier()}", "Decryption error");
 				success = false;
 				break;
 			}
-		}*/
+		}
 
 		if (!success)
 		{
