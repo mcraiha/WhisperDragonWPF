@@ -18,9 +18,9 @@ namespace WhisperDragonWPF
 
 	public static class DeserializationDefinitions
 	{
-		public static readonly Dictionary<DeserializationFormat, (Func<byte[], bool> isThisFormat, Func<byte[], CommonSecretsContainer> deserialize)> deserializers = new Dictionary<DeserializationFormat, (Func<byte[], bool>, Func<byte[], CommonSecretsContainer>)>()
+		public static readonly Dictionary<DeserializationFormat, (Func<byte[], bool> isThisFormat, Func<byte[], CommonSecretsContainer> deserialize, bool savingSupported)> deserializers = new Dictionary<DeserializationFormat, (Func<byte[], bool>, Func<byte[], CommonSecretsContainer>, bool)>()
 		{
-			{ DeserializationFormat.Json, (IsJsonFile, ParseJsonFile)}
+			{ DeserializationFormat.Json, (IsJsonFile, ParseJsonFile, true)}
 		};
 
 		private static readonly string jsonMagicStart = "{\"version\"";
