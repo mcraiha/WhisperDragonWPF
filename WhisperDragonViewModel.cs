@@ -42,7 +42,10 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 	/// </summary>
 	private CommonSecretsContainer csc = null;
 
-	// TODO: Add save format structure
+	/// <summary>
+	/// What save format should be used
+	/// </summary>
+	private DeserializationFormat saveFormat = DeserializationFormat.None;
 
 	/// <summary>
 	/// Path to current file (might be null)
@@ -61,11 +64,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 	/// <typeparam name="byte[]">Derived password as bytes</typeparam>
 	private readonly Dictionary<string, byte[]> derivedPasswords = new Dictionary<string, byte[]>();
 
-	// Settings for JSON serialization
-	private static readonly JsonSerializerOptions serializerOptions = new JsonSerializerOptions
-	{
-		WriteIndented = true
-	};
+	
 
 	public WhisperDragonViewModel(TabControl sections, Window window)
 	{
@@ -311,8 +310,8 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 						CommonSecretsContainer tempContainer = DeserializationDefinitions.deserializers[fileFormat].deserialize(allBytes);
 
 						// If contains secrets, then show secondary open step (which basically asks for passwords)
-						SecondaryOpenStepWindow secondaryOpenStepWindow = new SecondaryOpenStepWindow(tempContainer.keyDerivationFunctionEntries, 
-																				(Dictionary<string,byte[]> derivedPasswords) => this.FinalOpenStepWithSecrets(openFileDialog.FileName, tempContainer, derivedPasswords));
+						SecondaryOpenStepWindow secondaryOpenStepWindow = new SecondaryOpenStepWindow(tempContainer.keyDerivationFunctionEntries,
+																				(Dictionary<string,byte[]> derivedPasswords) => this.FinalOpenStepWithSecrets(openFileDialog.FileName, fileFormat, tempContainer, derivedPasswords));
 						secondaryOpenStepWindow.ShowDialog();
 					}
 				}));
@@ -323,9 +322,10 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 	/// Final open step when file contains secrets
 	/// </summary>
 	/// <param name="filename">Filename</param>
+	/// <param name="fileFormat">File format</param>
 	/// <param name="tempContainer">Temp container</param>
 	/// <param name="newDerivedPasswords">New derived passwords</param>
-	private void FinalOpenStepWithSecrets(string filename, CommonSecretsContainer tempContainer, Dictionary<string, byte[]> newDerivedPasswords)
+	private void FinalOpenStepWithSecrets(string filename, DeserializationFormat fileFormat, CommonSecretsContainer tempContainer, Dictionary<string, byte[]> newDerivedPasswords)
 	{
 		// Check that every entry can be decoded with given passwords
 		bool success = true;
@@ -384,6 +384,17 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		this.csc = tempContainer;
 		this.isModified = false;
 		this.filePath = filename;
+
+		// Select the save format based on format of file opened (and assuming we know how to save it)
+		if (DeserializationDefinitions.deserializers[fileFormat].savingSupported)
+		{
+			this.saveFormat = fileFormat;
+		}
+		else
+		{
+			this.saveFormat = DeserializationFormat.None;
+		}
+		
 		this.UpdateMainTitle(filename);
 
 		this.GenerateLoginSimplifiedsFromCommonSecrets();
@@ -398,7 +409,34 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 			return saveCommonSecretsContainerViaMenu 
 				?? (saveCommonSecretsContainerViaMenu = new ActionCommand(() =>
 				{
+					// Check that we know what save format should be used
+					if (this.saveFormat == DeserializationFormat.None)
+					{
+						this.SaveAsCommonSecretsContainerViaMenu.Execute(null);
+						return;
+					}
+
+					// Check that there is a least one secret when saving (otherwise there is no way to verify passwords when opening)
+					if (!this.CommonSecretsContainerHasAtLeastOneSecret())
+					{
+						MessageBox.Show("There must be at least one secret! Otherwise no password verification can be done for file.", "Error");
+						return;
+					}
+
 					// Check that writing to file is still possible
+					bool isWritePossible = false;
+					using (var fs = File.OpenWrite(this.filePath))
+					{
+						isWritePossible = fs.CanWrite;
+					}
+
+					if (!isWritePossible)
+					{
+						MessageBox.Show($"File {this.filePath} is not writeable!", "Error");
+						return;
+					}
+
+
 				}));
 		}
 	}
@@ -412,7 +450,12 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 			return saveAsCommonSecretsContainerViaMenu 
 				?? (saveAsCommonSecretsContainerViaMenu = new ActionCommand(() =>
 				{
-					// TODO: Check that there is a least one secret when saving (otherwise there is no way to verify passwords when opening)
+					// Check that there is a least one secret when saving (otherwise there is no way to verify passwords when opening)
+					if (!this.CommonSecretsContainerHasAtLeastOneSecret())
+					{
+						MessageBox.Show("There must be at least one secret! Otherwise no password verification can be done for file.", "Error");
+						return;
+					}
 
 					SaveFileDialog saveFileDialog = new SaveFileDialog();
 					saveFileDialog.Filter = "CommonSecrets JSON (*.commonsecrets.json)|*.commonsecrets.json|CommonSecrets XML (*.commonsecrets.xml)|*.commonsecrets.xml";
@@ -422,9 +465,11 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 						try
 						{
 							// Assume JSON for now
-							string json = JsonSerializer.Serialize(this.csc, serializerOptions);
-							File.WriteAllText(saveFileDialog.FileName, json);
+							byte[] jsonBytes = SerializationDefinitions.serializers[DeserializationFormat.Json](this.csc);
+							File.WriteAllBytes(saveFileDialog.FileName, jsonBytes);
 							this.filePath = saveFileDialog.FileName;
+							this.saveFormat = DeserializationFormat.Json;
+							this.isModified = false;
 							this.UpdateMainTitle(this.filePath);
 						}
 						catch (Exception e)
@@ -434,6 +479,11 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 					}
 				}));
 		}
+	}
+
+	private bool CommonSecretsContainerHasAtLeastOneSecret()
+	{
+		return this.csc != null && (this.csc.loginInformationSecrets.Count > 0 || this.csc.noteSecrets.Count > 0 || this.csc.fileSecrets.Count > 0);
 	}
 
 	private ICommand generatePasswordViaMenu;
