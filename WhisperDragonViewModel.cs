@@ -16,6 +16,9 @@ using CSCommonSecrets;
 public class WhisperDragonViewModel : INotifyPropertyChanged
 {
 	public const string appName = "WhisperDragon WPF";
+
+	public const string untitledTempName = "Untitled";
+
 	public string MainTitle { get; set; } = appName;
 
 	public bool IsSaveEnabled 
@@ -562,6 +565,10 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 			this.csc.loginInformations.Add(loginToAdd);
 		}
 
+		// Adding a login information modifies the structure
+		this.isModified = true;
+		this.UpdateMainTitle(this.filePath != null ? this.filePath : untitledTempName);
+
 		this.GenerateLoginSimplifiedsFromCommonSecrets();
 	}
 
@@ -592,7 +599,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		this.GenerateLoginSimplifiedsFromCommonSecrets();
 		
 		this.isModified = true;
-		this.UpdateMainTitle("Untitled");
+		this.UpdateMainTitle(untitledTempName);
 		OnPropertyChanged(nameof(this.IsSaveEnabled));
 	}
 
