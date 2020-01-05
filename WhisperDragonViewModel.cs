@@ -618,6 +618,15 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		}
 	}
 
+    public bool CanExecuteClosing()
+    {
+		string file = this.filePath != null ? this.filePath : untitledTempName;
+		MessageBoxResult result = MessageBox.Show($"Do you want to save your changes to {file} ?",
+                appName,
+                MessageBoxButton.YesNoCancel);
+        return result != MessageBoxResult.Cancel;
+    }
+
 	#endregion // Exit
 
 	#region Title generation

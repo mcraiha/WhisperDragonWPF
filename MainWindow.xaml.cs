@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +25,12 @@ namespace WhisperDragonWPF
 		{
 			InitializeComponent();
 			DataContext = new WhisperDragonViewModel(tabSections, this);
+		}
+
+		void MainWindow_Closing(object sender, CancelEventArgs e)
+		{
+			WhisperDragonViewModel current = (WhisperDragonViewModel)DataContext;
+			e.Cancel = !current.CanExecuteClosing();
 		}
 	}
 }
