@@ -6,12 +6,14 @@ CommonSecrets compatible password/secrets manager for WPF. That means this will 
 
 Finished:
 * Basic project
+* Password generator
+* CommonSecrets integration
 
 Under development:
-* Password generator
+* Finalizing open and save 
 
 Not started:
-* CommonSecrets integration
+
 
 ## How to install
 
