@@ -24,8 +24,11 @@
     </Window.Resources>
 
     <Grid>
-        <DockPanel>
-            <Menu DockPanel.Dock="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+            <Menu Grid.Row="0">
                 <MenuItem Header="_File">
                     <MenuItem Header="_New..." Command="{Binding CreateNewCommonSecretsContainerViaMenu}" />
                     <MenuItem Header="_Open..." Command="{Binding OpenCommonSecretsContainerViaMenu}" />
@@ -51,7 +54,16 @@
                 </MenuItem>
             </Menu>
 
-            <TabControl DockPanel.Dock="Bottom" TabStripPlacement="Bottom" x:Name="tabSections">
+            <Grid Visibility="{Binding WizardVisibility}" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">New...</Button>
+                <Button Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">Open...</Button>
+            </Grid>
+
+            <TabControl TabStripPlacement="Bottom" x:Name="tabSections" Visibility="{Binding TabsVisibility}" Grid.Row="1">
 
                 <TabItem Header="Logins (F2)">
                     <Grid>
@@ -122,11 +134,5 @@
                 </TabItem>
 
             </TabControl>
-
-        </DockPanel>
-
-        
-
-        
     </Grid>
 </Window>

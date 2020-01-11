@@ -698,6 +698,34 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 
 	#endregion // Title generation
 
+	#region Vibility
+
+	public Visibility TabsVisibility
+	{ 
+		get
+		{
+			return this.csc != null ? Visibility.Visible : Visibility.Collapsed;
+		} 
+		set
+		{
+
+		}
+	}
+
+	public Visibility WizardVisibility
+	{ 
+		get
+		{
+			return this.csc == null ? Visibility.Visible : Visibility.Collapsed;
+		} 
+		set
+		{
+
+		}
+	}
+
+	#endregion // Visibility
+
 	#region Common
 
 	private void GenerateLoginSimplifiedsFromCommonSecrets()
