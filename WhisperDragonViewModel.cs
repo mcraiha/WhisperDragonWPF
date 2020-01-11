@@ -11,6 +11,14 @@ using WhisperDragonWPF;
 using Microsoft.Win32;
 using CSCommonSecrets;
 
+public enum CloseType
+{
+	Close = 0,
+	SaveAndClose,
+	SaveAs,
+	Cancel
+}
+
 public class WhisperDragonViewModel : INotifyPropertyChanged
 {
 	public const string appName = "WhisperDragon WPF";
@@ -410,36 +418,42 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 			return saveCommonSecretsContainerViaMenu 
 				?? (saveCommonSecretsContainerViaMenu = new ActionCommand(() =>
 				{
-					// Check that we know what save format should be used
-					if (this.saveFormat == DeserializationFormat.None)
-					{
-						this.SaveAsCommonSecretsContainerViaMenu.Execute(null);
-						return;
-					}
-
-					// Check that there is a least one secret when saving (otherwise there is no way to verify passwords when opening)
-					if (!this.CommonSecretsContainerHasAtLeastOneSecret())
-					{
-						MessageBox.Show("There must be at least one secret! Otherwise no password verification can be done for file.", "Error");
-						return;
-					}
-
-					// Check that writing to file is still possible
-					bool isWritePossible = false;
-					using (var fs = File.OpenWrite(this.filePath))
-					{
-						isWritePossible = fs.CanWrite;
-					}
-
-					if (!isWritePossible)
-					{
-						MessageBox.Show($"File {this.filePath} is not writeable!", "Error");
-						return;
-					}
+					
 
 
 				}));
 		}
+	}
+
+	public bool ActualSaveCommonSecretsContainer()
+	{
+		// Check that we know what save format should be used
+		if (this.saveFormat == DeserializationFormat.None)
+		{
+			return this.ActualSaveAsCommonSecretsContainer();
+		}
+
+		// Check that there is a least one secret when saving (otherwise there is no way to verify passwords when opening)
+		if (!this.CommonSecretsContainerHasAtLeastOneSecret())
+		{
+			MessageBox.Show("There must be at least one secret! Otherwise no password verification can be done for file.", "Error");
+			return false;
+		}
+
+		// Check that writing to file is still possible
+		bool isWritePossible = false;
+		using (var fs = File.OpenWrite(this.filePath))
+		{
+			isWritePossible = fs.CanWrite;
+		}
+
+		if (!isWritePossible)
+		{
+			MessageBox.Show($"File {this.filePath} is not writeable!", "Error");
+			return false;
+		}
+
+		return false;
 	}
 
 	private ICommand saveAsCommonSecretsContainerViaMenu;
@@ -451,35 +465,43 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 			return saveAsCommonSecretsContainerViaMenu 
 				?? (saveAsCommonSecretsContainerViaMenu = new ActionCommand(() =>
 				{
-					// Check that there is a least one secret when saving (otherwise there is no way to verify passwords when opening)
-					if (!this.CommonSecretsContainerHasAtLeastOneSecret())
-					{
-						MessageBox.Show("There must be at least one secret! Otherwise no password verification can be done for file.", "Error");
-						return;
-					}
-
-					SaveFileDialog saveFileDialog = new SaveFileDialog();
-					saveFileDialog.Filter = "CommonSecrets JSON (*.commonsecrets.json)|*.commonsecrets.json|CommonSecrets XML (*.commonsecrets.xml)|*.commonsecrets.xml";
-					saveFileDialog.Title = "Save a CommonSecrets file";
-					if (saveFileDialog.ShowDialog() == true && !string.IsNullOrEmpty(saveFileDialog.FileName))
-					{
-						try
-						{
-							// Assume JSON for now
-							byte[] jsonBytes = SerializationDefinitions.serializers[DeserializationFormat.Json](this.csc);
-							File.WriteAllBytes(saveFileDialog.FileName, jsonBytes);
-							this.filePath = saveFileDialog.FileName;
-							this.saveFormat = DeserializationFormat.Json;
-							this.isModified = false;
-							this.UpdateMainTitle(this.filePath);
-						}
-						catch (Exception e)
-						{
-							MessageBox.Show($"Error happened while saving: {e}", "Error");
-						}
-					}
+					this.ActualSaveAsCommonSecretsContainer();
 				}));
 		}
+	}
+
+	public bool ActualSaveAsCommonSecretsContainer()
+	{
+		// Check that there is a least one secret when saving (otherwise there is no way to verify passwords when opening)
+		if (!this.CommonSecretsContainerHasAtLeastOneSecret())
+		{
+			MessageBox.Show("There must be at least one secret! Otherwise no password verification can be done for file.", "Error");
+			return false;
+		}
+
+		SaveFileDialog saveFileDialog = new SaveFileDialog();
+		saveFileDialog.Filter = "CommonSecrets JSON (*.commonsecrets.json)|*.commonsecrets.json|CommonSecrets XML (*.commonsecrets.xml)|*.commonsecrets.xml";
+		saveFileDialog.Title = "Save a CommonSecrets file";
+		if (saveFileDialog.ShowDialog() == true && !string.IsNullOrEmpty(saveFileDialog.FileName))
+		{
+			try
+			{
+				// Assume JSON for now
+				byte[] jsonBytes = SerializationDefinitions.serializers[DeserializationFormat.Json](this.csc);
+				File.WriteAllBytes(saveFileDialog.FileName, jsonBytes);
+				this.filePath = saveFileDialog.FileName;
+				this.saveFormat = DeserializationFormat.Json;
+				this.isModified = false;
+				this.UpdateMainTitle(this.filePath);
+				return true;
+			}
+			catch (Exception e)
+			{
+				MessageBox.Show($"Error happened while saving: {e}", "Error");
+			}
+		}
+
+		return false;
 	}
 
 	private bool CommonSecretsContainerHasAtLeastOneSecret()
@@ -618,13 +640,34 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		}
 	}
 
-    public bool CanExecuteClosing()
+    public CloseType CanExecuteClosing()
     {
-		string file = this.filePath != null ? this.filePath : untitledTempName;
-		MessageBoxResult result = MessageBox.Show($"Do you want to save your changes to {file} ?",
-                appName,
-                MessageBoxButton.YesNoCancel);
-        return result != MessageBoxResult.Cancel;
+		if (this.isModified)
+		{
+			string file = this.filePath != null ? this.filePath : untitledTempName;
+			MessageBoxResult result = MessageBox.Show($"Do you want to save your changes to {file} ?",
+					appName,
+					MessageBoxButton.YesNoCancel);
+
+			if (this.filePath == null && result == MessageBoxResult.Yes)
+			{
+				return CloseType.SaveAs;
+			}
+			else if (result == MessageBoxResult.Yes)
+			{
+				return CloseType.SaveAndClose;
+			}
+			else if (result == MessageBoxResult.No)
+			{
+				return CloseType.Close;
+			}
+			else
+			{
+				return CloseType.Cancel;
+			}
+		}
+
+		return CloseType.Close;
     }
 
 	#endregion // Exit

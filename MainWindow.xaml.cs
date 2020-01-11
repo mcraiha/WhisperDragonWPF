@@ -30,7 +30,25 @@ namespace WhisperDragonWPF
 		void MainWindow_Closing(object sender, CancelEventArgs e)
 		{
 			WhisperDragonViewModel current = (WhisperDragonViewModel)DataContext;
-			e.Cancel = !current.CanExecuteClosing();
+
+			CloseType closeType = current.CanExecuteClosing();
+			
+			if (closeType == CloseType.Cancel)
+			{
+				e.Cancel = true;
+			}
+			else if (closeType == CloseType.Close)
+			{
+				e.Cancel = false;
+			}
+			else if (closeType == CloseType.SaveAndClose)
+			{
+				e.Cancel = !current.ActualSaveCommonSecretsContainer();
+			}
+			else if (closeType == CloseType.SaveAs)
+			{
+				e.Cancel = !current.ActualSaveAsCommonSecretsContainer();
+			}
 		}
 	}
 }
