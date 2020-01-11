@@ -10,9 +10,9 @@
 		<StackPanel>
 			<Label Content="{Binding Description}" Margin="2,5,2,2" />
 			<Label Content="URL:" Margin="2,5,2,2" />
-			<TextBlock><Hyperlink NavigateUri="http://tba.com">WhisperDragonWPF</Hyperlink></TextBlock>
-			<TextBlock><Hyperlink NavigateUri="https://github.com/mcraiha/WhisperDragonWPF">GitHub</Hyperlink></TextBlock>
-			<TextBlock><Hyperlink NavigateUri="https://github.com/mcraiha/CSharp-CommonSecrets">CSharp-CommonSecrets</Hyperlink></TextBlock>
+			<TextBlock><Hyperlink NavigateUri="http://tba.com" RequestNavigate="OpenInBrowser">WhisperDragonWPF</Hyperlink></TextBlock>
+			<TextBlock><Hyperlink NavigateUri="https://github.com/mcraiha/WhisperDragonWPF" RequestNavigate="OpenInBrowser">GitHub</Hyperlink></TextBlock>
+			<TextBlock><Hyperlink NavigateUri="https://github.com/mcraiha/CSharp-CommonSecrets" RequestNavigate="OpenInBrowser">CSharp-CommonSecrets</Hyperlink></TextBlock>
 
 			<Button Command="{Binding OkCommand}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Padding="3,3,3,3" Width="75" Margin="10">OK</Button>
 		</StackPanel>

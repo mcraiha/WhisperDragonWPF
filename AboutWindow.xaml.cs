@@ -9,6 +9,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
 
 namespace WhisperDragonWPF
 {
@@ -21,6 +22,18 @@ namespace WhisperDragonWPF
 		{
 			InitializeComponent();
 			DataContext = new AboutViewModel(OkClose);
+		}
+
+		private void OpenInBrowser(object sender, RequestNavigateEventArgs e)
+		{
+			var ps = new ProcessStartInfo(e.Uri.AbsoluteUri)
+			{ 
+				UseShellExecute = true, 
+				Verb = "open" 
+			};
+			Process.Start(ps);
+
+			e.Handled = true;
 		}
 
 		private void OkClose()
