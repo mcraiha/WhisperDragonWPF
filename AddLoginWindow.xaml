@@ -7,18 +7,22 @@
 		mc:Ignorable="d"
 		Title="Add login" MinWidth="350" SizeToContent="WidthAndHeight">
 
+		<Window.InputBindings>
+        	<KeyBinding Command="{Binding DebugFill}" Key="F12"/>
+    	</Window.InputBindings>
+
 		<StackPanel FocusManager.FocusedElement="{Binding ElementName=title}">
 			<Label Content="Title:" Margin="2,5,2,2" />
-			<TextBox Name="title" Text="{Binding Title}" Margin="2,0,2,2" />
+			<TextBox Name="title" Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,2" />
 
 			<Label Content="URL:" Margin="2,5,2,2" />
-			<TextBox Name="url" Text="{Binding URL}" Margin="2,0,2,2" />
+			<TextBox Name="url" Text="{Binding URL, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,2" />
 
 			<Label Content="Email:" Margin="2,5,2,2" />
-			<TextBox Name="email" Text="{Binding Email}" Margin="2,0,2,2" />
+			<TextBox Name="email" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,2" />
 
 			<Label Content="Username:" Margin="2,5,2,2" />
-			<TextBox Name="username" Text="{Binding Username}" Margin="2,0,2,2" />
+			<TextBox Name="username" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,2" />
 
 			<Label Content="Password:" Margin="2,5,2,2" />
 			<TextBox Name="password" Visibility="{Binding PasswordTextVisibility}" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,2" />
@@ -26,13 +30,13 @@
 			<CheckBox IsChecked="{Binding VisiblePassword}" Margin="2,0,2,2">Visible</CheckBox>
 
 			<Label Content="Notes:" Margin="2,5,2,2" />
-			<TextBox Name="notes" Text="{Binding Notes}" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" MinLines="3" MaxLines="5" Margin="2,0,2,2" />
+			<TextBox Name="notes" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" MinLines="3" MaxLines="5" Margin="2,0,2,2" />
 
 			<Label Content="Category:" Margin="2,5,2,2" />
-			<TextBox Name="category" Text="{Binding Category}" Margin="2,0,2,2" />
+			<TextBox Name="category" Text="{Binding Category, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,2" />
 
 			<Label Content="Tags:" Margin="2,5,2,2" />
-			<TextBox Name="tags" Text="{Binding Tags}" Margin="2,0,2,2" />
+			<TextBox Name="tags" Text="{Binding Tags, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,2" />
 
 			<CheckBox IsChecked="{Binding IsSecret}" Margin="2,15,2,2">Secret</CheckBox>
 

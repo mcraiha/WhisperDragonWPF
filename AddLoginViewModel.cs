@@ -216,4 +216,65 @@ public class AddLoginViewModel : INotifyPropertyChanged
 	}
 
 	#endregion // Property changed
+
+	#region Debug/testing tools
+
+#if DEBUG
+	private static readonly string[] titles = new string[] {"Some site", "Another site", "Not my site"};
+	private static readonly string[] urls = new string[] {"https://somesite.com", "https://anothersite.com", "https://notmysite.com"};
+	private static readonly string[] usernames = new string[] {"bluedragon154", "megadragon", "topplayerINtown"};
+
+	private static readonly Random rng = new Random(Seed: 1337);
+
+#endif // DEBUG
+
+	private ICommand debugFill;
+	public ICommand DebugFill
+	{
+		get
+		{
+			return debugFill 
+				?? (debugFill = new ActionCommand(() =>
+				{
+					#if DEBUG
+					
+					this.Title = titles[rng.Next(titles.Length)];
+					OnPropertyChanged(nameof(Title));
+
+					this.URL = urls[rng.Next(urls.Length)];
+					OnPropertyChanged(nameof(URL));
+
+					this.Email = "superdragon@dragonhome.com";
+					OnPropertyChanged(nameof(Email));
+
+					this.Username = usernames[rng.Next(usernames.Length)];
+					OnPropertyChanged(nameof(Username));
+
+					if (this.VisiblePassword)
+					{
+						this.Password = System.IO.Path.GetRandomFileName();
+					}
+					else
+					{
+						passwordBox.Password = System.IO.Path.GetRandomFileName();
+					}
+					OnPropertyChanged(nameof(PasswordTextVisibility));
+					OnPropertyChanged(nameof(PasswordBoxVisibility));
+					OnPropertyChanged(nameof(Password));
+
+					this.Notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pretium arcu nec sagittis tempor.";
+					OnPropertyChanged(nameof(Notes));
+
+					this.Category = "Test generated";
+					OnPropertyChanged(nameof(Category));
+
+					this.Tags = "Test";
+					OnPropertyChanged(nameof(Tags));
+
+					#endif // DEBUG
+				}));
+		}
+	}
+
+	#endregion // Debug/testing tools
 }
