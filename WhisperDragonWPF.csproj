@@ -15,4 +15,8 @@
     <PackageReference Include="LibCommonSecrets" Version="0.9.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Resource Include="whisperdragon_1024x1024.png" />
+  </ItemGroup>
+
 </Project>

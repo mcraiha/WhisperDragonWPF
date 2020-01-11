@@ -55,6 +55,9 @@
             </Menu>
 
             <Grid Visibility="{Binding WizardVisibility}" Grid.Row="1">
+                <Grid.Background>
+                    <ImageBrush ImageSource="whisperdragon_1024x1024.png" Stretch="Uniform"/>
+                </Grid.Background>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
