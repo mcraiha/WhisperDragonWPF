@@ -421,9 +421,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 			return saveCommonSecretsContainerViaMenu 
 				?? (saveCommonSecretsContainerViaMenu = new ActionCommand(() =>
 				{
-					
-
-
+					this.ActualSaveCommonSecretsContainer();
 				}));
 		}
 	}
@@ -454,6 +452,20 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		{
 			MessageBox.Show($"File {this.filePath} is not writeable!", "Error");
 			return false;
+		}
+
+		try
+		{
+			// Use serializer selected earlier
+			byte[] bytesToWrite = SerializationDefinitions.serializers[this.saveFormat](this.csc);
+			File.WriteAllBytes(this.filePath, bytesToWrite);
+			this.isModified = false;
+			this.UpdateMainTitle(this.filePath);
+			return true;
+		}
+		catch (Exception e)
+		{
+			MessageBox.Show($"Error happened while saving: {e}", "Error");
 		}
 
 		return false;
