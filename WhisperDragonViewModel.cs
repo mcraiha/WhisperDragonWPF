@@ -406,6 +406,9 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		
 		this.UpdateMainTitle(filename);
 
+		// Enable save features
+		OnPropertyChanged(nameof(this.IsSaveEnabled));
+
 		this.GenerateLoginSimplifiedsFromCommonSecrets();
 	}
 
