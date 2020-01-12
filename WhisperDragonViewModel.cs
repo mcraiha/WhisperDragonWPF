@@ -409,6 +409,10 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		// Enable save features
 		OnPropertyChanged(nameof(this.IsSaveEnabled));
 
+		// Change UI
+		OnPropertyChanged(nameof(this.TabsVisibility));
+		OnPropertyChanged(nameof(this.WizardVisibility));
+
 		this.GenerateLoginSimplifiedsFromCommonSecrets();
 	}
 
@@ -635,7 +639,12 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		
 		this.isModified = true;
 		this.UpdateMainTitle(untitledTempName);
+
 		OnPropertyChanged(nameof(this.IsSaveEnabled));
+		
+		// Change UI
+		OnPropertyChanged(nameof(this.TabsVisibility));
+		OnPropertyChanged(nameof(this.WizardVisibility));
 	}
 
 	#endregion // New, Open, Save, Close
