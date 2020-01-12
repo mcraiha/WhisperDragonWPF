@@ -77,19 +77,6 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 
 	public WhisperDragonViewModel(TabControl sections, Window window)
 	{
-		// TODO: remove this dummy init
-		for (int i = 0; i < 5; i++ )
-		{
-			logins.Add(new LoginSimplified() {
-				IsSecure =  i % 2 == 0,
-				zeroBasedIndexNumber = i, 
-				Title = Path.GetRandomFileName(), 
-				Username = Path.GetRandomFileName(), 
-				URL = $"https://{Path.GetRandomFileName()}",
-				Email =  $"{Path.GetRandomFileName()}@{Path.GetRandomFileName()}",
-				});
-		}
-
 		this.tabSections = sections;
 		this.mainWindow = window;
 	}
@@ -641,7 +628,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		this.UpdateMainTitle(untitledTempName);
 
 		OnPropertyChanged(nameof(this.IsSaveEnabled));
-		
+
 		// Change UI
 		OnPropertyChanged(nameof(this.TabsVisibility));
 		OnPropertyChanged(nameof(this.WizardVisibility));
