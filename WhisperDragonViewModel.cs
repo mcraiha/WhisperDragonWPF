@@ -243,7 +243,20 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 				{
 					if (this.SelectedLogin != null)
 					{
-						logins.Remove(this.SelectedLogin);
+						if (this.SelectedLogin.IsSecure)
+						{
+							this.csc.loginInformationSecrets.RemoveAt(this.SelectedLogin.zeroBasedIndexNumber);
+						}
+						else
+						{
+							this.csc.loginInformations.RemoveAt(this.SelectedLogin.zeroBasedIndexNumber);
+						}
+
+						// Deleting a login information modifies the structure
+						this.isModified = true;
+						this.UpdateMainTitle(this.filePath != null ? this.filePath : untitledTempName);
+
+						this.GenerateLoginSimplifiedsFromCommonSecrets();
 					}
 				}));
 		}
