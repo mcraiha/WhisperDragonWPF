@@ -228,7 +228,26 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 			return duplicateLoginViaMenu
 				?? (duplicateLoginViaMenu = new ActionCommand(() =>
 				{
-					
+					if (this.SelectedLogin != null)
+					{
+						LoginInformation loginToAdd = new LoginInformation(this.SelectedLogin.Title, this.SelectedLogin.URL, this.SelectedLogin.Email, this.SelectedLogin.Username, this.SelectedLogin.Password, 
+															this.SelectedLogin.Notes, this.SelectedLogin.Icon, this.SelectedLogin.Category, this.SelectedLogin.Tags);
+						if (this.SelectedLogin.IsSecure)
+						{
+							string keyIdentifier = this.csc.loginInformationSecrets[this.SelectedLogin.zeroBasedIndexNumber].GetKeyIdentifier();
+							this.csc.AddLoginInformationSecret(this.derivedPasswords[keyIdentifier], loginToAdd, keyIdentifier);
+						}
+						else
+						{
+							this.csc.loginInformations.Add(loginToAdd);
+						}
+
+						// Duplicating a login information modifies the structure
+						this.isModified = true;
+						this.UpdateMainTitle(this.filePath != null ? this.filePath : untitledTempName);
+
+						this.GenerateLoginSimplifiedsFromCommonSecrets();
+					}
 				}));
 		}
 	}
