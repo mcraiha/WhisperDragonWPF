@@ -598,9 +598,42 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		this.GenerateLoginSimplifiedsFromCommonSecrets();
 	}
 
-	private void EditLoginInCollection(LoginSimplified editedLogin, string keyIdentifier)
+	private void EditLoginInCollection(LoginSimplified editedLogin, bool wasSecurityModified, string keyIdentifier)
 	{
+		LoginInformation loginToAdd = new LoginInformation(editedLogin.Title, editedLogin.URL, editedLogin.Email, editedLogin.Username, editedLogin.Password, 
+															editedLogin.Notes, editedLogin.Icon, editedLogin.Category, editedLogin.Tags);
 
+		if (wasSecurityModified)
+		{
+			// If logininformation jumps from secure <-> unsecure
+			if (editedLogin.IsSecure)
+			{
+				this.csc.loginInformations.RemoveAt(editedLogin.zeroBasedIndexNumber);
+				this.csc.AddLoginInformationSecret(this.derivedPasswords[keyIdentifier], loginToAdd, keyIdentifier);
+			}
+			else
+			{
+				this.csc.loginInformationSecrets.RemoveAt(editedLogin.zeroBasedIndexNumber);
+				this.csc.loginInformations.Add(loginToAdd);
+			}
+		}
+		else
+		{
+			if (editedLogin.IsSecure)
+			{
+				this.csc.ReplaceLoginInformationSecret(editedLogin.zeroBasedIndexNumber, this.derivedPasswords[keyIdentifier], loginToAdd, keyIdentifier);
+			}
+			else
+			{
+				this.csc.loginInformations[editedLogin.zeroBasedIndexNumber] = loginToAdd;
+			}
+		}
+
+		// Editing a login information modifies the structure
+		this.isModified = true;
+		this.UpdateMainTitle(this.filePath != null ? this.filePath : untitledTempName);
+
+		this.GenerateLoginSimplifiedsFromCommonSecrets();
 	}
 
 	#region New, Open, Save, Close

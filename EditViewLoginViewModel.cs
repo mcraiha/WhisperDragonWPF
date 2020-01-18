@@ -12,6 +12,11 @@ using WhisperDragonWPF;
 /// </summary>
 public class EditViewLoginViewModel : INotifyPropertyChanged
 {
+	// User should NOT be able to edit these
+	private int zeroBasedIndexNumber;
+	private bool wasOriginallySecret = true;
+
+	// User editable values
 	private bool isSecret = true;
 	public bool IsSecret 
 	{ 
@@ -94,11 +99,11 @@ public class EditViewLoginViewModel : INotifyPropertyChanged
 
 	private readonly Action onNegativeClose;
 
-	private readonly Action<LoginSimplified, string /* Key identifier */> editLogin;
+	private readonly Action<LoginSimplified, bool /* Was Security Modified */, string /* Key identifier */> editLogin;
 
 	private readonly PasswordBox passwordBox;
 
-	public EditViewLoginViewModel(LoginSimplified current, List<string> keyIds, Action positiveAction, Action negativeAction, Action<LoginSimplified, string /* Key identifier */> edit, PasswordBox pwBox)
+	public EditViewLoginViewModel(LoginSimplified current, List<string> keyIds, Action positiveAction, Action negativeAction, Action<LoginSimplified, bool /* Was Security Modified */, string /* Key identifier */> edit, PasswordBox pwBox)
 	{
 		this.KeyIdentifiers = new ObservableCollection<string>();
 		foreach (string keyIdentifier in keyIds)
@@ -116,6 +121,9 @@ public class EditViewLoginViewModel : INotifyPropertyChanged
 		this.editLogin = edit;
 		this.passwordBox = pwBox;
 
+		this.zeroBasedIndexNumber = current.zeroBasedIndexNumber;
+		this.wasOriginallySecret = current.IsSecure;
+		this.IsSecret = current.IsSecure;
 		this.Title = current.Title;
 		this.URL = current.URL;
 		this.Email = current.Email;
@@ -182,18 +190,20 @@ public class EditViewLoginViewModel : INotifyPropertyChanged
 				?? (editLoginCommand = new ActionCommand(() =>
 				{
 					this.editLogin(new LoginSimplified() {
+						zeroBasedIndexNumber = this.zeroBasedIndexNumber,
 						Title = this.Title,
 						URL = this.URL,
 						Email = this.Email,
 						Username = this.Username,
 						Password = this.visiblePassword ? this.Password : passwordBox.Password,
 						Notes = this.Notes,
+						Icon = new byte[] { 0 }, // FIX when icons are supported
 						Category = this.Category,
 						Tags = this.Tags,
 						IsSecure = this.IsSecret,
 						//CreationTime = DateTime.UtcNow,
 
-					 }, this.selectedKeyIdentifier);
+					 }, this.IsSecret != this.wasOriginallySecret, this.selectedKeyIdentifier);
 					this.onPositiveClose();
 				}));
 		}

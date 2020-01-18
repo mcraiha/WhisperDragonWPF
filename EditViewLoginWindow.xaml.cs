@@ -9,7 +9,7 @@ namespace WhisperDragonWPF
 	/// </summary>
 	public partial class EditViewLoginWindow : Window
 	{
-		public EditViewLoginWindow(LoginSimplified current, List<string> keyIdentifiers, Action<LoginSimplified, string /* Key identifier */> editLogin)
+		public EditViewLoginWindow(LoginSimplified current, List<string> keyIdentifiers, Action<LoginSimplified, bool /* Was Security Modified */, string /* Key identifier */> editLogin)
 		{
 			InitializeComponent();
 			DataContext = new EditViewLoginViewModel(current, keyIdentifiers, EditClose, CancelClose, editLogin, passwordBox);
