@@ -160,6 +160,13 @@ public class PreferencesViewModel : INotifyPropertyChanged
 			return saveCommand 
 				?? (saveCommand = new ActionCommand(() =>
 				{
+					this.settings.TitleShowMode = (ShowMode) this.SelectedTitleShowMode;
+					this.settings.UrlShowMode = (ShowMode) this.SelectedUrlShowMode;
+					this.settings.EmailShowMode = (ShowMode) this.SelectedEmailShowMode;
+					this.settings.UsernameShowMode = (ShowMode) this.SelectedUsernameShowMode;
+					this.settings.PasswordShowMode = (ShowMode) this.SelectedPasswordShowMode;
+					this.settings.CategoryShowMode = (ShowMode) this.SelectedCategoryShowMode;
+
 					this.saveAction(this.settings);
 					this.closeAction();
 				}));

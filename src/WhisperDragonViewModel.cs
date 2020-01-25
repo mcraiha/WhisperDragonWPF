@@ -601,7 +601,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		}
 	}
 
-	private JsonSerializerOptions saveSettingsJSONoptions = new JsonSerializerOptions
+	private static readonly JsonSerializerOptions saveSettingsJSONoptions = new JsonSerializerOptions
 	{
 		WriteIndented = true
 	};
@@ -611,6 +611,9 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		this.settingsData = settings;
 		string jsonString = JsonSerializer.Serialize(this.settingsData, saveSettingsJSONoptions);
 		File.WriteAllText(this.currentSettingsPath, jsonString);
+		
+		// Show changes immediately
+		this.GenerateLoginSimplifiedsFromCommonSecrets();
 	}
 
 	#endregion // Tools
@@ -830,7 +833,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 	private void GenerateLoginSimplifiedsFromCommonSecrets()
 	{
 		this.logins.Clear();
-		List<LoginSimplified> newLogins = LoginSimplified.TurnIntoUICompatible(this.csc.loginInformations, this.csc.loginInformationSecrets, this.derivedPasswords);
+		List<LoginSimplified> newLogins = LoginSimplified.TurnIntoUICompatible(this.csc.loginInformations, this.csc.loginInformationSecrets, this.derivedPasswords, this.settingsData);
 
 		foreach (LoginSimplified login in newLogins)
 		{
