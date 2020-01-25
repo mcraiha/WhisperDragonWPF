@@ -3,22 +3,53 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 using WhisperDragonWPF;
 
 public class PreferencesViewModel : INotifyPropertyChanged
 {
 	public string PreferencesLocation { get; set; }
 
-	private Action saveCloseAction;
-	private Action cancelCloseAction;
+	public ObservableCollection<string> ShowModes { get; }
+
+	private string selectedTitleShowMode;
+
+	public string SelectedTitleShowMode
+    {
+        get
+        {
+            return this.selectedTitleShowMode;
+        }
+        set
+        {
+            if (this.selectedTitleShowMode != value)
+            {
+                this.selectedTitleShowMode = value;
+                OnPropertyChanged(nameof(SelectedTitleShowMode));
+            }
+        }
+    }
+
+	private readonly SettingsData settings;
+	private readonly Action<SettingsData> saveAction;
+	private readonly Action closeAction;
 
 	public event PropertyChangedEventHandler PropertyChanged;
 
-	public PreferencesViewModel(string fileLocation, Action saveAction, Action cancelAction)
+	public PreferencesViewModel(SettingsData settingsData, string fileLocation, Action<SettingsData> saveAction, Action closeAction)
 	{
-		PreferencesLocation = fileLocation;
-		saveCloseAction = saveAction;
-		cancelCloseAction = cancelAction;
+		this.settings = settingsData;
+		this.PreferencesLocation = fileLocation;
+		this.saveAction = saveAction;
+		this.closeAction = closeAction;
+
+		this.ShowModes = new ObservableCollection<string>();
+		foreach (ShowMode showMode in (ShowMode[]) Enum.GetValues(typeof(ShowMode)))
+		{
+			this.ShowModes.Add(showMode.ToString());
+		}
+		
+		this.SelectedTitleShowMode = settingsData.TitleShowMode.ToString();
 	}
 
 	#region Buttons
@@ -32,7 +63,8 @@ public class PreferencesViewModel : INotifyPropertyChanged
 			return saveCommand 
 				?? (saveCommand = new ActionCommand(() =>
 				{
-					this.saveCloseAction();
+					this.saveAction(this.settings);
+					this.closeAction();
 				}));
 		}
 	}
@@ -45,7 +77,7 @@ public class PreferencesViewModel : INotifyPropertyChanged
 			return cancelCommand 
 				?? (cancelCommand = new ActionCommand(() =>
 				{
-					this.cancelCloseAction();
+					this.closeAction();
 				}));
 		}
 	}

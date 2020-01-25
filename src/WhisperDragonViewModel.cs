@@ -10,6 +10,8 @@ using System.Windows.Controls;
 using WhisperDragonWPF;
 using Microsoft.Win32;
 using CSCommonSecrets;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 public enum CloseType
 {
@@ -73,12 +75,36 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 	/// <typeparam name="byte[]">Derived password as bytes</typeparam>
 	private readonly Dictionary<string, byte[]> derivedPasswords = new Dictionary<string, byte[]>();
 
-	
+	private static readonly string normalSettingsDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "WhisperDragonWPF", "settings.json");
+	private static readonly string nearExeSettingsDataPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase), "settings.json");
+
+	private string currentSettingsPath = null;
+	private SettingsData settingsData = null;
 
 	public WhisperDragonViewModel(TabControl sections, Window window)
 	{
 		this.tabSections = sections;
 		this.mainWindow = window;
+
+		// Settings data priority is :
+		// 1. near .exe (USB mode)
+		// 2. in app data local
+		// 3. no settings, so create new instance
+		if (File.Exists(nearExeSettingsDataPath))
+		{
+			this.currentSettingsPath = nearExeSettingsDataPath;
+			this.settingsData = JsonSerializer.Deserialize<SettingsData>(File.ReadAllText(nearExeSettingsDataPath));
+		}
+		else if (File.Exists(normalSettingsDataPath))
+		{
+			this.currentSettingsPath = normalSettingsDataPath;
+			this.settingsData = JsonSerializer.Deserialize<SettingsData>(File.ReadAllText(normalSettingsDataPath));
+		}
+		else
+		{
+			this.currentSettingsPath = normalSettingsDataPath;
+			this.settingsData = new SettingsData();
+		}
 	}
 
 
@@ -569,10 +595,22 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 			return preferencesViaMenu 
 				?? (preferencesViaMenu = new ActionCommand(() =>
 				{
-					PreferencesWindow preferencesWindow = new PreferencesWindow("c:\\temp\\something.json");
+					PreferencesWindow preferencesWindow = new PreferencesWindow(this.settingsData, this.currentSettingsPath, this.SaveSettingsData);
 					preferencesWindow.ShowDialog();
 				}));
 		}
+	}
+
+	private JsonSerializerOptions saveSettingsJSONoptions = new JsonSerializerOptions
+	{
+		WriteIndented = true
+	};
+
+	private void SaveSettingsData(SettingsData settings)
+	{
+		this.settingsData = settings;
+		string jsonString = JsonSerializer.Serialize(this.settingsData, saveSettingsJSONoptions);
+		File.WriteAllText(this.currentSettingsPath, jsonString);
 	}
 
 	#endregion // Tools

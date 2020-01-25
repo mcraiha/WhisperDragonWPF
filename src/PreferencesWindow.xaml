@@ -11,6 +11,9 @@
 			<Label Content="Preferences location:" Margin="2,5,2,2" />
 			<TextBox Name="location" Text="{Binding PreferencesLocation}" IsReadOnly="True" Margin="2,0,2,2" />
 
+			<Label Content="Title show mode:" Margin="2,5,2,1" />
+			<ComboBox ItemsSource="{Binding ShowModes}" SelectedItem="{Binding SelectedTitleShowMode, Mode=TwoWay}" Margin="2,0,2,2"></ComboBox>
+
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 				<Button Margin="10" Command="{Binding SaveCommand}" Padding="3,3,3,3">Save</Button>
 				<Button Margin="10" Command="{Binding CancelCommand}" Padding="3,3,3,3">Cancel</Button>

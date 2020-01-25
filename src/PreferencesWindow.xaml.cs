@@ -1,3 +1,4 @@
+using System;
 using System.Windows;
 
 namespace WhisperDragonWPF
@@ -7,22 +8,19 @@ namespace WhisperDragonWPF
 	/// </summary>
 	public partial class PreferencesWindow : Window
 	{
-		public PreferencesWindow(string location)
+		private readonly Action<SettingsData> callOnSave;
+
+		public PreferencesWindow(SettingsData settingsData, string location, Action<SettingsData> callOnSave)
 		{
 			InitializeComponent();
-			DataContext = new PreferencesViewModel(location, this.SaveClose, this.CancelClose);
+			this.callOnSave = callOnSave;
+			DataContext = new PreferencesViewModel(settingsData, location, this.callOnSave, this.CloseCall);
 		}
 
-		private void SaveClose()
+		private void CloseCall()
 		{
 			this.Close();
 		}
-
-		private void CancelClose()
-		{
-			this.Close();
-		}
-
 
 		#region Validators
 
