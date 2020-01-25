@@ -12,22 +12,22 @@
 			<TextBox Name="location" Text="{Binding PreferencesLocation}" IsReadOnly="True" Margin="2,0,2,2" />
 
 			<Label Content="Title show mode:" Margin="2,5,2,1" />
-			<ComboBox ItemsSource="{Binding ShowModes}" SelectedItem="{Binding SelectedTitleShowMode, Mode=TwoWay}" Margin="2,0,2,2"></ComboBox>
+			<ComboBox ItemsSource="{Binding ShowModes}" SelectedIndex="{Binding SelectedTitleShowMode, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Margin="2,0,2,2"></ComboBox>
 
 			<Label Content="Address / URL show mode:" Margin="2,5,2,1" />
-			<ComboBox ItemsSource="{Binding ShowModes}" SelectedItem="{Binding SelectedUrlShowMode, Mode=TwoWay}" Margin="2,0,2,2"></ComboBox>
+			<ComboBox ItemsSource="{Binding ShowModes}" SelectedIndex="{Binding SelectedUrlShowMode, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Margin="2,0,2,2"></ComboBox>
 
 			<Label Content="Email show mode:" Margin="2,5,2,1" />
-			<ComboBox ItemsSource="{Binding ShowModes}" SelectedItem="{Binding SelectedEmailShowMode, Mode=TwoWay}" Margin="2,0,2,2"></ComboBox>
+			<ComboBox ItemsSource="{Binding ShowModes}" SelectedIndex="{Binding SelectedEmailShowMode, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Margin="2,0,2,2"></ComboBox>
 
 			<Label Content="Username show mode:" Margin="2,5,2,1" />
-			<ComboBox ItemsSource="{Binding ShowModes}" SelectedItem="{Binding SelectedUsernameShowMode, Mode=TwoWay}" Margin="2,0,2,2"></ComboBox>
+			<ComboBox ItemsSource="{Binding ShowModes}" SelectedIndex="{Binding SelectedUsernameShowMode, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Margin="2,0,2,2"></ComboBox>
 
 			<Label Content="Password show mode:" Margin="2,5,2,1" />
-			<ComboBox ItemsSource="{Binding ShowModes}" SelectedItem="{Binding SelectedPasswordShowMode, Mode=TwoWay}" Margin="2,0,2,2"></ComboBox>
+			<ComboBox ItemsSource="{Binding ShowModes}" SelectedIndex="{Binding SelectedPasswordShowMode, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Margin="2,0,2,2"></ComboBox>
 
 			<Label Content="Category show mode:" Margin="2,5,2,1" />
-			<ComboBox ItemsSource="{Binding ShowModes}" SelectedItem="{Binding SelectedCategoryShowMode, Mode=TwoWay}" Margin="2,0,2,2"></ComboBox>
+			<ComboBox ItemsSource="{Binding ShowModes}" SelectedIndex="{Binding SelectedCategoryShowMode, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Margin="2,0,2,2"></ComboBox>
 
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 				<Button Margin="10" Command="{Binding SaveCommand}" Padding="3,3,3,3">Save</Button>

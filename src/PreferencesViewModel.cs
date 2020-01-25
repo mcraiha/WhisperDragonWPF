@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
 using System.ComponentModel;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using WhisperDragonWPF;
 
@@ -10,11 +11,11 @@ public class PreferencesViewModel : INotifyPropertyChanged
 {
 	public string PreferencesLocation { get; set; }
 
-	public ObservableCollection<string> ShowModes { get; }
+	public Dictionary<int /* Index */, string /* string to show */> ShowModes { get; }
 
-	private string selectedTitleShowMode;
+	private int selectedTitleShowMode;
 
-	public string SelectedTitleShowMode
+	public int SelectedTitleShowMode
     {
         get
         {
@@ -30,9 +31,9 @@ public class PreferencesViewModel : INotifyPropertyChanged
         }
     }
 
-	private string selectedUrlShowMode;
+	private int selectedUrlShowMode;
 
-	public string SelectedUrlShowMode
+	public int SelectedUrlShowMode
     {
         get
         {
@@ -48,9 +49,9 @@ public class PreferencesViewModel : INotifyPropertyChanged
         }
     }
 
-	private string selectedEmailShowMode;
+	private int selectedEmailShowMode;
 
-	public string SelectedEmailShowMode
+	public int SelectedEmailShowMode
     {
         get
         {
@@ -66,9 +67,9 @@ public class PreferencesViewModel : INotifyPropertyChanged
         }
     }
 	
-	private string selectedUsernameShowMode;
+	private int selectedUsernameShowMode;
 
-	public string SelectedUsernameShowMode
+	public int SelectedUsernameShowMode
     {
         get
         {
@@ -84,9 +85,9 @@ public class PreferencesViewModel : INotifyPropertyChanged
         }
     }
 
-	private string selectedPasswordShowMode;
+	private int selectedPasswordShowMode;
 
-	public string SelectedPasswordShowMode
+	public int SelectedPasswordShowMode
     {
         get
         {
@@ -102,9 +103,9 @@ public class PreferencesViewModel : INotifyPropertyChanged
         }
     }
 
-	private string selectedCategoryShowMode;
+	private int selectedCategoryShowMode;
 
-	public string SelectedCategoryShowMode
+	public int SelectedCategoryShowMode
     {
         get
         {
@@ -134,18 +135,18 @@ public class PreferencesViewModel : INotifyPropertyChanged
 		this.saveAction = saveAction;
 		this.closeAction = closeAction;
 
-		this.ShowModes = new ObservableCollection<string>();
+		this.ShowModes = new Dictionary<int, string>();
 		foreach (ShowMode showMode in (ShowMode[]) Enum.GetValues(typeof(ShowMode)))
 		{
-			this.ShowModes.Add(showMode.ToString());
+			this.ShowModes.Add((int)showMode, showMode.ToString());
 		}
 		
-		this.SelectedTitleShowMode = settingsData.TitleShowMode.ToString();
-		this.SelectedUrlShowMode = settings.UrlShowMode.ToString();
-		this.SelectedEmailShowMode = settings.EmailShowMode.ToString();
-		this.SelectedUsernameShowMode = settings.UsernameShowMode.ToString();
-		this.SelectedPasswordShowMode = settings.PasswordShowMode.ToString();
-		this.SelectedCategoryShowMode = settings.CategoryShowMode.ToString();
+		this.SelectedTitleShowMode = (int)settingsData.TitleShowMode;
+		this.SelectedUrlShowMode = (int)settings.UrlShowMode;
+		this.SelectedEmailShowMode = (int)settings.EmailShowMode;
+		this.SelectedUsernameShowMode = (int)settings.UsernameShowMode;
+		this.SelectedPasswordShowMode = (int)settings.PasswordShowMode;
+		this.SelectedCategoryShowMode = (int)settings.CategoryShowMode;
 	}
 
 	#region Buttons
