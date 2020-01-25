@@ -160,6 +160,32 @@ public class AddLoginViewModel : INotifyPropertyChanged
 	
 	#region Buttons
 
+	private ICommand generatePasswordCommand;
+	public ICommand GeneratePasswordCommand
+	{
+		get
+		{
+			return generatePasswordCommand 
+				?? (generatePasswordCommand = new ActionCommand(() =>
+				{
+					CreatePasswordWindow passwordWindow = new CreatePasswordWindow(this.UpdatePassword);
+					passwordWindow.ShowDialog();
+				}));
+		}
+	}
+
+	private void UpdatePassword(string newPassword)
+	{
+		if (this.visiblePassword)
+		{
+			this.Password = newPassword;
+			OnPropertyChanged(nameof(Password));
+		}
+		else
+		{
+			passwordBox.Password = newPassword;
+		}
+	}
 	
 	private ICommand addLoginCommand;
 	public ICommand AddLoginCommand

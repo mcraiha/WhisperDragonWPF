@@ -26,8 +26,11 @@
 
 			<Label Content="Password:" Margin="2,5,2,2" />
 			<TextBox Name="password" Visibility="{Binding PasswordTextVisibility}" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Margin="2,0,2,2" />
-			<PasswordBox x:Name="passwordBox" Visibility="{Binding PasswordBoxVisibility}" Margin="2,0,2,2" />
+			<PasswordBox x:Name="passwordBox" Visibility="{Binding PasswordBoxVisibility}" Margin="2,0,2,2" />	
 			<CheckBox IsChecked="{Binding VisiblePassword}" Margin="2,0,2,2">Visible</CheckBox>
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+				<Button Margin="1" Command="{Binding GeneratePasswordCommand}" Padding="3,3,3,3">Generate...</Button>
+			</StackPanel>
 
 			<Label Content="Notes:" Margin="2,5,2,2" />
 			<TextBox Name="notes" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" MinLines="3" MaxLines="5" Margin="2,0,2,2" />

@@ -581,7 +581,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 			return generatePasswordViaMenu 
 				?? (generatePasswordViaMenu = new ActionCommand(() =>
 				{
-					CreatePasswordWindow passwordWindow = new CreatePasswordWindow();
+					CreatePasswordWindow passwordWindow = new CreatePasswordWindow(null);
 					passwordWindow.ShowDialog();
 				}));
 		}

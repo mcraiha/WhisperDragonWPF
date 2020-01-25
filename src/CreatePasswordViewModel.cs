@@ -37,6 +37,7 @@ public class CreatePasswordViewModel : INotifyPropertyChanged
 			GeneratedPassword = generatedPassword;
 		} 
 	}
+	public Visibility VisibilityUsePassword { get; set; }
 
 	private string generatedPassword = "";
 	public string GeneratedPassword 
@@ -86,10 +87,13 @@ public class CreatePasswordViewModel : INotifyPropertyChanged
 	private static readonly List<string> emoticonsUnicodeBlock = new List<string>();
 
 	private readonly Action callOnClose;
+	private readonly Action<string> passwordCallback;
 
-	public CreatePasswordViewModel(Action closeAction)
+	public CreatePasswordViewModel(Action closeAction, Action<string> passwordCallback)
 	{
 		this.callOnClose = closeAction;
+		this.passwordCallback = passwordCallback;
+		this.VisibilityUsePassword = (passwordCallback != null) ? Visibility.Visible : Visibility.Hidden;
 	}
 
 
@@ -193,6 +197,20 @@ public class CreatePasswordViewModel : INotifyPropertyChanged
 			return closeCommand 
 				?? (closeCommand = new ActionCommand(() =>
 				{
+					this.callOnClose?.Invoke();
+				}));
+		}
+	}
+
+	private ICommand useCommand;
+	public ICommand UseCommand
+	{
+		get
+		{
+			return useCommand 
+				?? (useCommand = new ActionCommand(() =>
+				{
+					this.passwordCallback?.Invoke(this.generatedPassword);
 					this.callOnClose?.Invoke();
 				}));
 		}
