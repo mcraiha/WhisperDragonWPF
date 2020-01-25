@@ -30,6 +30,97 @@ public class PreferencesViewModel : INotifyPropertyChanged
         }
     }
 
+	private string selectedUrlShowMode;
+
+	public string SelectedUrlShowMode
+    {
+        get
+        {
+            return this.selectedUrlShowMode;
+        }
+        set
+        {
+            if (this.selectedUrlShowMode != value)
+            {
+                this.selectedUrlShowMode = value;
+                OnPropertyChanged(nameof(SelectedUrlShowMode));
+            }
+        }
+    }
+
+	private string selectedEmailShowMode;
+
+	public string SelectedEmailShowMode
+    {
+        get
+        {
+            return this.selectedEmailShowMode;
+        }
+        set
+        {
+            if (this.selectedEmailShowMode != value)
+            {
+                this.selectedEmailShowMode = value;
+                OnPropertyChanged(nameof(SelectedEmailShowMode));
+            }
+        }
+    }
+	
+	private string selectedUsernameShowMode;
+
+	public string SelectedUsernameShowMode
+    {
+        get
+        {
+            return this.selectedUsernameShowMode;
+        }
+        set
+        {
+            if (this.selectedUsernameShowMode != value)
+            {
+                this.selectedUsernameShowMode = value;
+                OnPropertyChanged(nameof(SelectedUsernameShowMode));
+            }
+        }
+    }
+
+	private string selectedPasswordShowMode;
+
+	public string SelectedPasswordShowMode
+    {
+        get
+        {
+            return this.selectedPasswordShowMode;
+        }
+        set
+        {
+            if (this.selectedPasswordShowMode != value)
+            {
+                this.selectedPasswordShowMode = value;
+                OnPropertyChanged(nameof(SelectedPasswordShowMode));
+            }
+        }
+    }
+
+	private string selectedCategoryShowMode;
+
+	public string SelectedCategoryShowMode
+    {
+        get
+        {
+            return this.selectedCategoryShowMode;
+        }
+        set
+        {
+            if (this.selectedCategoryShowMode != value)
+            {
+                this.selectedCategoryShowMode = value;
+                OnPropertyChanged(nameof(SelectedCategoryShowMode));
+            }
+        }
+    }
+	
+
 	private readonly SettingsData settings;
 	private readonly Action<SettingsData> saveAction;
 	private readonly Action closeAction;
@@ -50,6 +141,11 @@ public class PreferencesViewModel : INotifyPropertyChanged
 		}
 		
 		this.SelectedTitleShowMode = settingsData.TitleShowMode.ToString();
+		this.SelectedUrlShowMode = settings.UrlShowMode.ToString();
+		this.SelectedEmailShowMode = settings.EmailShowMode.ToString();
+		this.SelectedUsernameShowMode = settings.UsernameShowMode.ToString();
+		this.SelectedPasswordShowMode = settings.PasswordShowMode.ToString();
+		this.SelectedCategoryShowMode = settings.CategoryShowMode.ToString();
 	}
 
 	#region Buttons
