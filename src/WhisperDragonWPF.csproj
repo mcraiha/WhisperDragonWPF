@@ -2,14 +2,20 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <PublishSingleFile>true</PublishSingleFile>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <PublishTrimmed>true</PublishTrimmed>
     <PublishReadyToRun>true</PublishReadyToRun>
+    <PublishReadyToRunShowWarnings>true</PublishReadyToRunShowWarnings>
     <UseWPF>true</UseWPF>
 	  <ApplicationIcon>whisperdragon.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <TrimmerRootAssembly Include="System.Xaml" />
+    <TrimmerRootAssembly Include="System.Text.Json" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="LibCommonSecrets" Version="0.9.4" />
