@@ -20,10 +20,10 @@ jobs:
         dotnet-version: 3.1.100
     
     - name: Build with dotnet
-      run: dotnet publish -c Release
+      run: dotnet publish src/WhisperDragonWPF.csproj -c Release
     
     - name: Zip .exe
-      run: zip -9 --junk-paths ${{ github.ref }} bin/Release/netcoreapp3.1/win-x64/publish/WhisperDragonWPF.exe
+      run: zip -9 --junk-paths ${{ github.ref }} src/bin/Release/netcoreapp3.1/win-x64/publish/WhisperDragonWPF.exe
     
     - name: Create Release
       id: create_release
