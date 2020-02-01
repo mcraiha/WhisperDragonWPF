@@ -23,7 +23,7 @@ jobs:
       run: dotnet publish src/WhisperDragonWPF.csproj -c Release
     
     - name: Zip .exe
-      run: zip -9 --junk-paths ${{ github.ref }} src/bin/Release/netcoreapp3.1/win-x64/publish/WhisperDragonWPF.exe
+      run: Compress-Archive -Path .\src\bin\Release\netcoreapp3.1\win-x64\publish\WhisperDragonWPF.exe -DestinationPath ${{ github.ref }} -CompressionLevel Optimal
     
     - name: Create Release
       id: create_release
