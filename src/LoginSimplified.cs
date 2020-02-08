@@ -82,6 +82,44 @@ namespace WhisperDragonWPF
 			return returnList;
 		}
 
+		public static LoginSimplified TurnIntoEditable(LoginInformation loginInformation, int zeroBasedIndexNumber)
+		{
+			return new LoginSimplified() {
+						zeroBasedIndexNumber = zeroBasedIndexNumber,
+						IsSecure = false,
+						Title = loginInformation.GetTitle(),
+						URL = loginInformation.GetURL(),
+						Email = loginInformation.GetEmail(),
+						Username = loginInformation.GetUsername(),
+						Password = loginInformation.GetPassword(),
+						Notes = loginInformation.GetNotes(),
+						Icon = loginInformation.GetIcon(),
+						Category = loginInformation.GetCategory(),
+						Tags = loginInformation.GetTags(),
+						CreationTime = loginInformation.GetCreationTime().ToString("s", System.Globalization.CultureInfo.InvariantCulture),
+						ModificationTime = loginInformation.GetModificationTime().ToString("s", System.Globalization.CultureInfo.InvariantCulture),
+					};
+		}
+
+		public static LoginSimplified TurnIntoEditable(LoginInformationSecret loginInformationSecret, byte[] derivedPassword, int zeroBasedIndexNumber)
+		{
+			return new LoginSimplified() {
+						zeroBasedIndexNumber = zeroBasedIndexNumber,
+						IsSecure = true,
+						Title = loginInformationSecret.GetTitle(derivedPassword),
+						URL = loginInformationSecret.GetURL(derivedPassword),
+						Email = loginInformationSecret.GetEmail(derivedPassword),
+						Username = loginInformationSecret.GetUsername(derivedPassword),
+						Password = loginInformationSecret.GetPassword(derivedPassword),
+						Notes = loginInformationSecret.GetNotes(derivedPassword),
+						Icon = loginInformationSecret.GetIcon(derivedPassword),
+						Category = loginInformationSecret.GetCategory(derivedPassword),
+						Tags = loginInformationSecret.GetTags(derivedPassword),
+						CreationTime = loginInformationSecret.GetCreationTime(derivedPassword).ToString("s", System.Globalization.CultureInfo.InvariantCulture),
+						ModificationTime = loginInformationSecret.GetModificationTime(derivedPassword).ToString("s", System.Globalization.CultureInfo.InvariantCulture),
+					};
+		}
+
 		private static readonly char passwordChar = '\u2022';
 
 		private static readonly Random rng = new Random(Seed: 2047);
