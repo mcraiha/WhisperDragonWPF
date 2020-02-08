@@ -160,6 +160,26 @@ public class AddLoginViewModel : INotifyPropertyChanged
 	
 	#region Buttons
 
+	private ICommand copyPasswordCommand;
+	public ICommand CopyPasswordCommand
+	{
+		get
+		{
+			return copyPasswordCommand 
+				?? (copyPasswordCommand = new ActionCommand(() =>
+				{
+					if (this.visiblePassword)
+					{
+						Clipboard.SetText(this.Password);
+					}
+					else
+					{
+						Clipboard.SetText(passwordBox.Password);
+					}
+				}));
+		}
+	}
+
 	private ICommand generatePasswordCommand;
 	public ICommand GeneratePasswordCommand
 	{

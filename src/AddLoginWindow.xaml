@@ -29,7 +29,8 @@
 			<PasswordBox x:Name="passwordBox" Visibility="{Binding PasswordBoxVisibility}" Margin="2,0,2,2" />	
 			<CheckBox IsChecked="{Binding VisiblePassword}" Margin="2,0,2,2">Visible</CheckBox>
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-				<Button Margin="1" Command="{Binding GeneratePasswordCommand}" Padding="3,3,3,3">Generate...</Button>
+				<Button Margin="2" Command="{Binding CopyPasswordCommand}" Padding="3,3,3,3">Copy</Button>
+				<Button Margin="2" Command="{Binding GeneratePasswordCommand}" Padding="3,3,3,3">Generate...</Button>
 			</StackPanel>
 
 			<Label Content="Notes:" Margin="2,5,2,2" />
