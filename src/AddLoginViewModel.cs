@@ -58,7 +58,23 @@ public class AddLoginViewModel : INotifyPropertyChanged
 		} 
 	}
 
-	public string Password { get; set; } = "";
+	private string password = "";
+
+	public string Password 
+	{ 
+		get { return this.password; }
+		set
+		{
+			if (this.password != value)
+			{
+				this.password = value;
+				OnPropertyChanged(nameof(Password));
+
+				this.isCopyButtonEnabled = !string.IsNullOrEmpty(this.Password);
+				OnPropertyChanged(nameof(IsCopyButtonEnabled));
+			}
+		} 
+	}
 
 	public string Notes { get; set; } = "";
 
@@ -114,6 +130,7 @@ public class AddLoginViewModel : INotifyPropertyChanged
 		this.onNegativeClose = negativeAction;
 		this.addLogin = add;
 		this.passwordBox = pwBox;
+		this.passwordBox.PasswordChanged += this.passwordBoxContentChanged;
 	}
 
 
@@ -177,6 +194,16 @@ public class AddLoginViewModel : INotifyPropertyChanged
 						Clipboard.SetText(passwordBox.Password);
 					}
 				}));
+		}
+	}
+
+	private bool isCopyButtonEnabled = false;
+
+	public bool IsCopyButtonEnabled
+	{
+		get
+		{
+			return this.isCopyButtonEnabled;
 		}
 	}
 
@@ -248,6 +275,18 @@ public class AddLoginViewModel : INotifyPropertyChanged
 	}
 
 	#endregion // Buttons
+
+	
+	#region Text inputs
+
+	private void passwordBoxContentChanged(object sender, RoutedEventArgs e)
+    {
+		this.isCopyButtonEnabled = !string.IsNullOrEmpty(passwordBox.Password);
+		OnPropertyChanged(nameof(IsCopyButtonEnabled));
+    }
+
+	#endregion // Text inputs
+
 
 	#region Property changed
 
