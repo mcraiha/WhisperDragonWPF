@@ -180,7 +180,15 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 				{
 					if (this.SelectedLogin != null)
 					{
-						Clipboard.SetText(this.SelectedLogin.URL);
+						if (this.SelectedLogin.IsSecure)
+						{
+							LoginInformationSecret lis = this.csc.loginInformationSecrets[this.SelectedLogin.zeroBasedIndexNumber];
+							Clipboard.SetText(lis.GetURL(this.derivedPasswords[lis.GetKeyIdentifier()]));
+						}
+						else
+						{
+							Clipboard.SetText(this.csc.loginInformations[this.SelectedLogin.zeroBasedIndexNumber].GetURL());
+						}
 					}
 				}));
 		}
@@ -196,7 +204,15 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 				{
 					if (this.SelectedLogin != null)
 					{
-						Clipboard.SetText(this.SelectedLogin.Username);
+						if (this.SelectedLogin.IsSecure)
+						{
+							LoginInformationSecret lis = this.csc.loginInformationSecrets[this.SelectedLogin.zeroBasedIndexNumber];
+							Clipboard.SetText(lis.GetUsername(this.derivedPasswords[lis.GetKeyIdentifier()]));
+						}
+						else
+						{
+							Clipboard.SetText(this.csc.loginInformations[this.SelectedLogin.zeroBasedIndexNumber].GetUsername());
+						}
 					}
 				}));
 		}
@@ -212,7 +228,15 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 				{
 					if (this.SelectedLogin != null)
 					{
-						Clipboard.SetText(this.SelectedLogin.Password);
+						if (this.SelectedLogin.IsSecure)
+						{
+							LoginInformationSecret lis = this.csc.loginInformationSecrets[this.SelectedLogin.zeroBasedIndexNumber];
+							Clipboard.SetText(lis.GetPassword(this.derivedPasswords[lis.GetKeyIdentifier()]));
+						}
+						else
+						{
+							Clipboard.SetText(this.csc.loginInformations[this.SelectedLogin.zeroBasedIndexNumber].GetPassword());
+						}
 					}
 				}));
 		}
