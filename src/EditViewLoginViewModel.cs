@@ -66,7 +66,23 @@ public class EditViewLoginViewModel : INotifyPropertyChanged
 		} 
 	}
 
-	public string Password { get; set; } = "";
+	private string password = "";
+
+	public string Password 
+	{ 
+		get { return this.password; }
+		set
+		{
+			if (this.password != value)
+			{
+				this.password = value;
+				OnPropertyChanged(nameof(Password));
+
+				this.isCopyButtonEnabled = !string.IsNullOrEmpty(this.Password);
+				OnPropertyChanged(nameof(IsCopyButtonEnabled));
+			}
+		} 
+	}
 
 	public string Notes { get; set; } = "";
 
@@ -120,6 +136,7 @@ public class EditViewLoginViewModel : INotifyPropertyChanged
 		this.onNegativeClose = negativeAction;
 		this.editLogin = edit;
 		this.passwordBox = pwBox;
+		this.passwordBox.PasswordChanged += this.passwordBoxContentChanged;
 
 		this.zeroBasedIndexNumber = current.zeroBasedIndexNumber;
 		this.wasOriginallySecret = current.IsSecure;
@@ -180,7 +197,63 @@ public class EditViewLoginViewModel : INotifyPropertyChanged
 	
 	#region Buttons
 
-	
+	private ICommand copyPasswordCommand;
+	public ICommand CopyPasswordCommand
+	{
+		get
+		{
+			return copyPasswordCommand 
+				?? (copyPasswordCommand = new ActionCommand(() =>
+				{
+					if (this.visiblePassword)
+					{
+						Clipboard.SetText(this.Password);
+					}
+					else
+					{
+						Clipboard.SetText(passwordBox.Password);
+					}
+				}));
+		}
+	}
+
+	private bool isCopyButtonEnabled = false;
+
+	public bool IsCopyButtonEnabled
+	{
+		get
+		{
+			return this.isCopyButtonEnabled;
+		}
+	}
+
+	private ICommand generatePasswordCommand;
+	public ICommand GeneratePasswordCommand
+	{
+		get
+		{
+			return generatePasswordCommand 
+				?? (generatePasswordCommand = new ActionCommand(() =>
+				{
+					CreatePasswordWindow passwordWindow = new CreatePasswordWindow(this.UpdatePassword);
+					passwordWindow.ShowDialog();
+				}));
+		}
+	}
+
+	private void UpdatePassword(string newPassword)
+	{
+		if (this.visiblePassword)
+		{
+			this.Password = newPassword;
+			OnPropertyChanged(nameof(Password));
+		}
+		else
+		{
+			passwordBox.Password = newPassword;
+		}
+	}
+
 	private ICommand editLoginCommand;
 	public ICommand EditLoginCommand
 	{
@@ -223,6 +296,16 @@ public class EditViewLoginViewModel : INotifyPropertyChanged
 	}
 
 	#endregion // Buttons
+
+	#region Text inputs
+
+	private void passwordBoxContentChanged(object sender, RoutedEventArgs e)
+    {
+		this.isCopyButtonEnabled = !string.IsNullOrEmpty(passwordBox.Password);
+		OnPropertyChanged(nameof(IsCopyButtonEnabled));
+    }
+
+	#endregion // Text inputs
 
 	#region Property changed
 
