@@ -36,14 +36,14 @@ namespace WhisperDragonWPF
 					returnList.Add(new LoginSimplified() {
 						zeroBasedIndexNumber = runningIndexNumber,
 						IsSecure = false,
-						Title = FormatTextWithFilter(loginInformation.GetTitle(), settingsData.TitleShowMode),
-						URL = FormatTextWithFilter(loginInformation.GetURL(), settingsData.UrlShowMode),
-						Email = FormatTextWithFilter(loginInformation.GetEmail(), settingsData.EmailShowMode),
-						Username = FormatTextWithFilter(loginInformation.GetUsername(), settingsData.UsernameShowMode),
-						Password = FormatTextWithFilter(loginInformation.GetPassword(), settingsData.PasswordShowMode),
+						Title = UITextFormat.FormatTextWithFilter(loginInformation.GetTitle(), settingsData.TitleShowMode),
+						URL = UITextFormat.FormatTextWithFilter(loginInformation.GetURL(), settingsData.UrlShowMode),
+						Email = UITextFormat.FormatTextWithFilter(loginInformation.GetEmail(), settingsData.EmailShowMode),
+						Username = UITextFormat.FormatTextWithFilter(loginInformation.GetUsername(), settingsData.UsernameShowMode),
+						Password = UITextFormat.FormatTextWithFilter(loginInformation.GetPassword(), settingsData.PasswordShowMode),
 						Notes = loginInformation.GetNotes(),
 						Icon = loginInformation.GetIcon(),
-						Category = FormatTextWithFilter(loginInformation.GetCategory(), settingsData.CategoryShowMode),
+						Category = UITextFormat.FormatTextWithFilter(loginInformation.GetCategory(), settingsData.CategoryShowMode),
 						Tags = loginInformation.GetTags(),
 						CreationTime = loginInformation.GetCreationTime().ToString("s", System.Globalization.CultureInfo.InvariantCulture),
 						ModificationTime = loginInformation.GetModificationTime().ToString("s", System.Globalization.CultureInfo.InvariantCulture),
@@ -62,14 +62,14 @@ namespace WhisperDragonWPF
 					returnList.Add(new LoginSimplified() {
 						zeroBasedIndexNumber = runningIndexNumber,
 						IsSecure = true,
-						Title = FormatTextWithFilter(loginInformationSecret.GetTitle(derivedPassword), settingsData.TitleShowMode),
-						URL = FormatTextWithFilter(loginInformationSecret.GetURL(derivedPassword), settingsData.UrlShowMode),
-						Email = FormatTextWithFilter(loginInformationSecret.GetEmail(derivedPassword), settingsData.EmailShowMode),
-						Username = FormatTextWithFilter(loginInformationSecret.GetUsername(derivedPassword), settingsData.UsernameShowMode),
-						Password = FormatTextWithFilter(loginInformationSecret.GetPassword(derivedPassword), settingsData.PasswordShowMode),
+						Title = UITextFormat.FormatTextWithFilter(loginInformationSecret.GetTitle(derivedPassword), settingsData.TitleShowMode),
+						URL = UITextFormat.FormatTextWithFilter(loginInformationSecret.GetURL(derivedPassword), settingsData.UrlShowMode),
+						Email = UITextFormat.FormatTextWithFilter(loginInformationSecret.GetEmail(derivedPassword), settingsData.EmailShowMode),
+						Username = UITextFormat.FormatTextWithFilter(loginInformationSecret.GetUsername(derivedPassword), settingsData.UsernameShowMode),
+						Password = UITextFormat.FormatTextWithFilter(loginInformationSecret.GetPassword(derivedPassword), settingsData.PasswordShowMode),
 						Notes = loginInformationSecret.GetNotes(derivedPassword),
 						Icon = loginInformationSecret.GetIcon(derivedPassword),
-						Category = FormatTextWithFilter(loginInformationSecret.GetCategory(derivedPassword), settingsData.CategoryShowMode),
+						Category = UITextFormat.FormatTextWithFilter(loginInformationSecret.GetCategory(derivedPassword), settingsData.CategoryShowMode),
 						Tags = loginInformationSecret.GetTags(derivedPassword),
 						CreationTime = loginInformationSecret.GetCreationTime(derivedPassword).ToString("s", System.Globalization.CultureInfo.InvariantCulture),
 						ModificationTime = loginInformationSecret.GetModificationTime(derivedPassword).ToString("s", System.Globalization.CultureInfo.InvariantCulture),
@@ -118,54 +118,6 @@ namespace WhisperDragonWPF
 						CreationTime = loginInformationSecret.GetCreationTime(derivedPassword).ToString("s", System.Globalization.CultureInfo.InvariantCulture),
 						ModificationTime = loginInformationSecret.GetModificationTime(derivedPassword).ToString("s", System.Globalization.CultureInfo.InvariantCulture),
 					};
-		}
-
-		private static readonly char passwordChar = '\u2022';
-
-		private static readonly Random rng = new Random(Seed: 2047);
-
-		private static string FormatTextWithFilter(string input, ShowMode showMode)
-		{
-			if (showMode == ShowMode.ShowFull)
-			{
-				return input;
-			}
-			else if (showMode == ShowMode.ShowFirstFour)
-			{
-				if (input.Length < 5)
-				{
-					return input;
-				}
-				else
-				{
-					return input.Substring(0, 4);
-				}
-			}
-			else if (showMode == ShowMode.ShowFirst)
-			{
-				if (input.Length < 2)
-				{
-					return input;
-				}
-				else
-				{
-					return input.Substring(0, 1);
-				}
-			}
-			else if (showMode == ShowMode.HiddenCorrectLength)
-			{
-				return new string(passwordChar, input.Length);
-			}
-			else if (showMode == ShowMode.HiddenConstantLenght)
-			{
-				return new string(passwordChar, 8);
-			}
-			else if (showMode == ShowMode.HiddenRandomLength)
-			{
-				return new string(passwordChar, rng.Next(1, 16));
-			}
-
-			throw new NotImplementedException("Missing ShowMode");
 		}
 	}
 }
