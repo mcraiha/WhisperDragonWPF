@@ -13,6 +13,7 @@ public class PreferencesViewModel : INotifyPropertyChanged
 
 	public Dictionary<int /* Index */, string /* string to show */> ShowModes { get; }
 
+    // Logins
 	private int selectedLoginTitleShowMode;
 
 	public int SelectedLoginTitleShowMode
@@ -121,6 +122,42 @@ public class PreferencesViewModel : INotifyPropertyChanged
         }
     }
 	
+    // Notes
+    private int selectedNoteTitleShowMode;
+
+	public int SelectedNoteTitleShowMode
+    {
+        get
+        {
+            return this.selectedNoteTitleShowMode;
+        }
+        set
+        {
+            if (this.selectedNoteTitleShowMode != value)
+            {
+                this.selectedNoteTitleShowMode = value;
+                OnPropertyChanged(nameof(SelectedNoteTitleShowMode));
+            }
+        }
+    }
+
+    private int selectedNoteTextShowMode;
+
+	public int SelectedNoteTextShowMode
+    {
+        get
+        {
+            return this.selectedNoteTextShowMode;
+        }
+        set
+        {
+            if (this.selectedNoteTextShowMode != value)
+            {
+                this.selectedNoteTextShowMode = value;
+                OnPropertyChanged(nameof(SelectedNoteTextShowMode));
+            }
+        }
+    }
 
 	private readonly SettingsData settings;
 	private readonly Action<SettingsData> saveAction;
@@ -141,12 +178,17 @@ public class PreferencesViewModel : INotifyPropertyChanged
 			this.ShowModes.Add((int)showMode, showMode.ToString());
 		}
 		
+        // Logins
 		this.SelectedLoginTitleShowMode = (int)settingsData.LoginTitleShowMode;
 		this.SelectedLoginUrlShowMode = (int)settings.LoginUrlShowMode;
 		this.SelectedLoginEmailShowMode = (int)settings.LoginEmailShowMode;
 		this.SelectedLoginUsernameShowMode = (int)settings.LoginUsernameShowMode;
 		this.SelectedLoginPasswordShowMode = (int)settings.LoginPasswordShowMode;
 		this.SelectedLoginCategoryShowMode = (int)settings.LoginCategoryShowMode;
+
+        // Notes
+        this.SelectedNoteTitleShowMode = (int)settingsData.NoteTitleShowMode;
+        this.SelectedNoteTextShowMode = (int)settingsData.NoteTextShowMode;
 	}
 
 	#region Buttons
@@ -160,12 +202,17 @@ public class PreferencesViewModel : INotifyPropertyChanged
 			return saveCommand 
 				?? (saveCommand = new ActionCommand(() =>
 				{
+                    // Logins
 					this.settings.LoginTitleShowMode = (ShowMode) this.SelectedLoginTitleShowMode;
 					this.settings.LoginUrlShowMode = (ShowMode) this.SelectedLoginUrlShowMode;
 					this.settings.LoginEmailShowMode = (ShowMode) this.SelectedLoginEmailShowMode;
 					this.settings.LoginUsernameShowMode = (ShowMode) this.SelectedLoginUsernameShowMode;
 					this.settings.LoginPasswordShowMode = (ShowMode) this.SelectedLoginPasswordShowMode;
 					this.settings.LoginCategoryShowMode = (ShowMode) this.SelectedLoginCategoryShowMode;
+
+                    // Notes
+                    this.settings.NoteTitleShowMode = (ShowMode) this.SelectedNoteTitleShowMode;
+                    this.settings.NoteTextShowMode = (ShowMode) this.SelectedNoteTextShowMode;
 
 					this.saveAction(this.settings);
 					this.closeAction();
