@@ -13,110 +13,110 @@ public class PreferencesViewModel : INotifyPropertyChanged
 
 	public Dictionary<int /* Index */, string /* string to show */> ShowModes { get; }
 
-	private int selectedTitleShowMode;
+	private int selectedLoginTitleShowMode;
 
-	public int SelectedTitleShowMode
+	public int SelectedLoginTitleShowMode
     {
         get
         {
-            return this.selectedTitleShowMode;
+            return this.selectedLoginTitleShowMode;
         }
         set
         {
-            if (this.selectedTitleShowMode != value)
+            if (this.selectedLoginTitleShowMode != value)
             {
-                this.selectedTitleShowMode = value;
-                OnPropertyChanged(nameof(SelectedTitleShowMode));
+                this.selectedLoginTitleShowMode = value;
+                OnPropertyChanged(nameof(SelectedLoginTitleShowMode));
             }
         }
     }
 
-	private int selectedUrlShowMode;
+	private int selectedLoginUrlShowMode;
 
-	public int SelectedUrlShowMode
+	public int SelectedLoginUrlShowMode
     {
         get
         {
-            return this.selectedUrlShowMode;
+            return this.selectedLoginUrlShowMode;
         }
         set
         {
-            if (this.selectedUrlShowMode != value)
+            if (this.selectedLoginUrlShowMode != value)
             {
-                this.selectedUrlShowMode = value;
-                OnPropertyChanged(nameof(SelectedUrlShowMode));
+                this.selectedLoginUrlShowMode = value;
+                OnPropertyChanged(nameof(SelectedLoginUrlShowMode));
             }
         }
     }
 
-	private int selectedEmailShowMode;
+	private int selectedLoginEmailShowMode;
 
-	public int SelectedEmailShowMode
+	public int SelectedLoginEmailShowMode
     {
         get
         {
-            return this.selectedEmailShowMode;
+            return this.selectedLoginEmailShowMode;
         }
         set
         {
-            if (this.selectedEmailShowMode != value)
+            if (this.selectedLoginEmailShowMode != value)
             {
-                this.selectedEmailShowMode = value;
-                OnPropertyChanged(nameof(SelectedEmailShowMode));
+                this.selectedLoginEmailShowMode = value;
+                OnPropertyChanged(nameof(SelectedLoginEmailShowMode));
             }
         }
     }
 	
-	private int selectedUsernameShowMode;
+	private int selectedLoginUsernameShowMode;
 
-	public int SelectedUsernameShowMode
+	public int SelectedLoginUsernameShowMode
     {
         get
         {
-            return this.selectedUsernameShowMode;
+            return this.selectedLoginUsernameShowMode;
         }
         set
         {
-            if (this.selectedUsernameShowMode != value)
+            if (this.selectedLoginUsernameShowMode != value)
             {
-                this.selectedUsernameShowMode = value;
-                OnPropertyChanged(nameof(SelectedUsernameShowMode));
+                this.selectedLoginUsernameShowMode = value;
+                OnPropertyChanged(nameof(SelectedLoginUsernameShowMode));
             }
         }
     }
 
-	private int selectedPasswordShowMode;
+	private int selectedLoginPasswordShowMode;
 
-	public int SelectedPasswordShowMode
+	public int SelectedLoginPasswordShowMode
     {
         get
         {
-            return this.selectedPasswordShowMode;
+            return this.selectedLoginPasswordShowMode;
         }
         set
         {
-            if (this.selectedPasswordShowMode != value)
+            if (this.selectedLoginPasswordShowMode != value)
             {
-                this.selectedPasswordShowMode = value;
-                OnPropertyChanged(nameof(SelectedPasswordShowMode));
+                this.selectedLoginPasswordShowMode = value;
+                OnPropertyChanged(nameof(SelectedLoginPasswordShowMode));
             }
         }
     }
 
-	private int selectedCategoryShowMode;
+	private int selectedLoginCategoryShowMode;
 
-	public int SelectedCategoryShowMode
+	public int SelectedLoginCategoryShowMode
     {
         get
         {
-            return this.selectedCategoryShowMode;
+            return this.selectedLoginCategoryShowMode;
         }
         set
         {
-            if (this.selectedCategoryShowMode != value)
+            if (this.selectedLoginCategoryShowMode != value)
             {
-                this.selectedCategoryShowMode = value;
-                OnPropertyChanged(nameof(SelectedCategoryShowMode));
+                this.selectedLoginCategoryShowMode = value;
+                OnPropertyChanged(nameof(SelectedLoginCategoryShowMode));
             }
         }
     }
@@ -141,12 +141,12 @@ public class PreferencesViewModel : INotifyPropertyChanged
 			this.ShowModes.Add((int)showMode, showMode.ToString());
 		}
 		
-		this.SelectedTitleShowMode = (int)settingsData.TitleShowMode;
-		this.SelectedUrlShowMode = (int)settings.UrlShowMode;
-		this.SelectedEmailShowMode = (int)settings.EmailShowMode;
-		this.SelectedUsernameShowMode = (int)settings.UsernameShowMode;
-		this.SelectedPasswordShowMode = (int)settings.PasswordShowMode;
-		this.SelectedCategoryShowMode = (int)settings.CategoryShowMode;
+		this.SelectedLoginTitleShowMode = (int)settingsData.LoginTitleShowMode;
+		this.SelectedLoginUrlShowMode = (int)settings.LoginUrlShowMode;
+		this.SelectedLoginEmailShowMode = (int)settings.LoginEmailShowMode;
+		this.SelectedLoginUsernameShowMode = (int)settings.LoginUsernameShowMode;
+		this.SelectedLoginPasswordShowMode = (int)settings.LoginPasswordShowMode;
+		this.SelectedLoginCategoryShowMode = (int)settings.LoginCategoryShowMode;
 	}
 
 	#region Buttons
@@ -160,12 +160,12 @@ public class PreferencesViewModel : INotifyPropertyChanged
 			return saveCommand 
 				?? (saveCommand = new ActionCommand(() =>
 				{
-					this.settings.TitleShowMode = (ShowMode) this.SelectedTitleShowMode;
-					this.settings.UrlShowMode = (ShowMode) this.SelectedUrlShowMode;
-					this.settings.EmailShowMode = (ShowMode) this.SelectedEmailShowMode;
-					this.settings.UsernameShowMode = (ShowMode) this.SelectedUsernameShowMode;
-					this.settings.PasswordShowMode = (ShowMode) this.SelectedPasswordShowMode;
-					this.settings.CategoryShowMode = (ShowMode) this.SelectedCategoryShowMode;
+					this.settings.LoginTitleShowMode = (ShowMode) this.SelectedLoginTitleShowMode;
+					this.settings.LoginUrlShowMode = (ShowMode) this.SelectedLoginUrlShowMode;
+					this.settings.LoginEmailShowMode = (ShowMode) this.SelectedLoginEmailShowMode;
+					this.settings.LoginUsernameShowMode = (ShowMode) this.SelectedLoginUsernameShowMode;
+					this.settings.LoginPasswordShowMode = (ShowMode) this.SelectedLoginPasswordShowMode;
+					this.settings.LoginCategoryShowMode = (ShowMode) this.SelectedLoginCategoryShowMode;
 
 					this.saveAction(this.settings);
 					this.closeAction();

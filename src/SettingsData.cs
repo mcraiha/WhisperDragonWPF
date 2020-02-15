@@ -17,17 +17,17 @@ namespace WhisperDragonWPF
     public class SettingsData
     {
         // Logins
-        public ShowMode TitleShowMode { get; set; } = ShowMode.ShowFull;
+        public ShowMode LoginTitleShowMode { get; set; } = ShowMode.ShowFull;
 
-        public ShowMode UrlShowMode { get; set; } = ShowMode.ShowFull;
+        public ShowMode LoginUrlShowMode { get; set; } = ShowMode.ShowFull;
 
-        public ShowMode EmailShowMode { get; set; } = ShowMode.ShowFull;
+        public ShowMode LoginEmailShowMode { get; set; } = ShowMode.ShowFull;
 
-        public ShowMode UsernameShowMode { get; set; } = ShowMode.ShowFull;
+        public ShowMode LoginUsernameShowMode { get; set; } = ShowMode.ShowFull;
 
-        public ShowMode PasswordShowMode { get; set; } = ShowMode.HiddenConstantLenght;
+        public ShowMode LoginPasswordShowMode { get; set; } = ShowMode.HiddenConstantLenght;
 
-        public ShowMode CategoryShowMode { get; set; } = ShowMode.ShowFull;
+        public ShowMode LoginCategoryShowMode { get; set; } = ShowMode.ShowFull;
 
 
         // Notes
