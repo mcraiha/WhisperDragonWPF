@@ -113,11 +113,16 @@
 
                 <TabItem Header="Notes (F3)">
 
-                    <DataGrid Name="Notes" AutoGenerateColumns="False" >
+                    <DataGrid Grid.Row="0" Grid.Column="0"
+                            Name="Notes" ItemsSource="{Binding Notes}" SelectedItem="{Binding SelectedNote, Mode=TwoWay}"
+                            SelectionMode="Single" AutoGenerateColumns="False"                
+                            IsReadOnly="True" >
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Text" />
-                            <DataGridTextColumn Header="Creation time" />
-                            <DataGridTextColumn Header="Modification time" />
+                            <DataGridTextColumn Header="Secure" Binding="{Binding IsSecure, Converter={StaticResource booltosecureiconstringconverter}}" CellStyle="{StaticResource CenterCellText}" />
+                            <DataGridTextColumn Header="Title" Binding="{Binding Title}" />
+                            <DataGridTextColumn Header="Text" Binding="{Binding Text}" />
+                            <DataGridTextColumn Header="Creation time" Binding="{Binding CreationTime}" />
+                            <DataGridTextColumn Header="Modification time" Binding="{Binding ModificationTime}" />
                         </DataGrid.Columns>
                     </DataGrid>
 

@@ -34,6 +34,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		get { return csc != null; }
 	}
 
+	// Logins
 	private ObservableCollection<LoginSimplified> logins = new ObservableCollection<LoginSimplified>();
 	public ObservableCollection<LoginSimplified> Logins
 	{
@@ -41,6 +42,16 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 	}
 
 	public LoginSimplified SelectedLogin { get; set; }
+
+
+	// Notes
+	private ObservableCollection<NoteSimplified> notes = new ObservableCollection<NoteSimplified>();
+	public ObservableCollection<NoteSimplified> Notes
+	{
+		get { return this.notes; }
+	}
+
+	public NoteSimplified SelectedNote { get; set; }
 
 	private TabControl tabSections;
 
@@ -495,6 +506,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		OnPropertyChanged(nameof(this.WizardVisibility));
 
 		this.GenerateLoginSimplifiedsFromCommonSecrets();
+		this.GenerateNoteSimplifiedsFromCommonSecrets();
 	}
 
 	private ICommand saveCommonSecretsContainerViaMenu;
@@ -650,6 +662,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		
 		// Show changes immediately
 		this.GenerateLoginSimplifiedsFromCommonSecrets();
+		this.GenerateNoteSimplifiedsFromCommonSecrets();
 	}
 
 	#endregion // Tools
@@ -756,15 +769,27 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 
 		LoginInformation demoLogin = new LoginInformation("Demo login", "https://localhost", "sample@email.com", "Dragon", "gwWTY#¤&%36", "This login will expire in 2030", new byte[] {}, "Samples", "Samples\tDemo");
 
-		(bool success, string possibleError) = this.csc.AddLoginInformationSecret(password, demoLogin, kdfe.GetKeyIdentifier());
+		(bool successAddLoginInformation, string possibleErrorAddLoginInformation) = this.csc.AddLoginInformationSecret(password, demoLogin, kdfe.GetKeyIdentifier());
 
-		if (!success)
+		if (!successAddLoginInformation)
 		{
-			MessageBox.Show($"Error when adding demo secret: {possibleError}", "Error");
+			MessageBox.Show($"Error when adding demo secret: {possibleErrorAddLoginInformation}", "Error");
+			return;
+		}
+
+		Note demoNote = new Note("Sample topic", "You can easily create notes");
+
+		(bool successAddNote, string possibleErrorAddNote) = this.csc.AddNoteSecret(password, demoNote, kdfe.GetKeyIdentifier());
+
+		if (!successAddNote)
+		{
+			MessageBox.Show($"Error when adding demo note: {possibleErrorAddNote}", "Error");
 			return;
 		}
 		
+		// Update UI lists
 		this.GenerateLoginSimplifiedsFromCommonSecrets();
+		this.GenerateNoteSimplifiedsFromCommonSecrets();
 		
 		this.isModified = true;
 		this.UpdateMainTitle(untitledTempName);
@@ -874,6 +899,17 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		foreach (LoginSimplified login in newLogins)
 		{
 			this.logins.Add(login);
+		}
+	}
+
+	private void GenerateNoteSimplifiedsFromCommonSecrets()
+	{
+		this.notes.Clear();
+		List<NoteSimplified> newNotes = NoteSimplified.TurnIntoUICompatible(this.csc.notes, this.csc.noteSecrets, this.derivedPasswords, this.settingsData);
+
+		foreach (NoteSimplified note in newNotes)
+		{
+			this.notes.Add(note);
 		}
 	}
 
