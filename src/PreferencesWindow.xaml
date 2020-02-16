@@ -47,6 +47,19 @@
 					</StackPanel>
 				</TabItem>
 
+				<TabItem Header="Files">
+					<StackPanel>
+						<Label Content="Filename show mode:" Margin="2,4,2,1" />
+						<ComboBox ItemsSource="{Binding ShowModes}" SelectedIndex="{Binding SelectedFilenameShowMode, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Margin="2,0,2,2"></ComboBox>
+
+						<Label Content="File size show mode:" Margin="2,4,2,1" />
+						<ComboBox ItemsSource="{Binding ShowModes}" SelectedIndex="{Binding SelectedFileSizeShowMode, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Margin="2,0,2,2"></ComboBox>
+
+						<Label Content="File type show mode:" Margin="2,4,2,1" />
+						<ComboBox ItemsSource="{Binding ShowModes}" SelectedIndex="{Binding SelectedFileTypeShowMode, Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" Margin="2,0,2,2"></ComboBox>
+					</StackPanel>
+				</TabItem>
+
 			</TabControl>
 
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

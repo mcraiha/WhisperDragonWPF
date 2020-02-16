@@ -37,8 +37,8 @@ namespace WhisperDragonWPF
 
         // Files
         public ShowMode FileFilenameShowMode { get; set; } = ShowMode.ShowFull;
-        public ShowMode FileFilesizeShowMode { get; set; } = ShowMode.ShowFull;
-        public ShowMode FileFiletypeShowMode { get; set; } = ShowMode.ShowFull;
+        public ShowMode FileFileSizeShowMode { get; set; } = ShowMode.ShowFull;
+        public ShowMode FileFileTypeShowMode { get; set; } = ShowMode.ShowFull;
         
         public SettingsData()
         {

@@ -159,6 +159,60 @@ public class PreferencesViewModel : INotifyPropertyChanged
         }
     }
 
+    private int selectedFilenameShowMode;
+
+	public int SelectedFilenameShowMode
+    {
+        get
+        {
+            return this.selectedFilenameShowMode;
+        }
+        set
+        {
+            if (this.selectedFilenameShowMode != value)
+            {
+                this.selectedFilenameShowMode = value;
+                OnPropertyChanged(nameof(SelectedFilenameShowMode));
+            }
+        }
+    }
+
+    private int selectedFileSizeShowMode;
+
+	public int SelectedFileSizeShowMode
+    {
+        get
+        {
+            return this.selectedFileSizeShowMode;
+        }
+        set
+        {
+            if (this.selectedFileSizeShowMode != value)
+            {
+                this.selectedFileSizeShowMode = value;
+                OnPropertyChanged(nameof(SelectedFileSizeShowMode));
+            }
+        }
+    }
+
+    private int selectedFileTypeShowMode;
+
+	public int SelectedFileTypeShowMode
+    {
+        get
+        {
+            return this.selectedFileTypeShowMode;
+        }
+        set
+        {
+            if (this.selectedFileTypeShowMode != value)
+            {
+                this.selectedFileTypeShowMode = value;
+                OnPropertyChanged(nameof(SelectedFileTypeShowMode));
+            }
+        }
+    }
+
 	private readonly SettingsData settings;
 	private readonly Action<SettingsData> saveAction;
 	private readonly Action closeAction;
@@ -189,6 +243,11 @@ public class PreferencesViewModel : INotifyPropertyChanged
         // Notes
         this.SelectedNoteTitleShowMode = (int)settingsData.NoteTitleShowMode;
         this.SelectedNoteTextShowMode = (int)settingsData.NoteTextShowMode;
+
+        // Files
+        this.SelectedFilenameShowMode = (int)settingsData.FileFilenameShowMode;
+        this.SelectedFileSizeShowMode = (int)settingsData.FileFileSizeShowMode;
+        this.SelectedFileTypeShowMode = (int)settingsData.FileFileTypeShowMode;
 	}
 
 	#region Buttons
@@ -213,6 +272,11 @@ public class PreferencesViewModel : INotifyPropertyChanged
                     // Notes
                     this.settings.NoteTitleShowMode = (ShowMode) this.SelectedNoteTitleShowMode;
                     this.settings.NoteTextShowMode = (ShowMode) this.SelectedNoteTextShowMode;
+
+                    // Files
+                    this.settings.FileFilenameShowMode = (ShowMode) this.SelectedFilenameShowMode;
+                    this.settings.FileFileSizeShowMode = (ShowMode) this.SelectedFileSizeShowMode;
+                    this.settings.FileFileTypeShowMode = (ShowMode) this.SelectedFileTypeShowMode;
 
 					this.saveAction(this.settings);
 					this.closeAction();
