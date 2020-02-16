@@ -53,6 +53,16 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 
 	public NoteSimplified SelectedNote { get; set; }
 
+
+	// Files
+	private ObservableCollection<FileSimplified> files = new ObservableCollection<FileSimplified>();
+	public ObservableCollection<FileSimplified> Files
+	{
+		get { return this.files; }
+	}
+
+	public NoteSimplified SelectedFile { get; set; }
+
 	private TabControl tabSections;
 
 	private Window mainWindow;
@@ -507,6 +517,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 
 		this.GenerateLoginSimplifiedsFromCommonSecrets();
 		this.GenerateNoteSimplifiedsFromCommonSecrets();
+		this.GenerateFileSimplifiedsFromCommonSecrets();
 	}
 
 	private ICommand saveCommonSecretsContainerViaMenu;
@@ -663,6 +674,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		// Show changes immediately
 		this.GenerateLoginSimplifiedsFromCommonSecrets();
 		this.GenerateNoteSimplifiedsFromCommonSecrets();
+		this.GenerateFileSimplifiedsFromCommonSecrets();
 	}
 
 	#endregion // Tools
@@ -790,6 +802,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		// Update UI lists
 		this.GenerateLoginSimplifiedsFromCommonSecrets();
 		this.GenerateNoteSimplifiedsFromCommonSecrets();
+		this.GenerateFileSimplifiedsFromCommonSecrets();
 		
 		this.isModified = true;
 		this.UpdateMainTitle(untitledTempName);
@@ -910,6 +923,17 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		foreach (NoteSimplified note in newNotes)
 		{
 			this.notes.Add(note);
+		}
+	}
+
+	private void GenerateFileSimplifiedsFromCommonSecrets()
+	{
+		this.files.Clear();
+		List<FileSimplified> newFiles = FileSimplified.TurnIntoUICompatible(this.csc.files, this.csc.fileSecrets, this.derivedPasswords, this.settingsData);
+
+		foreach (FileSimplified file in newFiles)
+		{
+			this.files.Add(file);
 		}
 	}
 

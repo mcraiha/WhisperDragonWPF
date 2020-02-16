@@ -33,6 +33,12 @@ namespace WhisperDragonWPF
         // Notes
         public ShowMode NoteTitleShowMode { get; set; } = ShowMode.ShowFull;
         public ShowMode NoteTextShowMode { get; set; } = ShowMode.HiddenConstantLenght;
+
+
+        // Files
+        public ShowMode FileFilenameShowMode { get; set; } = ShowMode.ShowFull;
+        public ShowMode FileFilesizeShowMode { get; set; } = ShowMode.ShowFull;
+        public ShowMode FileFiletypeShowMode { get; set; } = ShowMode.ShowFull;
         
         public SettingsData()
         {
