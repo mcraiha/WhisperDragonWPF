@@ -172,7 +172,7 @@ public class AddLoginViewModel : INotifyPropertyChanged
 		}
 	}
 
-	#endregion
+	#endregion // Visibilities
 
 	
 	#region Buttons
