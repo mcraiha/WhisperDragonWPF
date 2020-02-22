@@ -365,6 +365,106 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 	}
 
 	
+	private ICommand addNoteViaMenu;
+	public ICommand AddNoteViaMenu
+	{
+		get
+		{
+			return addNoteViaMenu
+				?? (addNoteViaMenu = new ActionCommand(() =>
+				{
+					AddNoteWindow addNoteWindow = new AddNoteWindow(this.derivedPasswords.Keys.ToList(), this.AddNoteToCollection);
+					addNoteWindow.ShowDialog();
+				}));
+		}
+	}
+
+	private ICommand editViewNoteViaMenu;
+	public ICommand EditViewNoteViaMenu
+	{
+		get
+		{
+			return editViewNoteViaMenu
+				?? (editViewNoteViaMenu = new ActionCommand(() =>
+				{
+					int index = this.SelectedNote.zeroBasedIndexNumber;
+					NoteSimplified noteToEdit = null;
+					if (this.SelectedNote.IsSecure) 
+					{
+						NoteSecret ns = this.csc.noteSecrets[index];
+						noteToEdit = NoteSimplified.TurnIntoEditable(ns, this.derivedPasswords[ns.GetKeyIdentifier()], index);
+					}
+					else
+					{
+						noteToEdit = NoteSimplified.TurnIntoEditable(this.csc.notes[index], index);
+					}
+
+					EditViewNoteWindow editViewNoteWindow = new EditViewNoteWindow(noteToEdit, this.derivedPasswords.Keys.ToList(), this.EditNoteInCollection);
+					editViewNoteWindow.ShowDialog();
+				}));
+		}
+	}
+
+	private ICommand duplicateNoteViaMenu;
+	public ICommand DuplicateNoteViaMenu
+	{
+		get
+		{
+			return duplicateNoteViaMenu
+				?? (duplicateNoteViaMenu = new ActionCommand(() =>
+				{
+					if (this.SelectedNote != null)
+					{
+						Note noteToAdd = new Note(this.SelectedNote.Title, this.SelectedNote.Text);
+
+						if (this.SelectedNote.IsSecure)
+						{
+							string keyIdentifier = this.csc.noteSecrets[this.SelectedNote.zeroBasedIndexNumber].GetKeyIdentifier();
+							this.csc.AddNoteSecret(this.derivedPasswords[keyIdentifier], noteToAdd, keyIdentifier);
+						}
+						else
+						{
+							this.csc.notes.Add(noteToAdd);
+						}
+
+						// Duplicating a note modifies the structure
+						this.isModified = true;
+						this.UpdateMainTitle(this.filePath != null ? this.filePath : untitledTempName);
+
+						this.GenerateNoteSimplifiedsFromCommonSecrets();
+					}
+				}));
+		}
+	}
+
+	private ICommand deleteNoteViaMenu;
+	public ICommand DeleteNoteViaMenu
+	{
+		get
+		{
+			return deleteNoteViaMenu
+				?? (deleteNoteViaMenu = new ActionCommand(() =>
+				{
+					if (this.SelectedNote != null)
+					{
+						if (this.SelectedNote.IsSecure)
+						{
+							this.csc.noteSecrets.RemoveAt(this.SelectedNote.zeroBasedIndexNumber);
+						}
+						else
+						{
+							this.csc.notes.RemoveAt(this.SelectedNote.zeroBasedIndexNumber);
+						}
+
+						// Deleting a note modifies the structure
+						this.isModified = true;
+						this.UpdateMainTitle(this.filePath != null ? this.filePath : untitledTempName);
+
+						this.GenerateNoteSimplifiedsFromCommonSecrets();
+					}
+				}));
+		}
+	}
 
 	#endregion // Context menu items
 
@@ -768,6 +868,77 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		this.UpdateMainTitle(this.filePath != null ? this.filePath : untitledTempName);
 
 		this.GenerateLoginSimplifiedsFromCommonSecrets();
+	}
+
+
+	private ICommand addNoteViaButton;
+	public ICommand AddNoteViaButton
+	{
+		get
+		{
+			return addNoteViaButton 
+				?? (addNoteViaButton = new ActionCommand(() =>
+				{
+					AddNoteWindow addNoteWindow = new AddNoteWindow(this.derivedPasswords.Keys.ToList(), this.AddNoteToCollection);
+					addNoteWindow.ShowDialog();
+				}));
+		}
+	}
+
+	private void AddNoteToCollection(NoteSimplified newNote, string keyIdentifier)
+	{
+		Note noteToAdd = new Note(newNote.Title, newNote.Text);
+		if (newNote.IsSecure)
+		{
+			this.csc.AddNoteSecret(this.derivedPasswords[keyIdentifier], noteToAdd, keyIdentifier);
+		}
+		else
+		{
+			this.csc.notes.Add(noteToAdd);
+		}
+
+		// Adding a note modifies the structure
+		this.isModified = true;
+		this.UpdateMainTitle(this.filePath != null ? this.filePath : untitledTempName);
+
+		this.GenerateNoteSimplifiedsFromCommonSecrets();
+	}
+
+	private void EditNoteInCollection(NoteSimplified editedNote, bool wasSecurityModified, string keyIdentifier)
+	{
+		Note noteToAdd = new Note(editedNote.Title, editedNote.Text);
+
+		if (wasSecurityModified)
+		{
+			// If note jumps from secure <-> unsecure
+			if (editedNote.IsSecure)
+			{
+				this.csc.notes.RemoveAt(editedNote.zeroBasedIndexNumber);
+				this.csc.AddNoteSecret(this.derivedPasswords[keyIdentifier], noteToAdd, keyIdentifier);
+			}
+			else
+			{
+				this.csc.noteSecrets.RemoveAt(editedNote.zeroBasedIndexNumber);
+				this.csc.notes.Add(noteToAdd);
+			}
+		}
+		else
+		{
+			if (editedNote.IsSecure)
+			{
+				this.csc.ReplaceNoteSecret(editedNote.zeroBasedIndexNumber, this.derivedPasswords[keyIdentifier], noteToAdd, keyIdentifier);
+			}
+			else
+			{
+				this.csc.notes[editedNote.zeroBasedIndexNumber] = noteToAdd;
+			}
+		}
+
+		// Editing a note modifies the structure
+		this.isModified = true;
+		this.UpdateMainTitle(this.filePath != null ? this.filePath : untitledTempName);
+
+		this.GenerateNoteSimplifiedsFromCommonSecrets();
 	}
 
 	#region New, Open, Save, Close
