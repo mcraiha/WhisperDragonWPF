@@ -941,6 +941,40 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		this.GenerateNoteSimplifiedsFromCommonSecrets();
 	}
 
+
+	private ICommand addFileViaButton;
+	public ICommand AddFileViaButton
+	{
+		get
+		{
+			return addFileViaButton 
+				?? (addFileViaButton = new ActionCommand(() =>
+				{
+					AddFileWindow addFileWindow = new AddFileWindow(this.derivedPasswords.Keys.ToList(), this.AddFileToCollection);
+					addFileWindow.ShowDialog();
+				}));
+		}
+	}
+
+	private void AddFileToCollection(string filename, byte[] byteArray, bool isSecret, string keyIdentifier)
+	{
+		FileEntry newFile = new FileEntry(filename, byteArray);
+		if (isSecret)
+		{
+			this.csc.AddFileEntrySecret(this.derivedPasswords[keyIdentifier], newFile, keyIdentifier);
+		}
+		else
+		{
+			this.csc.files.Add(newFile);
+		}
+
+		// Adding a file modifies the structure
+		this.isModified = true;
+		this.UpdateMainTitle(this.filePath != null ? this.filePath : untitledTempName);
+
+		this.GenerateFileSimplifiedsFromCommonSecrets();
+	}
+
 	#region New, Open, Save, Close
 
 	private void CreateNewCommonSecrets(KeyDerivationFunctionEntry kdfe, string password)
