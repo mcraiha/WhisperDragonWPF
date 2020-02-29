@@ -130,13 +130,13 @@
                                 <DataGridTextColumn Header="Modification time" Binding="{Binding ModificationTime}" />
                             </DataGrid.Columns>
                             <DataGrid.ContextMenu>
-                                    <ContextMenu>
-                                        <MenuItem Header="Add Note..." Command="{Binding AddNoteViaMenu}" />
-                                        <MenuItem Header="Edit/View Note..." Command="{Binding EditViewNoteViaMenu}" />
-                                        <MenuItem Header="Duplicate Note" Command="{Binding DuplicateNoteViaMenu}" />
-                                        <MenuItem Header="Delete Note" Command="{Binding DeleteNoteViaMenu}" />
-                                    </ContextMenu>
-                                </DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Add Note..." Command="{Binding AddNoteViaMenu}" />
+                                    <MenuItem Header="Edit/View Note..." Command="{Binding EditViewNoteViaMenu}" />
+                                    <MenuItem Header="Duplicate Note" Command="{Binding DuplicateNoteViaMenu}" />
+                                    <MenuItem Header="Delete Note" Command="{Binding DeleteNoteViaMenu}" />
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
                         </DataGrid>
 
                         <Button Grid.Row="1" Grid.Column="0" Command="{Binding AddNoteViaButton}">+ Note</Button>
