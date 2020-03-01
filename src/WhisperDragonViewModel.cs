@@ -61,7 +61,7 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		get { return this.files; }
 	}
 
-	public NoteSimplified SelectedFile { get; set; }
+	public FileSimplified SelectedFile { get; set; }
 
 	private TabControl tabSections;
 
@@ -461,6 +461,147 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 						this.UpdateMainTitle(this.filePath != null ? this.filePath : untitledTempName);
 
 						this.GenerateNoteSimplifiedsFromCommonSecrets();
+					}
+				}));
+		}
+	}
+
+
+	private ICommand saveFileViaContextMenu;
+
+	public ICommand SaveFileViaContextMenu
+	{
+		get
+		{
+			return saveFileViaContextMenu
+				?? (saveFileViaContextMenu = new ActionCommand(() =>
+				{
+					if (this.SelectedFile != null)
+					{
+						if (this.SelectedFile.IsSecure)
+						{
+							FileEntrySecret fes = this.csc.fileSecrets[this.SelectedFile.zeroBasedIndexNumber];
+							string keyIdentifier = fes.GetKeyIdentifier();
+							byte[] derivedPassword = this.derivedPasswords[keyIdentifier];
+
+							SaveFileDialog saveFileDialog = new SaveFileDialog();
+							saveFileDialog.FileName = fes.GetFilename(derivedPassword);
+							if (saveFileDialog.ShowDialog() == true)
+							{
+								File.WriteAllBytes(saveFileDialog.FileName, fes.GetFileContent(derivedPassword));
+							}
+						}
+						else
+						{
+							SaveFileDialog saveFileDialog = new SaveFileDialog();
+							saveFileDialog.FileName = this.csc.files[this.SelectedFile.zeroBasedIndexNumber].GetFilename();
+							if (saveFileDialog.ShowDialog() == true)
+							{
+								File.WriteAllBytes(saveFileDialog.FileName, this.csc.files[this.SelectedFile.zeroBasedIndexNumber].GetFileContent());
+							}
+						}
+					}
+				}));
+		}
+	}
+
+	private ICommand addFileViaMenu;
+	public ICommand AddFileViaMenu
+	{
+		get
+		{
+			return addFileViaMenu
+				?? (addFileViaMenu = new ActionCommand(() =>
+				{
+					AddFileWindow addFileWindow = new AddFileWindow(this.derivedPasswords.Keys.ToList(), this.AddFileToCollection);
+					addFileWindow.ShowDialog();
+				}));
+		}
+	}
+
+	private ICommand editViewFileViaMenu;
+	public ICommand EditViewFileViaMenu
+	{
+		get
+		{
+			return editViewFileViaMenu
+				?? (editViewFileViaMenu = new ActionCommand(() =>
+				{
+					int index = this.SelectedFile.zeroBasedIndexNumber;
+					if (this.SelectedFile.IsSecure) 
+					{
+						FileEntrySecret fes = this.csc.fileSecrets[index];
+						EditViewFileWindow editViewFileWindow = new EditViewFileWindow(fes, derivedPasswords[fes.GetKeyIdentifier()], index, this.derivedPasswords.Keys.ToList(), this.EditFileInCollection);
+						editViewFileWindow.ShowDialog();
+					}
+					else
+					{
+						FileEntry fe = this.csc.files[index];
+						EditViewFileWindow editViewFileWindow = new EditViewFileWindow(fe, index, this.derivedPasswords.Keys.ToList(), this.EditFileInCollection);
+						editViewFileWindow.ShowDialog();
+					}
+				}));
+		}
+	}
+
+	private ICommand duplicateFileViaMenu;
+	public ICommand DuplicateFileViaMenu
+	{
+		get
+		{
+			return duplicateFileViaMenu
+				?? (duplicateFileViaMenu = new ActionCommand(() =>
+				{
+					if (this.SelectedFile != null)
+					{
+						if (this.SelectedFile.IsSecure)
+						{
+							FileEntrySecret fes = this.csc.fileSecrets[this.SelectedFile.zeroBasedIndexNumber];		
+							string keyIdentifier = fes.GetKeyIdentifier();
+							byte[] derivedPassword = this.derivedPasswords[keyIdentifier];
+							FileEntry fileToAdd = new FileEntry(fes.GetFilename(derivedPassword), fes.GetFileContent(derivedPassword));
+							this.csc.AddFileEntrySecret(derivedPassword, fileToAdd, keyIdentifier);
+						}
+						else
+						{
+							FileEntry fileToAdd = new FileEntry(this.csc.files[this.SelectedFile.zeroBasedIndexNumber].GetFilename(), this.csc.files[this.SelectedFile.zeroBasedIndexNumber].GetFileContent());
+							this.csc.files.Add(fileToAdd);
+						}
+
+						// Duplicating a File modifies the structure
+						this.isModified = true;
+						this.UpdateMainTitle(this.filePath != null ? this.filePath : untitledTempName);
+
+						this.GenerateFileSimplifiedsFromCommonSecrets();
+					}
+				}));
+		}
+	}
+
+	private ICommand deleteFileViaMenu;
+	public ICommand DeleteFileViaMenu
+	{
+		get
+		{
+			return deleteFileViaMenu
+				?? (deleteFileViaMenu = new ActionCommand(() =>
+				{
+					if (this.SelectedFile != null)
+					{
+						if (this.SelectedFile.IsSecure)
+						{
+							this.csc.fileSecrets.RemoveAt(this.SelectedFile.zeroBasedIndexNumber);
+						}
+						else
+						{
+							this.csc.files.RemoveAt(this.SelectedFile.zeroBasedIndexNumber);
+						}
+
+						// Deleting a File modifies the structure
+						this.isModified = true;
+						this.UpdateMainTitle(this.filePath != null ? this.filePath : untitledTempName);
+
+						this.GenerateFileSimplifiedsFromCommonSecrets();
 					}
 				}));
 		}
@@ -969,6 +1110,40 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		}
 
 		// Adding a file modifies the structure
+		this.isModified = true;
+		this.UpdateMainTitle(this.filePath != null ? this.filePath : untitledTempName);
+
+		this.GenerateFileSimplifiedsFromCommonSecrets();
+	}
+
+	private void EditFileInCollection(int zeroBasedIndexNumber, bool isNowSecure, bool wasSecurityModified, string keyIdentifier)
+	{
+		if (wasSecurityModified)
+		{
+			// If file jumps from secure <-> unsecure
+			if (isNowSecure)
+			{
+				this.csc.AddFileEntrySecret(this.derivedPasswords[keyIdentifier], this.csc.files[zeroBasedIndexNumber], keyIdentifier);
+				this.csc.files.RemoveAt(zeroBasedIndexNumber);
+			}
+			else
+			{
+				FileEntrySecret fes = this.csc.fileSecrets[zeroBasedIndexNumber];
+				byte[] derivedPassword = derivedPasswords[fes.GetKeyIdentifier()];
+				FileEntry tempFileEntry = new FileEntry(fes.GetFilename(derivedPassword), fes.GetFileContent(derivedPassword));
+				this.csc.fileSecrets.RemoveAt(zeroBasedIndexNumber);
+				this.csc.files.Add(tempFileEntry);
+			}
+		}
+		else
+		{
+			if (isNowSecure)
+			{
+				// TODO: support key change
+			}
+		}
+
+		// Editing a file modifies the structure
 		this.isModified = true;
 		this.UpdateMainTitle(this.filePath != null ? this.filePath : untitledTempName);
 
