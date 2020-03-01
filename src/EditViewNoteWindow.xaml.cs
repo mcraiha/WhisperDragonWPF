@@ -5,7 +5,7 @@ using System.Windows;
 namespace WhisperDragonWPF
 {
 	/// <summary>
-	/// Interaction logic for EditViewNotenWindow.xaml
+	/// Interaction logic for EditViewNoteWindow.xaml
 	/// </summary>
 	public partial class EditViewNoteWindow : Window
 	{
