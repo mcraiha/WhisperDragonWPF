@@ -602,6 +602,43 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		}
 	}
 
+	private ICommand saveFileFromFilesViaMenu;
+	public ICommand SaveFileFromFilesViaMenu
+	{
+		get
+		{
+			return saveFileFromFilesViaMenu
+				?? (saveFileFromFilesViaMenu = new ActionCommand(() =>
+				{
+					if (this.SelectedFile != null)
+					{
+						SaveFileDialog saveFileDialog = new SaveFileDialog();
+						
+						if (this.SelectedFile.IsSecure)
+						{
+							FileEntrySecret fes = this.csc.fileSecrets[this.SelectedFile.zeroBasedIndexNumber];
+							string keyIdentifier = fes.GetKeyIdentifier();
+							byte[] derivedPassword = this.derivedPasswords[keyIdentifier];
+							saveFileDialog.FileName = fes.GetFilename(derivedPassword);
+							if (saveFileDialog.ShowDialog() == true && !string.IsNullOrEmpty(saveFileDialog.FileName))
+							{
+								File.WriteAllBytes(saveFileDialog.FileName, fes.GetFileContent(derivedPassword));
+							}
+						}
+						else
+						{
+							FileEntry fe = this.csc.files[this.SelectedFile.zeroBasedIndexNumber];
+							saveFileDialog.FileName = fe.GetFilename();
+							if (saveFileDialog.ShowDialog() == true && !string.IsNullOrEmpty(saveFileDialog.FileName))
+							{
+								File.WriteAllBytes(saveFileDialog.FileName, fe.GetFileContent());
+							}
+						}		
+					}
+				}));
+		}
+	}
+
 	#endregion // Context menu items
 
 

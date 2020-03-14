@@ -164,7 +164,7 @@
                             </DataGrid.Columns>
                             <DataGrid.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Save File..." Command="{Binding SaveFileViaMenu}" />
+                                    <MenuItem Header="Save File..." Command="{Binding SaveFileFromFilesViaMenu}" />
                                     <Separator />
                                     <MenuItem Header="Add File..." Command="{Binding AddFileViaMenu}" />
                                     <MenuItem Header="Edit/View File..." Command="{Binding EditViewFileViaMenu}" />
