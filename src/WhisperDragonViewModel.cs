@@ -313,15 +313,14 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 				{
 					if (this.SelectedLogin != null)
 					{
-						LoginInformation loginToAdd = new LoginInformation(this.SelectedLogin.Title, this.SelectedLogin.URL, this.SelectedLogin.Email, this.SelectedLogin.Username, this.SelectedLogin.Password, 
-															this.SelectedLogin.Notes, this.SelectedLogin.Icon, this.SelectedLogin.Category, this.SelectedLogin.Tags);
 						if (this.SelectedLogin.IsSecure)
 						{
-							string keyIdentifier = this.csc.loginInformationSecrets[this.SelectedLogin.zeroBasedIndexNumber].GetKeyIdentifier();
-							this.csc.AddLoginInformationSecret(this.derivedPasswords[keyIdentifier], loginToAdd, keyIdentifier);
+							LoginInformationSecret loginToAdd = new LoginInformationSecret(this.csc.loginInformationSecrets[this.SelectedLogin.zeroBasedIndexNumber]);
+							this.csc.loginInformationSecrets.Add(loginToAdd);
 						}
 						else
 						{
+							LoginInformation loginToAdd = new LoginInformation(this.csc.loginInformations[this.SelectedLogin.zeroBasedIndexNumber]);
 							this.csc.loginInformations.Add(loginToAdd);
 						}
 
