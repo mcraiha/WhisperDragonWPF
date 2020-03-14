@@ -416,12 +416,12 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 					{
 						if (this.SelectedNote.IsSecure)
 						{
-							NoteSecret noteToDuplicate = this.csc.noteSecrets[this.SelectedNote.zeroBasedIndexNumber];
+							NoteSecret noteToDuplicate = new NoteSecret(this.csc.noteSecrets[this.SelectedNote.zeroBasedIndexNumber]);
 							this.csc.noteSecrets.Add(noteToDuplicate);
 						}
 						else
 						{
-							Note noteToDuplicate = this.csc.notes[this.SelectedNote.zeroBasedIndexNumber];
+							Note noteToDuplicate = new Note(this.csc.notes[this.SelectedNote.zeroBasedIndexNumber]);
 							this.csc.notes.Add(noteToDuplicate);
 						}
 
@@ -554,15 +554,12 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 					{
 						if (this.SelectedFile.IsSecure)
 						{
-							FileEntrySecret fes = this.csc.fileSecrets[this.SelectedFile.zeroBasedIndexNumber];		
-							string keyIdentifier = fes.GetKeyIdentifier();
-							byte[] derivedPassword = this.derivedPasswords[keyIdentifier];
-							FileEntry fileToAdd = new FileEntry(fes.GetFilename(derivedPassword), fes.GetFileContent(derivedPassword));
-							this.csc.AddFileEntrySecret(derivedPassword, fileToAdd, keyIdentifier);
+							FileEntrySecret fes = new FileEntrySecret(this.csc.fileSecrets[this.SelectedFile.zeroBasedIndexNumber]);		
+							this.csc.fileSecrets.Add(fes);
 						}
 						else
 						{
-							FileEntry fileToAdd = new FileEntry(this.csc.files[this.SelectedFile.zeroBasedIndexNumber].GetFilename(), this.csc.files[this.SelectedFile.zeroBasedIndexNumber].GetFileContent());
+							FileEntry fileToAdd = new FileEntry(this.csc.files[this.SelectedFile.zeroBasedIndexNumber]);
 							this.csc.files.Add(fileToAdd);
 						}
 
