@@ -417,15 +417,12 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 						if (this.SelectedNote.IsSecure)
 						{
 							NoteSecret noteToDuplicate = this.csc.noteSecrets[this.SelectedNote.zeroBasedIndexNumber];
-							string keyIdentifier = noteToDuplicate.GetKeyIdentifier();
-							byte[] derivedPassword = this.derivedPasswords[keyIdentifier];
-							Note noteToAdd = new Note(noteToDuplicate.GetNoteTitle(derivedPassword), noteToDuplicate.GetNoteText(derivedPassword));
-							this.csc.AddNoteSecret(derivedPassword, noteToAdd, keyIdentifier);
+							this.csc.noteSecrets.Add(noteToDuplicate);
 						}
 						else
 						{
 							Note noteToDuplicate = this.csc.notes[this.SelectedNote.zeroBasedIndexNumber];
-							this.csc.notes.Add(new Note(noteToDuplicate.GetNoteTitle(), noteToDuplicate.GetNoteText()));
+							this.csc.notes.Add(noteToDuplicate);
 						}
 
 						// Duplicating a note modifies the structure
