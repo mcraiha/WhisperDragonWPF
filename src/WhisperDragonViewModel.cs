@@ -919,6 +919,20 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 		}
 	}
 
+	private ICommand benchmarkViaMenu;
+	public ICommand BenchmarkViaMenu
+	{
+		get
+		{
+			return benchmarkViaMenu 
+				?? (benchmarkViaMenu = new ActionCommand(() =>
+				{
+					BenchmarkWindow benchmarkWindow = new BenchmarkWindow();
+					benchmarkWindow.ShowDialog();
+				}));
+		}
+	}
+
 	private ICommand preferencesViaMenu;
 	public ICommand PreferencesViaMenu
 	{
