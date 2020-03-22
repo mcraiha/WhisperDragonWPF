@@ -3,7 +3,7 @@ using System.Windows;
 namespace WhisperDragonWPF
 {
 	/// <summary>
-	/// Interaction logic for MainWindow.xaml
+	/// Interaction logic for BenchmarkWindow.xaml
 	/// </summary>
 	public partial class BenchmarkWindow : Window
 	{
