@@ -40,7 +40,17 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 		} 
 	}
 
-	public string Password { get; set; } = "";
+	private string password = "";
+
+	public string Password 
+	{ 
+		get { return this.password; } 
+        set 
+		{ 
+			this.password = value; 
+			this.PasswordChanged(password); 
+		}  
+	}
 
 	public string PasswordEntropy { get; set; } = "";
 
@@ -230,11 +240,16 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 
 	#region Values changed
 
+	private void PasswordChanged(string newPassword)
+	{
+		this.UpdatePasswordEntropy(newPassword);
+		this.UpdateShannonEntropy(newPassword);
+		this.CheckIfPasswordIsTooCommon(newPassword);
+	}
+
 	private void Password1Changed(Object sender, RoutedEventArgs args)
 	{
-		this.UpdatePasswordEntropy(passwordBox1.Password);
-		this.UpdateShannonEntropy(passwordBox1.Password);
-		this.CheckIfPasswordIsTooCommon(passwordBox1.Password);
+		this.PasswordChanged(passwordBox1.Password);
 	}
 
 	private void Password2Changed(Object sender, RoutedEventArgs args)
