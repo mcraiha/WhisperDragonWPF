@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/bin/Debug/netcoreapp3.0/win-x64/WhisperDragonWPF.dll",
+            "program": "${workspaceFolder}/src/bin/Debug/netcoreapp3.1/win-x64/WhisperDragonWPF.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
