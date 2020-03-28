@@ -46,6 +46,8 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 
 	public string ShannonEntropy { get; set; } = "";
 
+	public string UnsafePasswordWarning { get; set; } = "";
+
 	public ObservableCollection<string> Algorithms { get; }
 	public string selectedAlgorithm;
 
@@ -101,14 +103,18 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 
 	public event PropertyChangedEventHandler PropertyChanged;
 
+	private readonly HashSet<string> unsafePasswords;
+
 	private readonly Action<KeyDerivationFunctionEntry, string> callOnPositive;
 	private readonly Action callOnNegative;
 
 	private readonly PasswordBox passwordBox1;
 	private readonly PasswordBox passwordBox2;
 
-	public CreateCommonSecretsViewModel(Action<KeyDerivationFunctionEntry, string> positiveAction, Action negativeAction, PasswordBox pwBox1, PasswordBox pwBox2)
+	public CreateCommonSecretsViewModel(HashSet<string> commonUnsafePasswords, Action<KeyDerivationFunctionEntry, string> positiveAction, Action negativeAction, PasswordBox pwBox1, PasswordBox pwBox2)
 	{
+		this.unsafePasswords = commonUnsafePasswords;
+
 		this.callOnPositive = positiveAction;
 		this.callOnNegative = negativeAction;
 		this.passwordBox1 = pwBox1;
@@ -228,6 +234,7 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 	{
 		this.UpdatePasswordEntropy(passwordBox1.Password);
 		this.UpdateShannonEntropy(passwordBox1.Password);
+		this.CheckIfPasswordIsTooCommon(passwordBox1.Password);
 	}
 
 	private void Password2Changed(Object sender, RoutedEventArgs args)
@@ -248,6 +255,20 @@ public class CreateCommonSecretsViewModel : INotifyPropertyChanged
 		double entropyInBits = EntropyCalcs.ShannonEntropy(pw);
 		this.ShannonEntropy = $"{LocMan.Get("Shannon entropy:")} {entropyInBits.ToString("F2")} {LocMan.Get("bits")}";
 		OnPropertyChanged(nameof(ShannonEntropy));
+	}
+
+	private void CheckIfPasswordIsTooCommon(string pw)
+	{
+		if (unsafePasswords.Contains(pw))
+		{
+			this.UnsafePasswordWarning = "Warning, very common password!";
+		}
+		else
+		{
+			this.UnsafePasswordWarning = "";
+		}
+
+		OnPropertyChanged(nameof(UnsafePasswordWarning));
 	}
 
 	#endregion // Values changed

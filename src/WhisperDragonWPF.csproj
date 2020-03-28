@@ -22,6 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="CommonPasswords/10-million-password-list-top-10000.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="whisperdragon_1024x1024.png" />
   </ItemGroup>
 

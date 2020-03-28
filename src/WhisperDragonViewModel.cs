@@ -102,6 +102,9 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 	private string currentSettingsPath = null;
 	private SettingsData settingsData = null;
 
+	private static HashSet<string> commonPasswords = null;
+	private static readonly string commonPasswordsResourceName = "CommonPasswords/10-million-password-list-top-10000.txt";
+
 	public WhisperDragonViewModel(TabControl sections, Window window)
 	{
 		this.tabSections = sections;
@@ -653,7 +656,12 @@ public class WhisperDragonViewModel : INotifyPropertyChanged
 			return createNewCommonSecretsContainerViaMenu 
 				?? (createNewCommonSecretsContainerViaMenu = new ActionCommand(() =>
 				{
-					CreateCommonSecretsWindow createCommonSecretsWindow = new CreateCommonSecretsWindow(this.CreateNewCommonSecrets);
+					if (commonPasswords == null)
+					{
+						commonPasswords = EmbedResourceLoader.ReadAsHashset(commonPasswordsResourceName);
+					}
+
+					CreateCommonSecretsWindow createCommonSecretsWindow = new CreateCommonSecretsWindow(this.CreateNewCommonSecrets, commonPasswords);
 					createCommonSecretsWindow.ShowDialog();
 				}));
 		}

@@ -23,11 +23,11 @@ namespace WhisperDragonWPF
 	{
 		private Action<KeyDerivationFunctionEntry, string> positive;
 
-		public CreateCommonSecretsWindow(Action<KeyDerivationFunctionEntry, string> onPositive)
+		public CreateCommonSecretsWindow(Action<KeyDerivationFunctionEntry, string> onPositive, HashSet<string> commonUnsafePasswords)
 		{
 			InitializeComponent();
 			this.positive = onPositive;
-			DataContext = new CreateCommonSecretsViewModel(OkClose, CancelClose, passwordBox1, passwordBox2);
+			DataContext = new CreateCommonSecretsViewModel(commonUnsafePasswords, OkClose, CancelClose, passwordBox1, passwordBox2);
 		}
 
 		private void CancelClose()
