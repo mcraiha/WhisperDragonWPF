@@ -2,6 +2,7 @@ using System;
 using System.Windows.Input;
 using System.ComponentModel;
 using WhisperDragonWPF;
+using System.Threading.Tasks;
 
 public class BenchmarkViewModel : INotifyPropertyChanged
 {
@@ -26,10 +27,11 @@ public class BenchmarkViewModel : INotifyPropertyChanged
 		get
 		{
 			return benchmarkCommand 
-				?? (benchmarkCommand = new ActionCommand(() =>
+				?? (benchmarkCommand = new ActionCommand( async () =>
 				{
 					Result = "Started";
 					OnPropertyChanged(nameof(Result));
+					await Task.Delay(10);
 					int runs = Benchmarker.Benchmark(5000, 100000);
 					Result = $"In 5 seconds your computer run {runs} PBKDF2 brute force attempts";
 					OnPropertyChanged(nameof(Result));
