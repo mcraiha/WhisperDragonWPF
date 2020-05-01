@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="CommonPasswords/10-million-password-list-top-10000.txt" />
+    <EmbeddedResource Include="CommonWords/English-Common.txt" />
   </ItemGroup>
 
   <ItemGroup>
