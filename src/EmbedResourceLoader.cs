@@ -28,6 +28,28 @@ namespace WhisperDragonWPF
             return returnValue;
         }
 
+        public static List<string> ReadAsList(string resourceToLoad)
+        {
+            List<string> returnValue = new List<string>();
+
+            Stream namesStream = LoadResourceStream(resourceToLoad, typeof(EmbedResourceLoader).GetTypeInfo().Assembly);
+            using (StreamReader sr = new StreamReader(namesStream)) 
+            {
+                string line;
+                while ((line = sr.ReadLine()) != null) 
+                {
+                    if (line.StartsWith("//") || line.Length < 1)
+                    {
+                        continue;
+                    }
+
+                    returnValue.Add(line);
+                }
+            }
+
+            return returnValue;
+        }
+
         private static Stream LoadResourceStream(string resourceName, Assembly assembly)
 		{
 			string properResourceName = GetResourceName(assembly, resourceName);
