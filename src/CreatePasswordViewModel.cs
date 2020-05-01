@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Security.Cryptography;
 using System;
 using System.Linq;
@@ -58,8 +59,55 @@ public class CreatePasswordViewModel : INotifyPropertyChanged
 			this.generatedPassword = value;
 			OnPropertyChanged(nameof(GeneratedPassword));
 		}
-	
 	}
+
+
+	private string generatedPronounceablePassword = "";
+	public string GeneratedPronounceablePassword 
+	{ 
+		get
+		{
+			if (VisiblePassword)
+			{
+				return this.generatedPronounceablePassword;
+			}
+			
+			return string.Create(this.generatedPronounceablePassword.Length, '*', (chars, buf) => {
+    																	for (int i=0;i<chars.Length;i++) chars[i] = buf;
+					});
+		}
+		set         
+		{
+			this.generatedPronounceablePassword = value;
+			OnPropertyChanged(nameof(GeneratedPronounceablePassword));
+		}
+	}
+
+	public ObservableCollection<string> Languages { get; }
+
+	public string selectedLanguage;
+
+	public string SelectedLanguage
+	{
+        get
+        {
+            return this.selectedLanguage;
+        }
+        set
+        {
+            if (this.selectedLanguage != value)
+            {
+                this.selectedLanguage = value;
+                OnPropertyChanged(nameof(SelectedLanguage));
+            }
+        }
+    }
+
+	public bool StartWithUpperCase { get; set; } = true;
+
+	public bool IncludeNumbers { get; set; } = true;
+
+	public bool IncludeSpecialCharSimple { get; set; } = true;
 
 	public event PropertyChangedEventHandler PropertyChanged;
 
@@ -83,8 +131,18 @@ public class CreatePasswordViewModel : INotifyPropertyChanged
 		'!', '"', '#', '$', '%', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~'
 	};
 
+	private static readonly List<char> specialCharactersPronounceable = new List<char>()
+	{
+		'!', '#', '$', '%', '*', '+', '-', '.', '?', '@', '_',
+	};
+
 	// Generated during runtime in ConstructEmojiList(), See https://en.wikipedia.org/wiki/Emoticons_(Unicode_block)
 	private static readonly List<string> emoticonsUnicodeBlock = new List<string>();
+
+	private static readonly List<(string, string)> languageToCommonWords = new List<(string, string)>()
+	{
+		("English", "CommonWords/English-Common.txt")
+	};
 
 	private readonly Action callOnClose;
 	private readonly Action<string> passwordCallback;
@@ -94,8 +152,22 @@ public class CreatePasswordViewModel : INotifyPropertyChanged
 		this.callOnClose = closeAction;
 		this.passwordCallback = passwordCallback;
 		this.VisibilityUsePassword = (passwordCallback != null) ? Visibility.Visible : Visibility.Hidden;
+
+		this.Languages = CreateLanguages();
+		this.selectedLanguage = Languages[0];
 	}
 
+	private static ObservableCollection<string> CreateLanguages()
+	{
+		ObservableCollection<string> returnList = new ObservableCollection<string>();
+
+		foreach (var pair in languageToCommonWords)
+		{
+			returnList.Add(pair.Item1);
+		}
+
+		return returnList;
+	}
 
 	#region Buttons
 
@@ -175,6 +247,57 @@ public class CreatePasswordViewModel : INotifyPropertyChanged
 	}
 
 
+	private ICommand generatePronounceablePasswordCommand;
+	public ICommand GeneratePronounceablePasswordCommand
+	{
+		get
+		{
+			return generatePronounceablePasswordCommand 
+				?? (generatePronounceablePasswordCommand = new ActionCommand(() =>
+				{
+					List<string> commonWords = EmbedResourceLoader.ReadAsList(languageToCommonWords[0].Item2);
+
+					string currentPronounceablePassword = "";
+
+					using (var generator = RandomNumberGenerator.Create())
+					{
+						int bigIndex = GetPositiveRandomInt(generator);
+						int smallIndex = bigIndex % commonWords.Count;
+
+						string firstWord = commonWords[smallIndex];
+
+						if (StartWithUpperCase)
+						{
+							firstWord = char.ToUpper(firstWord[0]) + firstWord.Substring(1);
+						}
+
+						bigIndex = GetPositiveRandomInt(generator);
+						smallIndex = bigIndex % commonWords.Count;
+						string secondWord = commonWords[smallIndex];
+
+						currentPronounceablePassword = firstWord + secondWord;
+
+						if (IncludeNumbers)
+						{
+							bigIndex = GetPositiveRandomInt(generator);
+							smallIndex = bigIndex % 99;
+							currentPronounceablePassword += smallIndex;
+						}
+
+						if (IncludeSpecialCharSimple)
+						{
+							int index = GetPositiveRandomInt(generator) % specialCharactersPronounceable.Count;
+							currentPronounceablePassword += specialCharactersPronounceable[index];
+						}		
+					}
+
+					GeneratedPronounceablePassword = currentPronounceablePassword;
+					copyPronounceableToClipboardCommand.RaiseCanExecuteChanged();
+				}));
+		}
+	}
+
+
 	private ActionConditionalCommand copyToClipboardCommand;
 	public ActionConditionalCommand CopyToClipboardCommand
 	{
@@ -188,6 +311,19 @@ public class CreatePasswordViewModel : INotifyPropertyChanged
 		}
 	}
 
+
+	private ActionConditionalCommand copyPronounceableToClipboardCommand;
+	public ActionConditionalCommand CopyPronounceableToClipboardCommand
+	{
+		get
+		{
+			return copyPronounceableToClipboardCommand 
+				?? (copyPronounceableToClipboardCommand = new ActionConditionalCommand(() =>
+				{
+					Clipboard.SetText(this.generatedPronounceablePassword);
+				}, () => this.generatedPronounceablePassword.Length > 1));
+		}
+	}
 
 	private ICommand closeCommand;
 	public ICommand CloseCommand
