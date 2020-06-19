@@ -103,6 +103,8 @@ public class CreatePasswordViewModel : INotifyPropertyChanged
         }
     }
 
+	public string HowManyWords { get; set; } = "2";
+
 	public bool StartWithUpperCase { get; set; } = true;
 
 	public bool IncludeNumbers { get; set; } = true;
@@ -259,6 +261,15 @@ public class CreatePasswordViewModel : INotifyPropertyChanged
 
 					string currentPronounceablePassword = "";
 
+					int wordCount = 2; 
+					if (int.TryParse(this.HowManyWords, out int possibleWordCount))
+					{
+						if (possibleWordCount > 0)
+						{
+							wordCount = possibleWordCount;
+						}
+					}
+
 					using (var generator = RandomNumberGenerator.Create())
 					{
 						int bigIndex = GetPositiveRandomInt(generator);
@@ -271,11 +282,16 @@ public class CreatePasswordViewModel : INotifyPropertyChanged
 							firstWord = char.ToUpper(firstWord[0]) + firstWord.Substring(1);
 						}
 
-						bigIndex = GetPositiveRandomInt(generator);
-						smallIndex = bigIndex % commonWords.Count;
-						string secondWord = commonWords[smallIndex];
+						currentPronounceablePassword = firstWord;
 
-						currentPronounceablePassword = firstWord + secondWord;
+						for (int i = 1; i < possibleWordCount; i++)
+						{
+							bigIndex = GetPositiveRandomInt(generator);
+							smallIndex = bigIndex % commonWords.Count;
+							string tempWord = commonWords[smallIndex];
+
+							currentPronounceablePassword += tempWord;
+						}
 
 						if (IncludeNumbers)
 						{
