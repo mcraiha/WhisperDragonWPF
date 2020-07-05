@@ -61,13 +61,13 @@ namespace tests
 
 			// Act
 			cpvmOnlyLowerCase.GeneratePasswordCommand.Execute(null);
-			string passwordUpperCase = cpvmOnlyLowerCase.GeneratedPassword;
+			string passwordLowerCase = cpvmOnlyLowerCase.GeneratedPassword;
 
 			// Assert
-			Assert.IsFalse(string.IsNullOrEmpty(passwordUpperCase));
-			Assert.AreEqual(int.Parse(cpvmOnlyLowerCase.PasswordLength), passwordUpperCase.Length);
+			Assert.IsFalse(string.IsNullOrEmpty(passwordLowerCase));
+			Assert.AreEqual(int.Parse(cpvmOnlyLowerCase.PasswordLength), passwordLowerCase.Length);
 
-			Assert.IsTrue(passwordUpperCase.All(c => char.IsLower(c) && char.IsLetter(c)));
+			Assert.IsTrue(passwordLowerCase.All(c => char.IsLower(c) && char.IsLetter(c)));
 		}
 
 		[Test]
@@ -90,6 +90,50 @@ namespace tests
 			Assert.AreEqual(int.Parse(cpvmOnlyUpperCase.PasswordLength), passwordUpperCase.Length);
 
 			Assert.IsTrue(passwordUpperCase.All(c => char.IsUpper(c) && char.IsLetter(c)));
+		}
+
+		[Test]
+		public void GeneratePasswordCommandDigitsTest()
+		{
+			// Arrange
+			CreatePasswordViewModel cpvmOnlyDigits = new CreatePasswordViewModel(null, null);
+			cpvmOnlyDigits.IncludeUpperCaseLatinLetters = false;
+			cpvmOnlyDigits.IncludeLowerCaseLatinLetters = false;
+			cpvmOnlyDigits.IncludeDigits = true;
+			cpvmOnlyDigits.IncludeSpecialCharactersASCII = false;
+			cpvmOnlyDigits.IncludeEmojis = false;
+
+			// Act
+			cpvmOnlyDigits.GeneratePasswordCommand.Execute(null);
+			string passwordDigits = cpvmOnlyDigits.GeneratedPassword;
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(passwordDigits));
+			Assert.AreEqual(int.Parse(cpvmOnlyDigits.PasswordLength), passwordDigits.Length);
+
+			Assert.IsTrue(passwordDigits.All(c => char.IsDigit(c)));
+		}
+
+		[Test]
+		public void GeneratePasswordCommandSpecialCharactersTest()
+		{
+			// Arrange
+			CreatePasswordViewModel cpvmOnlySpecialChars = new CreatePasswordViewModel(null, null);
+			cpvmOnlySpecialChars.IncludeUpperCaseLatinLetters = false;
+			cpvmOnlySpecialChars.IncludeLowerCaseLatinLetters = false;
+			cpvmOnlySpecialChars.IncludeDigits = false;
+			cpvmOnlySpecialChars.IncludeSpecialCharactersASCII = true;
+			cpvmOnlySpecialChars.IncludeEmojis = false;
+
+			// Act
+			cpvmOnlySpecialChars.GeneratePasswordCommand.Execute(null);
+			string passwordSpecialChars = cpvmOnlySpecialChars.GeneratedPassword;
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(passwordSpecialChars));
+			Assert.AreEqual(int.Parse(cpvmOnlySpecialChars.PasswordLength), passwordSpecialChars.Length);
+
+			Assert.IsTrue(passwordSpecialChars.All(c => !char.IsDigit(c) && !char.IsLetter(c)));
 		}
 	}
 }
