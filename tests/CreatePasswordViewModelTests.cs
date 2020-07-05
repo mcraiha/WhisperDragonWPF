@@ -49,10 +49,33 @@ namespace tests
 		}
 
 		[Test]
+		public void GeneratePasswordCommandLowerCaseTest()
+		{
+			// Arrange
+			CreatePasswordViewModel cpvmOnlyLowerCase = new CreatePasswordViewModel(null, null);
+			cpvmOnlyLowerCase.IncludeLowerCaseLatinLetters = true;
+			cpvmOnlyLowerCase.IncludeUpperCaseLatinLetters = false;
+			cpvmOnlyLowerCase.IncludeDigits = false;
+			cpvmOnlyLowerCase.IncludeSpecialCharactersASCII = false;
+			cpvmOnlyLowerCase.IncludeEmojis = false;
+
+			// Act
+			cpvmOnlyLowerCase.GeneratePasswordCommand.Execute(null);
+			string passwordUpperCase = cpvmOnlyLowerCase.GeneratedPassword;
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(passwordUpperCase));
+			Assert.AreEqual(int.Parse(cpvmOnlyLowerCase.PasswordLength), passwordUpperCase.Length);
+
+			Assert.IsTrue(passwordUpperCase.All(c => char.IsLower(c) && char.IsLetter(c)));
+		}
+
+		[Test]
 		public void GeneratePasswordCommandUpperCaseTest()
 		{
 			// Arrange
 			CreatePasswordViewModel cpvmOnlyUpperCase = new CreatePasswordViewModel(null, null);
+			cpvmOnlyUpperCase.IncludeUpperCaseLatinLetters = true;
 			cpvmOnlyUpperCase.IncludeLowerCaseLatinLetters = false;
 			cpvmOnlyUpperCase.IncludeDigits = false;
 			cpvmOnlyUpperCase.IncludeSpecialCharactersASCII = false;
