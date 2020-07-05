@@ -135,5 +135,32 @@ namespace tests
 
 			Assert.IsTrue(passwordSpecialChars.All(c => !char.IsDigit(c) && !char.IsLetter(c)));
 		}
+
+		[Test]
+		public void GeneratePronounceablePasswordCommandTest()
+		{
+			// Arrange
+			CreatePasswordViewModel cpvmPronounceable2Words = new CreatePasswordViewModel(null, null);
+			cpvmPronounceable2Words.HowManyWords = "2";
+
+			CreatePasswordViewModel cpvmPronounceable9Words = new CreatePasswordViewModel(null, null);
+			cpvmPronounceable9Words.HowManyWords = "9";
+
+			// Act
+			cpvmPronounceable2Words.GeneratePronounceablePasswordCommand.Execute(null);
+			string password2Words = cpvmPronounceable2Words.GeneratedPronounceablePassword;
+
+			cpvmPronounceable9Words.GeneratePronounceablePasswordCommand.Execute(null);
+			string password9Words = cpvmPronounceable9Words.GeneratedPronounceablePassword;
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(password2Words));
+			Assert.Greater(password2Words.Length, 5);
+
+			Assert.IsFalse(string.IsNullOrEmpty(password9Words));
+			Assert.Greater(password9Words.Length, 21);
+
+			Assert.AreNotEqual(password2Words, password9Words);
+		}
 	}
 }
