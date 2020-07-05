@@ -243,7 +243,7 @@ public class CreatePasswordViewModel : INotifyPropertyChanged
 					}
 
 					GeneratedPassword = string.Join("", generated); //  new String( generated.ToArray());
-					copyToClipboardCommand.RaiseCanExecuteChanged();
+					copyToClipboardCommand?.RaiseCanExecuteChanged();
 				}));
 		}
 	}
@@ -308,7 +308,7 @@ public class CreatePasswordViewModel : INotifyPropertyChanged
 					}
 
 					GeneratedPronounceablePassword = currentPronounceablePassword;
-					copyPronounceableToClipboardCommand.RaiseCanExecuteChanged();
+					copyPronounceableToClipboardCommand?.RaiseCanExecuteChanged();
 				}));
 		}
 	}
