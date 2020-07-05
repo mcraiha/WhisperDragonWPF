@@ -27,5 +27,21 @@ namespace tests
 			Assert.AreEqual(entropyFirst, entropySecond);
 			Assert.AreNotEqual(entropyFirst, entropyThird);
 		}
+
+		[Test]
+		public void GetPasswordSecurityLevelTest()
+		{
+			// Arrange
+			string first = "cat";
+			string second = "cat!24TBTB1214b!DF¤";
+
+			// Act
+			PasswordSecurityLevel securityLevelFirst = EntropyCalcs.GetPasswordSecurityLevel(EntropyCalcs.CalcutePasswordEntropy(first));
+			PasswordSecurityLevel securityLevelSecond = EntropyCalcs.GetPasswordSecurityLevel(EntropyCalcs.CalcutePasswordEntropy(second));
+
+			// Assert
+			Assert.AreEqual(PasswordSecurityLevel.Very_Weak, securityLevelFirst);
+			Assert.AreNotEqual(securityLevelFirst, securityLevelSecond);
+		}
 	}
 }
