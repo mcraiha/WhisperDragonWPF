@@ -28,8 +28,8 @@ See unreleased documentation in ...
 ### Build
 
 1. Clone repository to local machine
-2. Install .NET Core 3.0 (or later) to Windows machine (if not already installed) 
-3. Run `dotnet run` in command prompt or PowerShell or run `dotnet publish -c Release` to build single exe to **bin\Release\netcoreapp3.0\win-x64\publish** folder
+2. Install .NET 5.0 (or later) to Windows machine (if not already installed) 
+3. Run `dotnet run` in command prompt or PowerShell or run `dotnet publish -c Release` to build single .exe to **bin\Release\net5.0-windows\win-x64\publish** folder
 
 ### Debug with Visual Studio Code
 
